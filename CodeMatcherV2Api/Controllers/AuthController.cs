@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using webapplication.Models;
+using CodeMatcherV2Api.Models;
 
-namespace webapplication.Controllers
+namespace CodeMatcherV2Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

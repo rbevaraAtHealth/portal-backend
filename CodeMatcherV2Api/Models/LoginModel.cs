@@ -1,4 +1,4 @@
-﻿namespace webapplication.Models
+﻿namespace CodeMatcherV2Api.Models
 {
     public class LoginModel
     {

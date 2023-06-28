@@ -9,10 +9,10 @@
     }
   },
   "profiles": {
-    "webapplication": {
+    "CodeMatcherv2Api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "swagger/index.html",
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace webapplication.Controllers
+namespace CodeMatcherV2Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
