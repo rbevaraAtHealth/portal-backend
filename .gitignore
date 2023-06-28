@@ -1,0 +1,17 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/CodeMatcherV2Api/.vs
+/CodeMatcherV2Api/bin/Debug
+/CodeMatcherV2Api/obj/Debug
+/CodeMatcherV2Api/obj/webapplication.csproj.nuget.g.targets
+/CodeMatcherV2Api/obj/webapplication.csproj.nuget.g.props
+/CodeMatcherV2Api/obj/webapplication.csproj.nuget.dgspec.json
+/CodeMatcherV2Api/obj/Release/net6.0
+/CodeMatcherV2Api/obj/project.nuget.cache
+/CodeMatcherV2Api/obj/project.assets.json
+/CodeMatcherV2Api/obj/CodeMatcherV2Api.csproj.nuget.g.targets
+/CodeMatcherV2Api/obj/CodeMatcherV2Api.csproj.nuget.g.props
+/CodeMatcherV2Api/obj/CodeMatcherV2Api.csproj.nuget.dgspec.json
