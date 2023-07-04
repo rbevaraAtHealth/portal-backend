@@ -11,16 +11,16 @@ namespace CodeMatcherV2Api.Controllers
     [ApiController]
     public class TriggerRunController : ControllerBase
     {
-        [HttpGet, Authorize]
-        public async Task<IActionResult> RunJob([FromBody] UserModel userModel)
-        {
+        //[HttpGet, Authorize]
+        //public async Task<IActionResult> RunJob([FromBody] UserModel userModel)
+        //{
 
-            ResponseResult responseResult = new ResponseResult();
-            responseResult.Code = 200;
-            responseResult.Message = "Run User Clicked";
-            responseResult.Data = userModel;
-            return Ok(responseResult);
+        //    ResponseResult responseResult = new ResponseResult();
+        //    responseResult.Code = 200;
+        //    responseResult.Message = "Run User Clicked";
+        //    responseResult.Data = userModel;
+        //    return Ok(responseResult);
 
-        }
+        //}
     }
 }
