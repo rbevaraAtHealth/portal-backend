@@ -19,7 +19,6 @@ namespace CodeMatcherV2Api.Controllers
 
         public AuthController(IConfiguration configuration)
         {
-           
             _configuration = configuration;
         }
         [HttpPost, Route("login")]
@@ -39,7 +38,7 @@ namespace CodeMatcherV2Api.Controllers
                 {
                     new Claim(ClaimTypes.Name, user.UserName)
                 };
-                var tokeOptions = new JwtSecurityToken(
+                var tokenOptions = new JwtSecurityToken(
                     issuer: _configuration["JWT:ValidIssuer"],
                     audience: _configuration["JWT:ValidAudience"],
                     claims: authClaims,
@@ -47,7 +46,7 @@ namespace CodeMatcherV2Api.Controllers
                     signingCredentials: signinCredentials
                 );
 
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
                 return Ok(new { Token = tokenString });
             }
             else
