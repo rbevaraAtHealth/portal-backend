@@ -73,7 +73,7 @@ namespace CodeMatcherV2Api
                             }
                         },
                         new string[] { }
-                    }});
+                    }});    
                     c.CustomSchemaIds(type => type.FullName);
 
                 });
@@ -87,7 +87,7 @@ namespace CodeMatcherV2Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 
