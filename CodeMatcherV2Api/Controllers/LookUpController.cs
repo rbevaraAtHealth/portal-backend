@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 namespace CodeMatcherV2Api.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class LookUpController : ControllerBase
+    public class LookUpController : BaseController
     {
        
         [HttpGet]

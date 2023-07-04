@@ -8,36 +8,39 @@ using System.Threading.Tasks;
 namespace CodeMatcherV2Api.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
-        [HttpGet, Authorize]
+        [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            List<UserModel> users = new List<UserModel>();
-            users.Add(new UserModel { Email = "Teena@123@nstarxinc.com", FirstName = "Teena", LastName = "Gera" });
-            users.Add(new UserModel { Email = "Anu@123@nstarxinc.com", FirstName = "Anu", LastName = "Sharma" });
-            users.Add(new UserModel { Email = "abc@123@nstarxinc.com", FirstName = "ABC", LastName = "XYZ" });
-           ResponseResult responseResult=new ResponseResult();
+            List<UserModel> users = new List<UserModel>
+            {
+                new UserModel { Email = "Teena@123@nstarxinc.com", FirstName = "Teena", LastName = "Gera" },
+                new UserModel { Email = "Anu@123@nstarxinc.com", FirstName = "Anu", LastName = "Sharma" },
+                new UserModel { Email = "abc@123@nstarxinc.com", FirstName = "ABC", LastName = "XYZ" }
+            };
+            ResponseResult responseResult=new ResponseResult();
             responseResult.Code = 200;
             responseResult.Message = "Get Users Clicked";
-            responseResult.Data = users;
+            responseResult.Data = await users;
             return Ok(responseResult);
             //return Ok(users);
         }
-        [HttpGet("{id}"), Authorize]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            ResponseResult responseResult = new ResponseResult();
-            responseResult.Code = 200;
-            responseResult.Message = "GetUserById Clicked";
-            responseResult.Data = new UserModel { Email = "Anu@123@nstarxinc.com", FirstName = "Anu", LastName = "Sharma" };
+            ResponseResult responseResult = new ResponseResult
+            {
+                Code = 200,
+                Message = "GetUserById Clicked",
+                Data = new UserModel { Email = "Anu@123@nstarxinc.com", FirstName = "Anu", LastName = "Sharma" }
+            };
             return Ok(responseResult);
             //return Ok(new UserModel { Email = "Anu@123@nstarxinc.com", FirstName = "Anu", LastName = "Sharma" });
         }
 
 
-        [HttpPost, Authorize]
+        [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] UserModel userModel)
         {
             ResponseResult responseResult = new ResponseResult();
@@ -48,7 +51,7 @@ namespace CodeMatcherV2Api.Controllers
            // return Ok(userModel);
         }
 
-        [HttpPut, Authorize]
+        [HttpPut]
         public async Task<IActionResult> UpdateUser([FromBody] UserModel userModel)
         {
             ResponseResult responseResult = new ResponseResult();
@@ -58,7 +61,7 @@ namespace CodeMatcherV2Api.Controllers
             return Ok(responseResult);
             //return Ok(userModel);
         }
-        [HttpDelete, Authorize]
+        [HttpDelete]
         public async Task<IActionResult> DeleteUser([FromBody] int id)
         {
             ResponseResult responseResult = new ResponseResult();
