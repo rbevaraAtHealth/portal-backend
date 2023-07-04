@@ -1,4 +1,5 @@
 ﻿using CodeMatcherV2Api.Models;
+using Gremlin.Net.Driver.Messages;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace CodeMatcherV2Api.Controllers
     [Route("api/[controller]")]
     public class LookUpController : BaseController
     {
-       
+
         [HttpGet]
         public async Task<IActionResult> GetSegment()
         {
@@ -23,7 +24,7 @@ namespace CodeMatcherV2Api.Controllers
             responseResult.Code = 200;
             responseResult.Message = "Get Segments Clicked";
             responseResult.Data = segments;
-           
+
             return  Ok(segments);
 
         }
