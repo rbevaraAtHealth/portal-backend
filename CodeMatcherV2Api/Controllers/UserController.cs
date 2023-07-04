@@ -22,7 +22,7 @@ namespace CodeMatcherV2Api.Controllers
             ResponseResult responseResult=new ResponseResult();
             responseResult.Code = 200;
             responseResult.Message = "Get Users Clicked";
-            responseResult.Data = await users;
+            responseResult.Data = users;
             return Ok(responseResult);
             //return Ok(users);
         }
