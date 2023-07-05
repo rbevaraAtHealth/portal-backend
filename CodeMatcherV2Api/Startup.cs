@@ -1,4 +1,7 @@
 using System.Text;
+using AutoMapper;
+using CodeMatcherV2Api.BusinessLayer;
+using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,8 +45,13 @@ namespace CodeMatcherV2Api
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
                 };
             });
-
+            IMapper mapper = MapperConfig.RegisterMaps().CreateMapper();
+            services.AddSingleton(mapper);
             services.AddControllers();
+            services.AddTransient<IUser, User>();
+            services.AddTransient<ILookUp, LookUp>();
+
+            
             services
                 .AddSwaggerGen(c =>
                 {

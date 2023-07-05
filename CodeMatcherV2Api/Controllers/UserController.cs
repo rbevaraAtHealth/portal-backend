@@ -1,73 +1,88 @@
-﻿using CodeMatcherV2Api.Models;
-using Gremlin.Net.Driver.Messages;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
-        [HttpGet, Authorize]
-        public async Task<IActionResult> GetUsers()
+        private readonly IUser _User;
+        public UserController(IUser user)
         {
-            List<UserModel> users = new List<UserModel>();
-            users.Add(new UserModel { Email = "Teena@123@nstarxinc.com", FirstName = "Teena", LastName = "Gera" });
-            users.Add(new UserModel { Email = "Anu@123@nstarxinc.com", FirstName = "Anu", LastName = "Sharma" });
-            users.Add(new UserModel { Email = "abc@123@nstarxinc.com", FirstName = "ABC", LastName = "XYZ" });
-            ResponseResult responseResult = new ResponseResult();
-            responseResult.Code = 200;
-            responseResult.Message = "Get Users Clicked";
-            responseResult.Data = users;
-            return Ok(responseResult);
-            //return Ok(users);
+            _User = user;
         }
-        [HttpGet("{id}"), Authorize]
-        public async Task<IActionResult> GetById(int id)
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsersAsync()
         {
-            ResponseResult responseResult = new ResponseResult();
-            responseResult.Code = 200;
-            responseResult.Message = "GetUserById Clicked";
-            responseResult.Data = new UserModel { Email = "Anu@123@nstarxinc.com", FirstName = "Anu", LastName = "Sharma" };
-            return Ok(responseResult);
-            //return Ok(new UserModel { Email = "Anu@123@nstarxinc.com", FirstName = "Anu", LastName = "Sharma" });
+            try
+            {
+                var users = await _User.GetAllUsersAsync();
+                return Ok(users);
+
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserByIdAsync(int id)
+        {
+            try
+            {
+                var user = await _User.GetUserByIdAsync(id);
+                return Ok(user);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex); 
+            }
         }
 
 
-        [HttpPost, Authorize]
-        public async Task<IActionResult> CreateUser([FromBody] UserModel userModel)
+        [HttpPost]
+        public async Task<IActionResult> CreateUserAsync([FromBody] UserModel user)
         {
-            ResponseResult responseResult = new ResponseResult();
-            responseResult.Code = 200;
-            responseResult.Message = "Create User Clicked";
-            responseResult.Data = userModel;
-            return Ok(responseResult);
-            // return Ok(userModel);
+            try
+            {
+                var userModel = await _User.CreateUserAsync(user);
+                return Ok(userModel);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
-        [HttpPut, Authorize]
-        public async Task<IActionResult> UpdateUser([FromBody] UserModel userModel)
+        [HttpPut]
+        public async Task<IActionResult> UpdateUserAsync([FromBody] UserModel user)
         {
-            ResponseResult responseResult = new ResponseResult();
-            responseResult.Code = 200;
-            responseResult.Message = "Update User Clicked";
-            responseResult.Data = userModel;
-            return Ok(responseResult);
-            //return Ok(userModel);
+            try
+            {
+                var userModel = await _User.UpdateUserAsync(user);
+                return Ok(userModel);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
-        [HttpDelete, Authorize]
-        public async Task<IActionResult> DeleteUser([FromBody] int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUserAsync(int id)
         {
-            ResponseResult responseResult = new ResponseResult();
-            responseResult.Code = 200;
-            responseResult.Message = "Delete User Clicked";
-            responseResult.Data = "User Deleted";
-            return Ok(responseResult);
-            //return Ok(0);
+            try
+            {
+                var message = await _User.DeleteUserAsync(id);
+                return Ok(message);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
     }
