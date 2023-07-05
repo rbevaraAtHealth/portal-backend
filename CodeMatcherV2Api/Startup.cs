@@ -48,7 +48,9 @@ namespace CodeMatcherV2Api
             IMapper mapper = MapperConfig.RegisterMaps().CreateMapper();
             services.AddSingleton(mapper);
             services.AddControllers();
-            services.AddTransient<IUserBusinessLayer, UserBusinessLayer>();
+            services.AddTransient<IUser, User>();
+            services.AddTransient<ILookUp, LookUp>();
+
             
             services
                 .AddSwaggerGen(c =>

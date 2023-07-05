@@ -1,12 +1,7 @@
 ﻿using CodeMatcherV2Api.BusinessLayer.Interfaces;
-using CodeMatcherV2Api.Dtos;
 using CodeMatcherV2Api.Models;
-using Gremlin.Net.Driver.Messages;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.Controllers
@@ -14,10 +9,10 @@ namespace CodeMatcherV2Api.Controllers
     [Route("api/[controller]")]
     public class UserController : BaseController
     {
-        private readonly IUserBusinessLayer _userBusinessLayer;
-        public UserController(IUserBusinessLayer userBusinessLayer)
+        private readonly IUser _User;
+        public UserController(IUser user)
         {
-            _userBusinessLayer = userBusinessLayer;
+            _User = user;
         }
 
         [HttpGet]
@@ -25,7 +20,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                var users = await _userBusinessLayer.GetAllUsersAsync();
+                var users = await _User.GetAllUsersAsync();
                 return Ok(users);
 
             }
@@ -39,7 +34,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                var user = await _userBusinessLayer.GetUserByIdAsync(id);
+                var user = await _User.GetUserByIdAsync(id);
                 return Ok(user);
             }
             catch(Exception ex)
@@ -54,7 +49,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                var userModel = await _userBusinessLayer.CreateUserAsync(user);
+                var userModel = await _User.CreateUserAsync(user);
                 return Ok(userModel);
             }
             catch(Exception ex)
@@ -68,7 +63,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                var userModel = await _userBusinessLayer.UpdateUserAsync(user);
+                var userModel = await _User.UpdateUserAsync(user);
                 return Ok(userModel);
             }
             catch(Exception ex)
@@ -81,7 +76,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                var message = await _userBusinessLayer.DeleteUserAsync(id);
+                var message = await _User.DeleteUserAsync(id);
                 return Ok(message);
             }
             catch(Exception ex)

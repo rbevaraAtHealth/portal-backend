@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.BusinessLayer
 {
-    public class UserBusinessLayer : IUserBusinessLayer
+    public class User : IUser
     {
         private readonly IMapper _mapper;
-        public UserBusinessLayer(IMapper mapper)
+        public User(IMapper mapper)
         {
                 _mapper= mapper;
         }

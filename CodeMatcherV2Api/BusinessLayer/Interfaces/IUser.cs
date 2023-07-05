@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.BusinessLayer.Interfaces
 {
-    public interface IUserBusinessLayer
+    public interface IUser
     {
         Task<IEnumerable<UserModel>> GetAllUsersAsync();
         Task<UserModel> GetUserByIdAsync(int id);
