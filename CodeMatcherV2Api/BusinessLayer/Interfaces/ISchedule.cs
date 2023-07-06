@@ -7,7 +7,7 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
 {
     public interface ISchedule
     {
-        Task<string> ScheduleJobAsync(string segment, string frequency, float threshold);
+        Task<string> ScheduleJobAsync(ScheduleModel schedule);
 
     }
 }

@@ -9,9 +9,9 @@ namespace CodeMatcherV2Api.BusinessLayer
 {
     public class Schedule: ISchedule
     {
-        public async Task<string> ScheduleJobAsync(string segment,string frequency, float threshold)
+        public async Task<string> ScheduleJobAsync(ScheduleModel schedule)
         {
-            return "run";
+            return "Job Scheduled Successfully";
         }
 
 

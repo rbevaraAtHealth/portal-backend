@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
+using CodeMatcherV2Api.Models;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -17,12 +18,13 @@ namespace CodeMatcherV2Api.Controllers
             _schedule = schedule;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ScheduleJob(string segment, string frequency, float threshold)
+        [HttpPost]
+        public async Task<IActionResult> ScheduleJob([FromBody] ScheduleModel schedule)
         {
+
             try
             {
-                var scheduleJob= await _schedule.ScheduleJobAsync(segment, frequency, threshold);
+                var scheduleJob= await _schedule.ScheduleJobAsync(schedule);
                 return Ok(scheduleJob);
 
             }

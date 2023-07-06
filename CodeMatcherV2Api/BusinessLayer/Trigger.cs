@@ -11,7 +11,7 @@ namespace CodeMatcherV2Api.BusinessLayer
     {
         public async Task<string> GetAllTriggerAsync(string segment)
         {
-            return "Trigger run Successfully";
+            return "Job Triggered Successfully";
         }
     }
 }
