@@ -11,6 +11,7 @@ namespace CodeMatcherV2Api
             var mapperConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<UserModel, UserDto>().ReverseMap();
+                //config.CreateMap<LookUpModel, LookUpDto>().ReverseMap();
             });
             return mapperConfig;
         }

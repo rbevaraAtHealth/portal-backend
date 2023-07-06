@@ -1,32 +1,32 @@
-﻿//using CodeMatcherV2Api.Models;
-//using Gremlin.Net.Driver.Messages;
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-//using System.Collections.Generic;
-//using System.Threading.Tasks;
+﻿using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
-//namespace CodeMatcherV2Api.Controllers
-//{
-//    [Route("api/[controller]")]
-//    public class LookUpController : BaseController
-//    {
+namespace CodeMatcherV2Api.Controllers
+{
+    [Route("api/[controller]")]
+    public class LookUpController : BaseController
+    {
+        private readonly ILookUp _lookUp;
+        public LookUpController(ILookUp lookUp)
+        {
+            _lookUp = lookUp;
+        }
 
-//        [HttpGet]
-//        public async Task<IActionResult> GetSegment()
-//        {
-//            List<string> segments = new List<string>();
-//            segments.Add("Insurance");
-//            segments.Add("School");
-//            segments.Add("Insurance");
-//            segments.Add("Hospital");
-//            segments.Add("State License");
-//            ResponseResult responseResult = new ResponseResult();
-//            responseResult.Code = 200;
-//            responseResult.Message = "Get Segments Clicked";
-//            responseResult.Data = segments;
+        [HttpGet]
+        public async Task<IActionResult> GetSegment(string lookupType)
+        {
+            try
+            {
+                var segments =await _lookUp.GetLookupsAsync(lookupType);
+                return Ok(segments);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-//            return  Ok(segments);
-
-//        }
-//    }
-//}
+        }
+    }
+}
