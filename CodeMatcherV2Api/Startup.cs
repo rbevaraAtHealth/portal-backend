@@ -53,7 +53,8 @@ namespace CodeMatcherV2Api
             services.AddSingleton(mapper);
             services.AddControllers();
             services.AddTransient<IUser, User>();
-            //services.AddTransient<ILookUp, LookUp>();
+            services.AddTransient<ITrigger, Trigger>();
+            services.AddTransient<ISchedule, Schedule>();
 
 
             services

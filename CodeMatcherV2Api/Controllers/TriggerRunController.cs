@@ -1,6 +1,8 @@
-﻿using CodeMatcherV2Api.Models;
+﻿using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,18 +11,29 @@ namespace CodeMatcherV2Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TriggerRunController : ControllerBase
+    public class TriggerRunController : BaseController
     {
-        //[HttpGet, Authorize]
-        //public async Task<IActionResult> RunJob([FromBody] UserModel userModel)
-        //{
+        private readonly ITrigger _trigger;
 
-        //    ResponseResult responseResult = new ResponseResult();
-        //    responseResult.Code = 200;
-        //    responseResult.Message = "Run User Clicked";
-        //    responseResult.Data = userModel;
-        //    return Ok(responseResult);
+        public TriggerRunController(ITrigger trigger)
+        {
+            _trigger = trigger;
+        }
 
-        //}
+        [HttpGet]
+        public async Task<IActionResult> GetAllTrigger(string segment)
+        {
+            try
+            {
+                var triggerJob = await _trigger.GetAllTriggerAsync(segment);
+                return Ok(triggerJob);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
     }
 }
