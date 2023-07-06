@@ -15,7 +15,7 @@ namespace CodeMatcherV2Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSegment(string lookupType)
+        public async Task<IActionResult> GetLookups(string lookupType)
         {
             try
             {
