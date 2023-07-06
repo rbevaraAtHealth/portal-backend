@@ -2,9 +2,11 @@ using System.Text;
 using AutoMapper;
 using CodeMatcherV2Api.BusinessLayer;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using CodeMatcherV2Api.Dtos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +27,8 @@ namespace CodeMatcherV2Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(options =>
+                                        options.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
             services.AddControllers();
 
             services.AddAuthentication(opt => {
@@ -50,8 +54,9 @@ namespace CodeMatcherV2Api
             services.AddControllers();
             services.AddTransient<IUser, User>();
             services.AddTransient<ILookUp, LookUp>();
+            services.AddTransient<ICodeMapping, CodeMapping>();
 
-            
+
             services
                 .AddSwaggerGen(c =>
                 {
@@ -81,7 +86,7 @@ namespace CodeMatcherV2Api
                             }
                         },
                         new string[] { }
-                    }});    
+                    }});
                     c.CustomSchemaIds(type => type.FullName);
 
                 });
