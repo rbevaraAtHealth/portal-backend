@@ -16,7 +16,7 @@ namespace CodeMatcherV2Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsersAsync()
+        public async Task<IActionResult> GetAllUsers()
         {
             try
             {
@@ -30,7 +30,7 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserByIdAsync(int id)
+        public async Task<IActionResult> GetUserById(int id)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace CodeMatcherV2Api.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateUserAsync([FromBody] UserModel user)
+        public async Task<IActionResult> CreateUser([FromBody] UserModel user)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace CodeMatcherV2Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUserAsync([FromBody] UserModel user)
+        public async Task<IActionResult> UpdateUser([FromBody] UserModel user)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
         [HttpDelete]
-        public async Task<IActionResult> DeleteUserAsync(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
             try
             {
