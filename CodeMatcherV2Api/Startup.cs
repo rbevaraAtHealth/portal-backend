@@ -55,6 +55,8 @@ namespace CodeMatcherV2Api
             services.AddTransient<IUser, User>();
             services.AddTransient<ITrigger, Trigger>();
             services.AddTransient<ISchedule, Schedule>();
+            services.AddTransient<ILookUp, LookUp>();
+            services.AddTransient<ICodeMapping, CodeMapping>();
 
 
             services
