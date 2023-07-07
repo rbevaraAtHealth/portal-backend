@@ -1,6 +1,10 @@
 ﻿using AutoMapper;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using CodeMatcherV2Api.Dtos;
+using CodeMatcherV2Api.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.BusinessLayer
@@ -8,22 +12,16 @@ namespace CodeMatcherV2Api.BusinessLayer
     public class LookUp : ILookUp
     {
         private readonly IMapper _mapper;
-        public LookUp(IMapper mapper)
+        private AppDbContext _context;
+        public LookUp(IMapper mapper, AppDbContext context)
         {
-            _mapper= mapper;
+            _context = context;
+            _mapper = mapper;
         }
-        public async Task<Dictionary<int, string>> GetLookupsAsync(string lookUpType)
+        public async Task<IEnumerable<LookupModel>> GetLookupByIdAsync(int lookUpTypeId)
         {
-            Dictionary<int,string> segments=new Dictionary<int,string>();
-            
-            if (lookUpType.ToLower() == "segment")
-            {
-                segments.Add(1, "Insurance");
-                segments.Add(2, "School");
-                segments.Add(3, "Hospital");
-                segments.Add(4, "State License");
-            }
-            return segments;
+            var lookup = await _context.Lookups.Where(x => x.LookupTypeId == lookUpTypeId).ToListAsync();
+            return _mapper.Map<List<LookupModel>>(lookup);
         }
     }
 }

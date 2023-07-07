@@ -43,8 +43,7 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
 
-
-        [HttpPost]
+        [HttpPost,Route("CreateUser")]
         public async Task<IActionResult> CreateUser([FromBody] UserModel user)
         {
             try
@@ -58,7 +57,7 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut,Route("UpdateUser")]
         public async Task<IActionResult> UpdateUser([FromBody] UserModel user)
         {
             try
@@ -71,7 +70,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(ex);
             }
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             try

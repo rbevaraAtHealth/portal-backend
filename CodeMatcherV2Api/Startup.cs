@@ -55,6 +55,7 @@ namespace CodeMatcherV2Api
             services.AddTransient<IUser, User>();
             services.AddTransient<ILookUp, LookUp>();
             services.AddTransient<ICodeMapping, CodeMapping>();
+            services.AddTransient<ILookupTypes, LookupTypes>();
 
 
             services
@@ -102,8 +103,9 @@ namespace CodeMatcherV2Api
 
             // app.UseHttpsRedirection();
 
+            app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwagger();

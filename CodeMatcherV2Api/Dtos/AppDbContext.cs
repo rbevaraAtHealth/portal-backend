@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
-
 namespace CodeMatcherV2Api.Dtos
 {
     public class AppDbContext : DbContext
