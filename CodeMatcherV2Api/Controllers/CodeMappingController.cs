@@ -14,7 +14,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             _codeMapping = codeMapping;
         }
-        [HttpGet]
+        [HttpGet,Route("GetCodeMappingRecords")]
         public async Task<IActionResult> GetCodeMappingRecords()
         {
             try
