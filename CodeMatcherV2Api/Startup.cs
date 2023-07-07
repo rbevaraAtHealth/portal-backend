@@ -54,6 +54,7 @@ namespace CodeMatcherV2Api
             services.AddControllers();
             services.AddTransient<IUser, User>();
             services.AddTransient<ILookUp, LookUp>();
+            services.AddTransient<IUploadCSV, UploadCSV>();
             services.AddTransient<ICodeMapping, CodeMapping>();
 
 
