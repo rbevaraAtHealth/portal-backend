@@ -12,10 +12,12 @@ namespace CodeMatcherV2Api.Controllers
     {
         private readonly ILookUp _lookUp;
         private readonly ILookupTypes _lookupTypes;
+        private readonly ResponseViewModel _responseViewModel;
         public LookUpController(ILookUp lookUp, ILookupTypes lookupTypes)
         {
             _lookUp = lookUp;
             _lookupTypes = lookupTypes; 
+            _responseViewModel = new ResponseViewModel();
         }
 
         [HttpGet,Route("GetLookups")]
@@ -24,21 +26,18 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 if (string.IsNullOrWhiteSpace(lookupType))
-                    throw new ArgumentNullException("LookType cann't be null",nameof(lookupType));
-                LookupTypeModel lookupdto =await _lookupTypes.GetLookupByNameAsync(lookupType);
-                if(lookupdto == null)
-                    throw new ArgumentNullException("No Looktype found", nameof(lookupType));
-                var lookupsdto =await _lookUp.GetLookupByIdAsync(lookupdto.LookupTypeId);
-                List<string> lookups = new List<string>();
-                foreach (var item in lookupsdto)
-                {
-                    lookups.Add(item.Name);
-                }
-                return Ok(lookups);
+                    throw new ArgumentNullException("Lookup Type cannot be null",nameof(lookupType));
+                LookupTypeModel lookupTypes =await _lookupTypes.GetLookupByNameAsync(lookupType);
+                if(lookupTypes == null)
+                    throw new ArgumentNullException("Looktype not found", nameof(lookupType));
+                var lookups =await _lookUp.GetLookupByIdAsync(lookupTypes.LookupTypeId);                
+                _responseViewModel.Model = lookups;
+                return Ok(_responseViewModel);
             }
             catch(Exception ex)
             {
-                return BadRequest(ex.Message);
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return Ok(_responseViewModel);
             }
 
         }
