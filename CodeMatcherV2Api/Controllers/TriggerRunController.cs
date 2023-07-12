@@ -20,7 +20,7 @@ namespace CodeMatcherV2Api.Controllers
             _trigger = trigger;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAllTrigger(string segment)
         {
             try
