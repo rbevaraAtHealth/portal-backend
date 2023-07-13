@@ -29,13 +29,16 @@ namespace CodeMatcherV2Api
         {
             services.AddCors(c =>
             {
-                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
             });
             services.AddDbContext<AppDbContext>(options =>
                                         options.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
             services.AddControllers();
 
-            services.AddAuthentication(opt => {
+            services.AddAuthentication(opt =>
+            {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
@@ -109,10 +112,9 @@ namespace CodeMatcherV2Api
             }
 
             // app.UseHttpsRedirection();
-
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors();
+            app.UseCors("AllowOrigin");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwagger();
