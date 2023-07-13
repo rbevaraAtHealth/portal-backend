@@ -13,7 +13,5 @@ namespace CodeMatcherV2Api.BusinessLayer
         {
             return "Job Scheduled Successfully";
         }
-
-
     }
 }
