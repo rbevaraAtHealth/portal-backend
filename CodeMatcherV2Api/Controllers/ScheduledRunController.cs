@@ -15,11 +15,11 @@ namespace CodeMatcherV2Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SchedulerRunController : BaseController
+    public class ScheduledRunController : BaseController
     {
         private readonly ISchedule _schedule;
         private readonly IHttpClientFactory _httpClientFactory;
-        public SchedulerRunController(ISchedule schedule,IHttpClientFactory httpClientFactory)
+        public ScheduledRunController(ISchedule schedule,IHttpClientFactory httpClientFactory)
         {
             _schedule = schedule;
             _httpClientFactory = httpClientFactory;
