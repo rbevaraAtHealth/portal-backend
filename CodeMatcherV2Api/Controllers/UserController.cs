@@ -3,6 +3,7 @@ using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using CodeMatcherV2Api.Middlewares.HttpHelper;
 
 namespace CodeMatcherV2Api.Controllers
 {

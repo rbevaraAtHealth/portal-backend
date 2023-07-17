@@ -5,6 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
 using CodeMatcherV2Api.Models;
+using System.Net.Http;
+using CodeMatcherV2Api.ApiRequestModels;
+using CodeMatcherV2Api.Middlewares.HttpHelper;
+using CodeMatcherV2Api.ApiResponeModel;
+using Newtonsoft.Json;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -13,19 +18,23 @@ namespace CodeMatcherV2Api.Controllers
     public class SchedulerRunController : BaseController
     {
         private readonly ISchedule _schedule;
-        public SchedulerRunController(ISchedule schedule)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public SchedulerRunController(ISchedule schedule,IHttpClientFactory httpClientFactory)
         {
             _schedule = schedule;
+            _httpClientFactory = httpClientFactory;
         }
 
         [HttpPost]
         public async Task<IActionResult> ScheduleJob([FromBody] ScheduleModel schedule)
         {
-
             try
             {
-                var scheduleJob= await _schedule.ScheduleJobAsync(schedule);
-                return Ok(scheduleJob);
+                string url = "code-generation/scheduled-run";
+                var requestModel =  _schedule.ApiRequestGet(schedule);
+                var apiResponse=await  HttpHelper.Post_HttpClient(_httpClientFactory, requestModel,url);
+                var SavedData= _schedule.APiResponseSave(apiResponse);
+                return Ok(SavedData);
 
             }
             catch (Exception ex)

@@ -1,3 +1,5 @@
+using System;
+using System.Net.Http.Headers;
 using System.Text;
 using AutoMapper;
 using CodeMatcherV2Api.BusinessLayer;
@@ -35,7 +37,8 @@ namespace CodeMatcherV2Api
                                         options.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
             services.AddControllers();
 
-            services.AddAuthentication(opt => {
+            services.AddAuthentication(opt =>
+            {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
@@ -63,8 +66,14 @@ namespace CodeMatcherV2Api
             services.AddTransient<IUploadCSV, UploadCSV>();
             services.AddTransient<ICodeMapping, CodeMapping>();
             services.AddTransient<ILookupTypes, LookupTypes>();
-
-
+            //services.AddHttpClient();
+            services.AddHttpClient("CodeMatcher", c =>
+            {
+                c.BaseAddress = new Uri("http://codeconv-app02.azurewebsites.net/");
+               // c.DefaultRequestHeaders.Add("Accept", "application/json");
+                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
+            
             services
                 .AddSwaggerGen(c =>
                 {
