@@ -1,10 +1,8 @@
-﻿using CodeMatcherV2Api.BusinessLayer;
-using CodeMatcherV2Api.BusinessLayer.Interfaces;
+﻿using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using CodeMatcherV2Api.Middlewares.HttpHelper;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -12,11 +10,9 @@ namespace CodeMatcherV2Api.Controllers
     public class UserController : BaseController
     {
         private readonly IUser _User;
-        private readonly ResponseViewModel _responseViewModel;
         public UserController(IUser user)
         {
             _User = user;
-            _responseViewModel = new ResponseViewModel();
         }
 
         [HttpGet]
@@ -25,14 +21,12 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 var users = await _User.GetAllUsersAsync();
-
-                _responseViewModel.Model = users;
+                return Ok(users);
             }
             catch (Exception ex)
             {
-                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(ex.Message);
             }
-            return Ok(_responseViewModel);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
@@ -40,13 +34,12 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 var user = await _User.GetUserByIdAsync(id);
-                _responseViewModel.Model = user;
+                return Ok(user);
             }
             catch (Exception ex)
             {
-                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(ex.Message);
             }
-            return Ok(_responseViewModel);
         }
 
         [HttpPost, Route("CreateUser")]
@@ -55,13 +48,12 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 var userModel = await _User.CreateUserAsync(user);
-                _responseViewModel.Model = userModel;
+                return Ok(userModel);
             }
             catch (Exception ex)
             {
-                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(ex.Message);
             }
-            return Ok(_responseViewModel);
         }
 
         [HttpPut, Route("UpdateUser")]
@@ -70,13 +62,12 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 var userModel = await _User.UpdateUserAsync(user);
-                _responseViewModel.Model = userModel;
+                return Ok(userModel);
             }
             catch (Exception ex)
             {
-                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(ex.Message);
             }
-            return Ok(_responseViewModel);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
@@ -84,13 +75,12 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 var message = await _User.DeleteUserAsync(id);
-                _responseViewModel.Message = message;
+                return Ok(message);
             }
             catch (Exception ex)
             {
-                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(ex.Message);
             }
-            return Ok(_responseViewModel);
         }
     }
 }

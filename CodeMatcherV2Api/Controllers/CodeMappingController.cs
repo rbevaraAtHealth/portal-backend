@@ -12,13 +12,13 @@ namespace CodeMatcherV2Api.Controllers
     public class CodeMappingController : BaseController
     {
         private readonly ICodeMapping _codeMapping;
-        private readonly ResponseViewModel _responseView;
+       // private readonly ResponseViewModel _responseView;
         private object _responseViewModel;
 
         public CodeMappingController(ICodeMapping codeMapping)
         {
             _codeMapping = codeMapping;
-            _responseView = new ResponseViewModel();
+          //  _responseView = new ResponseViewModel();
         }
         [HttpGet,Route("GetCodeMappingRecords")]
         public async Task<IActionResult> GetCodeMappingRecords()
@@ -26,13 +26,12 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                var records = await _codeMapping.GetCodeMappingsRecordsAsync();
-                _responseView.Model= records;
+                return Ok(records);
             }
             catch(Exception ex) 
             {
-                _responseView.ExceptionMessage = ex.Message;
+                return BadRequest(ex.Message);
             }
-            return Ok(_responseViewModel);
         }
     }
 }

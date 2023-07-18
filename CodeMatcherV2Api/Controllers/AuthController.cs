@@ -16,19 +16,16 @@ namespace CodeMatcherV2Api.Controllers
     public class AuthController : ControllerBase
     {   
         private readonly IConfiguration _configuration;
-        private readonly ResponseViewModel _responseViewModel;
-
         public AuthController(IConfiguration configuration)
         {
             _configuration = configuration;
-             _responseViewModel = new ResponseViewModel();
         }
         [HttpPost, Route("login")]
         public IActionResult Login([FromBody]LoginModel user)
         {
             if (user == null)
             {
-                return Ok(_responseViewModel);
+                return Ok(user);
             }
 
             if ((user.UserName.ToLower() == "admin" || user.UserName.ToLower() == "internaluser" )  && user.Password == "Password@123")
@@ -52,7 +49,7 @@ namespace CodeMatcherV2Api.Controllers
             }
             else
             {
-                return Ok(_responseViewModel);
+                return BadRequest();
             }
         }
     }
