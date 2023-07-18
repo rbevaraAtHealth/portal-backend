@@ -16,17 +16,19 @@ namespace CodeMatcherV2Api.Controllers
     public class AuthController : ControllerBase
     {   
         private readonly IConfiguration _configuration;
+        private readonly ResponseViewModel _responseViewModel;
 
         public AuthController(IConfiguration configuration)
         {
             _configuration = configuration;
+             _responseViewModel = new ResponseViewModel();
         }
         [HttpPost, Route("login")]
         public IActionResult Login([FromBody]LoginModel user)
         {
             if (user == null)
             {
-                return BadRequest("Invalid client request");
+                return Ok(_responseViewModel);
             }
 
             if ((user.UserName.ToLower() == "admin" || user.UserName.ToLower() == "internaluser" )  && user.Password == "Password@123")
@@ -43,15 +45,14 @@ namespace CodeMatcherV2Api.Controllers
                     audience: _configuration["JWT:ValidAudience"],
                     claims: authClaims,
                     expires: DateTime.Now.AddHours(3),
-                    signingCredentials: signinCredentials
-                );
+                    signingCredentials: signinCredentials);
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
                 return Ok(new { Token = tokenString });
             }
             else
             {
-                return Unauthorized();
+                return Ok(_responseViewModel);
             }
         }
     }

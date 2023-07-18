@@ -14,10 +14,12 @@ namespace CodeMatcherV2Api.Controllers
     public class TriggerRunController : BaseController
     {
         private readonly ITrigger _trigger;
+        private readonly ResponseViewModel _responseViewModel;
 
         public TriggerRunController(ITrigger trigger)
         {
             _trigger = trigger;
+            _responseViewModel = new ResponseViewModel();
         }
 
         [HttpGet]
@@ -26,14 +28,14 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 var triggerJob = await _trigger.GetAllTriggerAsync(segment);
-                return Ok(triggerJob);
-
+                _responseViewModel.Message = segment;
+              
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                _responseViewModel.ExceptionMessage = ex.Message;
             }
+            return Ok(_responseViewModel);
         }
-
     }
 }
