@@ -59,6 +59,5 @@ namespace CodeMatcherV2Api.Controllers
             var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
             return (extension == ".csv" || extension == ".CSV");
         }
-
     }
 }

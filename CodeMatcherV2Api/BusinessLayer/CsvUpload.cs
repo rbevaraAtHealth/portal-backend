@@ -61,7 +61,6 @@ namespace CodeMatcherV2Api.BusinessLayer
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "Resources\\Files", fileName);
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    BinaryWriter w = new BinaryWriter(stream);
                     await file.CopyToAsync(stream);
                 }
                 return path;
@@ -73,4 +72,3 @@ namespace CodeMatcherV2Api.BusinessLayer
         }
     }
 }
-

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CodeMatcherV2Api.Dtos
 {
@@ -9,7 +11,7 @@ namespace CodeMatcherV2Api.Dtos
         public int LookupTypeId { get; set; }
 
         [ForeignKey("LookupTypeId")]
-        public LookupTypeDto LookupTypeDto { get; set; }
+        public LookupTypeDto LookupType { get; set; }
 
         public string Name { get; set; }
     }
