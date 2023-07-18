@@ -4,24 +4,28 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using CodeMatcherV2Api.Middlewares.HttpHelper;
+using System.Net.Http;
 
 namespace CodeMatcherV2Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UploadCSVController : ControllerBase
+    public class CsvUploadController : ControllerBase
     {
-        private readonly IUploadCSV _Upload;
-        public UploadCSVController(IUploadCSV upload)
+        private readonly ICsvUpload _Upload;
+        private readonly IHttpClientFactory _httpClientFactory;
+        public CsvUploadController(ICsvUpload upload,IHttpClientFactory httpClientFactory)
         {
             _Upload = upload;
+            _httpClientFactory = httpClientFactory;
         }
 
         [HttpPost("UploadFile")]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
 
-            if (CheckIfCSVFile(file))
+            if (CheckIfCsvFile(file))
             {
                 var fileUploader = await _Upload.WriteFile(file);
                 return Ok(fileUploader);
@@ -34,12 +38,15 @@ namespace CodeMatcherV2Api.Controllers
         }
 
         [HttpPost("UploadCsv")]
-        public async Task<IActionResult> UploadCsv([FromBody] UploadModel upload)
+        public async Task<IActionResult> UploadCsv([FromBody] CgCsvUploadModel upload)
         {
             try
             {
-                var uploadModel = await _Upload.GetUploadCSVAsync(upload);
-                return Ok(uploadModel);
+                var requestModel = _Upload.CgUploadCsvRequestGet(upload);
+                var url = "code-generation/csv-upload";
+                var response =await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel, url);
+                var responseModel = _Upload.CgUploadSaveResponse(response);
+                return Ok(responseModel);
             }
             catch (Exception ex)
             {
@@ -47,8 +54,7 @@ namespace CodeMatcherV2Api.Controllers
             }
 
         }
-
-        private bool CheckIfCSVFile(IFormFile file)
+        private bool CheckIfCsvFile(IFormFile file)
         {
             var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
             return (extension == ".csv" || extension == ".CSV");

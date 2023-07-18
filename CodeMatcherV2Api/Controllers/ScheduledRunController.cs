@@ -17,31 +17,50 @@ namespace CodeMatcherV2Api.Controllers
     [ApiController]
     public class ScheduledRunController : BaseController
     {
-        private readonly ISchedule _schedule;
-        private readonly IHttpClientFactory _httpClientFactory;
-        public ScheduledRunController(ISchedule schedule,IHttpClientFactory httpClientFactory)
-        {
-            _schedule = schedule;
-            _httpClientFactory = httpClientFactory;
-        }
+        //private readonly ISchedule _schedule;
+        //private readonly IHttpClientFactory _httpClientFactory;
+        //public ScheduledRunController(ISchedule schedule,IHttpClientFactory httpClientFactory)
+        //{
+        //    _schedule = schedule;
+        //    _httpClientFactory = httpClientFactory;
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> ScheduleJob([FromBody] ScheduleModel schedule)
-        {
-            try
-            {
-                string url = "code-generation/scheduled-run";
-                var requestModel =  _schedule.ApiRequestGet(schedule);
-                var apiResponse=await  HttpHelper.Post_HttpClient(_httpClientFactory, requestModel,url);
-                var SavedData= _schedule.APiResponseSave(apiResponse);
-                return Ok(SavedData);
+        //[HttpPost,Route("CodeGenerationScheduleJob")]
+        ////[HttpGet]
+        //public async Task<IActionResult> CodeGenerationScheduleJob([FromBody] CgScheduledModel schedule)
+        //{
+        //    try
+        //    {
+        //        string url = "code-generation/scheduled-run";
+        //        var requestModel =  _schedule.ApiRequestGet(schedule);
+        //        var apiResponse=await  HttpHelper.Post_HttpClient(_httpClientFactory, requestModel,url);
+        //        var SavedData= _schedule.APiResponseSave(apiResponse);
+        //        return Ok(SavedData);
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex);
+        //    }
+        //}
+        //[HttpPost,Route("MonthlyEmbedScheduledRun")]
+        //public async Task<IActionResult> MonthlyEmbedScheduledRun([FromBody] CgScheduledModel schedule)
+        //{
+        //    try
+        //    {
+        //        string url = "code-generation/scheduled-run";
+        //        var requestModel = _schedule.ApiRequestGet(schedule);
+        //        var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel, url);
+        //        var SavedData = _schedule.APiResponseSave(apiResponse);
+        //        return Ok(SavedData);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex);
+        //    }
+
+        //}
 
     }
 }

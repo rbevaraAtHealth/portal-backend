@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace CodeMatcherV2Api.ApiResponeModel
 {
-    public class CgUploadCsvResModel
+    public class CgScheduledRunResModel
     {
         [JsonProperty(PropertyName = "message")]
         public string Message { get; set; }

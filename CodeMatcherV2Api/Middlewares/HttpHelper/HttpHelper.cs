@@ -1,7 +1,4 @@
-﻿using CodeMatcherV2Api.ApiResponeModel;
-using CodeMatcherV2Api.Models;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
 

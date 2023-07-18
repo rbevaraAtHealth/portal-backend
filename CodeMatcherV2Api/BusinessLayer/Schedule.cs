@@ -15,25 +15,25 @@ namespace CodeMatcherV2Api.BusinessLayer
     public class Schedule: ISchedule
     {
        
-        public CGScheduledRunReqModel ApiRequestGet(ScheduleModel schedule)
+        public CgScheduledRunReqModel ApiRequestGet(CgScheduledModel schedule)
         {
-            CGScheduledRunReqModel requestModel = new CGScheduledRunReqModel();
+            CgScheduledRunReqModel requestModel = new CgScheduledRunReqModel();
             requestModel.Segment = schedule.Segment;
             requestModel.RunSchedule = schedule.RunSchedule;
             requestModel.Threshold = schedule.Threshold;
-            requestModel.LatestLink = schedule.LatestLink;
-            requestModel.ClientId = schedule.Client_Id;
+            requestModel.LatestLink = "32342";
+            requestModel.ClientId = "All";
             return  requestModel;
         }
 
-        public  CGScheduleRunResModel APiResponseSave(HttpResponseMessage response)
+        public  CgScheduledRunResModel APiResponseSave(HttpResponseMessage response)
         {
-            CGScheduleRunResModel responseViewModel = new CGScheduleRunResModel();
+            CgScheduledRunResModel responseViewModel = new CgScheduledRunResModel();
             if (response.IsSuccessStatusCode)
             {
                 string httpResult =  response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 if (!string.IsNullOrWhiteSpace(httpResult))
-                    responseViewModel = JsonConvert.DeserializeObject<CGScheduleRunResModel>(httpResult);
+                    responseViewModel = JsonConvert.DeserializeObject<CgScheduledRunResModel>(httpResult);
                 if (responseViewModel != null)
                 {
                     return responseViewModel;

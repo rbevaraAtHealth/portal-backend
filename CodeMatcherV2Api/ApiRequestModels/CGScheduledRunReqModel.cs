@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace CodeMatcherV2Api.ApiRequestModels
 {
-    public class CGScheduledRunReqModel
+    public class CgScheduledRunReqModel
     {
         [JsonProperty(PropertyName = "segment")]
         public string Segment { get; set; }

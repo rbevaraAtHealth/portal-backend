@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace CodeMatcherV2Api.ApiResponeModel
 {
-    public class CGScheduleRunResModel
+    public class MonthlyEmbedScheduledRunResModel
     {
         [JsonProperty(PropertyName = "message")]
         public string Message { get; set; }

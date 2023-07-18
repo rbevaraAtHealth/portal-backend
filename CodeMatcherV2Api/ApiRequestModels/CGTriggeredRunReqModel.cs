@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace CodeMatcherV2Api.ApiRequestModels
 {
-    public class CGTriggeredRunReqModel
+    public class CgTriggeredRunReqModel
     {
         [JsonProperty(PropertyName = "segment")]
         public string Segment { get; set; }
@@ -12,7 +12,7 @@ namespace CodeMatcherV2Api.ApiRequestModels
         [JsonProperty(PropertyName = "latest_link")]
         public string LatestLink { get; set; }
         [JsonProperty(PropertyName = "client_Id")]
-        public string Client_Id { get; set; }
+        public string ClientId { get; set; }
 
     }
 }

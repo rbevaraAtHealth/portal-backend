@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace CodeMatcherV2Api.ApiRequestModels
 {
-    public class EmbedScheduledRunReqModel
+    public class MonthlyEmbedScheduledRunReqModel
     {
         [JsonProperty(PropertyName = "segment")]
         public string Segment { get; set; }
