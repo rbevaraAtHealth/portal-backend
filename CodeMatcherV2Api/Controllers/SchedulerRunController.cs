@@ -13,9 +13,11 @@ namespace CodeMatcherV2Api.Controllers
     public class SchedulerRunController : BaseController
     {
         private readonly ISchedule _schedule;
+        private readonly ResponseViewModel _responseViewModel;
         public SchedulerRunController(ISchedule schedule)
         {
             _schedule = schedule;
+            _responseViewModel = new ResponseViewModel();
         }
 
         [HttpPost]
@@ -25,14 +27,14 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 var scheduleJob= await _schedule.ScheduleJobAsync(schedule);
-                return Ok(scheduleJob);
-
+                _responseViewModel.Message = scheduleJob;
+            
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                _responseViewModel.ExceptionMessage = ex.Message;
             }
+            return Ok(_responseViewModel);
         }
-
     }
 }

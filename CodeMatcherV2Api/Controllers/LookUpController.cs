@@ -32,14 +32,12 @@ namespace CodeMatcherV2Api.Controllers
                     throw new ArgumentNullException("Looktype not found", nameof(lookupType));
                 var lookups =await _lookUp.GetLookupByIdAsync(lookupTypes.LookupTypeId);                
                 _responseViewModel.Model = lookups;
-                return Ok(_responseViewModel);
             }
             catch(Exception ex)
             {
                 _responseViewModel.ExceptionMessage = ex.Message;
-                return Ok(_responseViewModel);
             }
-
+            return Ok(_responseViewModel);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.BusinessLayer.Interfaces

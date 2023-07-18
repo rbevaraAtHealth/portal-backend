@@ -12,25 +12,26 @@ namespace CodeMatcherV2Api.Controllers
     public class UploadCSVController : ControllerBase
     {
         private readonly IUploadCSV _Upload;
+        private readonly ResponseViewModel _responseViewModel;
         public UploadCSVController(IUploadCSV upload)
         {
             _Upload = upload;
+            _responseViewModel = new ResponseViewModel();
         }
 
         [HttpPost("UploadFile")]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
-
             if (CheckIfCSVFile(file))
             {
                 var fileUploader = await _Upload.WriteFile(file);
-                return Ok(fileUploader);
+                _responseViewModel.Message = fileUploader;                
             }
             else
             {
-                return BadRequest(new { message = "Invlaid File Extension" });
-
+                _responseViewModel.ExceptionMessage = "Invlaid File Extension";
             }
+            return Ok(_responseViewModel);
         }
 
         [HttpPost("UploadCsv")]
@@ -38,14 +39,14 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                var uploadModel = await _Upload.GetUploadCSVAsync(upload);
-                return Ok(uploadModel);
+                var uploadModel = await _Upload.GetUploadCSVAsync(upload);                
+                _responseViewModel.Message = uploadModel;                
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                _responseViewModel.ExceptionMessage = ex.Message;
             }
-
+            return Ok(_responseViewModel);
         }
 
         private bool CheckIfCSVFile(IFormFile file)
@@ -53,6 +54,5 @@ namespace CodeMatcherV2Api.Controllers
             var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
             return (extension == ".csv" || extension == ".CSV");
         }
-
     }
 }

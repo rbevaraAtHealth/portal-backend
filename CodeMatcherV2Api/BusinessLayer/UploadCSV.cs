@@ -3,7 +3,6 @@ using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -44,7 +43,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             catch (Exception ex)
             {
-                            }
+            }
             return "";
         }
     }
