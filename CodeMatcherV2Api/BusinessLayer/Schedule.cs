@@ -14,7 +14,10 @@ namespace CodeMatcherV2Api.BusinessLayer
 {
     public class Schedule: ISchedule
     {
-       
+        public async Task<string> ScheduleJobAsync()
+        {
+            return "Job Scheduled Successfully";
+        }
         public CgScheduledRunReqModel ApiRequestGet(CgScheduledModel schedule)
         {
             CgScheduledRunReqModel requestModel = new CgScheduledRunReqModel();

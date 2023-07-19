@@ -11,6 +11,7 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
 {
     public interface ISchedule
     {
+        Task<string> ScheduleJobAsync();
         CgScheduledRunReqModel ApiRequestGet(CgScheduledModel schedule);
         CgScheduledRunResModel APiResponseSave(HttpResponseMessage httpResponse);
 

@@ -17,14 +17,28 @@ namespace CodeMatcherV2Api.Controllers
     [ApiController]
     public class ScheduledRunController : BaseController
     {
-        //private readonly ISchedule _schedule;
-        //private readonly IHttpClientFactory _httpClientFactory;
-        //public ScheduledRunController(ISchedule schedule,IHttpClientFactory httpClientFactory)
-        //{
-        //    _schedule = schedule;
-        //    _httpClientFactory = httpClientFactory;
-        //}
+        private readonly ISchedule _schedule;
+        private readonly IHttpClientFactory _httpClientFactory;
+        public ScheduledRunController(ISchedule schedule, IHttpClientFactory httpClientFactory)
+        {
+            _schedule = schedule;
+            _httpClientFactory = httpClientFactory;
+        }
+        [HttpGet]
+        public async Task<IActionResult> ScheduleJob()
+        {
 
+            try
+            {
+                var scheduleJob = await _schedule.ScheduleJobAsync();
+                return Ok(scheduleJob);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
         //[HttpPost,Route("CodeGenerationScheduleJob")]
         ////[HttpGet]
         //public async Task<IActionResult> CodeGenerationScheduleJob([FromBody] CgScheduledModel schedule)
