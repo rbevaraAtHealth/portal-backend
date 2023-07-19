@@ -11,7 +11,7 @@ namespace CodeMatcherV2Api.Dtos
 
         private DateTime created;
 
-        public virtual DateTime? CreatedTime
+        public virtual DateTime CreatedTime
         { 
             get { return created; }
             private set { created = DateTime.Now; } 

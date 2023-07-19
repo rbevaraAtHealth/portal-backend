@@ -4,7 +4,6 @@ namespace CodeMatcherV2Api.Models
 {
     public class CodeGenerationModel
     {
-        public int RequestId { get; set; }
         public int RunTypeId { get; set; }
         public int SegmentId { get; set; }
         public string RunSchedule { get; set; }

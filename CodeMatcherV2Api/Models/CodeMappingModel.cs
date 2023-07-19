@@ -12,7 +12,5 @@ namespace CodeMatcherV2Api.Models
         public string RunBy { get; set; }
         public string RunType { get; set; }
         public CodeMappingSummary CodeMappingSummary { get; set; }
-
-
     }
 }

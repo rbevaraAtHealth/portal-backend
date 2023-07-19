@@ -39,8 +39,7 @@ namespace CodeMatcherV2Api.Migrations
                         name: "FK_Lookups_LookupTypes_LookupTypeId",
                         column: x => x.LookupTypeId,
                         principalTable: "LookupTypes",
-                        principalColumn: "LookupTypeId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "LookupTypeId");
                 });
 
             migrationBuilder.CreateTable(
@@ -54,12 +53,12 @@ namespace CodeMatcherV2Api.Migrations
                     RunSchedule = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Threshold = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LatestLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClientId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: true)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    ClientId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,14 +67,12 @@ namespace CodeMatcherV2Api.Migrations
                         name: "FK_CodeGenerations_Lookups_RunTypeId",
                         column: x => x.RunTypeId,
                         principalTable: "Lookups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_CodeGenerations_Lookups_SegmentTypeId",
                         column: x => x.SegmentTypeId,
                         principalTable: "Lookups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -89,7 +86,7 @@ namespace CodeMatcherV2Api.Migrations
                     EmbeddingFrequencyId = table.Column<int>(type: "int", nullable: false),
                     RunSchedule = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: true)
@@ -101,20 +98,17 @@ namespace CodeMatcherV2Api.Migrations
                         name: "FK_Embeddings_Lookups_EmbeddingFrequencyId",
                         column: x => x.EmbeddingFrequencyId,
                         principalTable: "Lookups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Embeddings_Lookups_RunTypeId",
                         column: x => x.RunTypeId,
                         principalTable: "Lookups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Embeddings_Lookups_SegmentTypeId",
                         column: x => x.SegmentTypeId,
                         principalTable: "Lookups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
