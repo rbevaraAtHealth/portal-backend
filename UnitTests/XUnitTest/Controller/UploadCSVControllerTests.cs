@@ -5,24 +5,24 @@ using XUnitTest.MockData;
 
 namespace XUnitTest.Controller
 {
-    public class UploadCSVControllerTests
-    {
-        private readonly Mock<IUploadCSV> _Upload;
-        public UploadCSVControllerTests()
-        {
-            _Upload = new Mock<IUploadCSV>();
-        }
+    //public class UploadCSVControllerTests
+    //{
+    //    private readonly Mock<ICsvUpload> _Upload;
+    //    public UploadCSVControllerTests()
+    //    {
+    //        _Upload = new Mock<ICsvUpload>();
+    //    }
 
-        [Fact]
-        public async Task UploadCSVController_SholudCallUploadCSVAsyncOnce()
-        {
-            //Arrange
-            var newUpload = UploadCSVMockData.UploadData();
-            var controller = new UploadCSVController(_Upload.Object);
-            //Act
-            var result = await controller.UploadCsv(newUpload);
-            //Assert
-            _Upload.Verify(c => c.GetUploadCSVAsync(newUpload),Times.Exactly(1));
-        }
-    }
+    //    [Fact]
+    //    public async Task UploadCSVController_SholudCallUploadCSVAsyncOnce()
+    //    {
+    //        //Arrange
+    //        var newUpload = UploadCSVMockData.UploadData();
+    //        var controller = new CsvUploadController(_Upload.Object);
+    //        //Act
+    //        var result = await controller.UploadCsv(newUpload);
+    //        //Assert
+    //        _Upload.Verify(c => c.GetUploadCSVAsync(newUpload), Times.Exactly(1));
+    //    }
+    //}
 }

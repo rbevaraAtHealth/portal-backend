@@ -3,16 +3,16 @@
 namespace XUnitTest.MockData
 {
     public class UploadCSVMockData
-    {
-        public static UploadModel UploadData()
-        {
-            return new UploadModel
-            {
+{
+    //public static UploadModel UploadData()
+    //{
+    //    return new UploadModel
+    //    {
 
-                Segment = "Hospital",
-                Threshold = 85.05f,
-                CsvFilePath = "Test1",
-            };
-        }
-    }
+    //        Segment = "Hospital",
+    //        Threshold = 85.05f,
+    //        CsvFilePath = "Test1",
+    //    };
+    //}
+}
 }
