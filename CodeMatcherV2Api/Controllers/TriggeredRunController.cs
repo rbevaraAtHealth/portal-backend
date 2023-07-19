@@ -25,8 +25,22 @@ namespace CodeMatcherV2Api.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllTrigger(string segment)
+        {
+            try
+            {
+                var triggerJob = await _trigger.GetAllTriggerAsync(segment);
+                return Ok(triggerJob);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         [HttpPost, Route("CodeGenerationTriggerRun")]
-        //[HttpGet]
         public async Task<IActionResult> CodeGenerationTriggerdRun(CgTriggerRunModel trigger)
         {
             try
