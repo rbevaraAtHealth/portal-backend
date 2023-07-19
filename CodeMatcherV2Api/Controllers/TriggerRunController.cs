@@ -22,7 +22,7 @@ namespace CodeMatcherV2Api.Controllers
             _responseViewModel = new ResponseViewModel();
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAllTrigger(string segment)
         {
             try
