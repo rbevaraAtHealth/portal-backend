@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
-using CodeMatcherV2Api.Dtos;
+using CodeMatcherV2Api.EntityFrameworkCore;
 using CodeMatcherV2Api.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;

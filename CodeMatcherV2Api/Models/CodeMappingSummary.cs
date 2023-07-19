@@ -15,6 +15,5 @@ namespace CodeMatcherV2Api.Models
         public int ProcessedRecords { get; set; }
         public int CodeGeneratedRecords { get; set; }
         public int CodeNotGeneratedRecords { get; set; }
-
     }
 }
