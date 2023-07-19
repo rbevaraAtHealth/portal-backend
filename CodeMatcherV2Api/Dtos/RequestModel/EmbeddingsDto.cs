@@ -1,10 +1,9 @@
-﻿using CodeMatcherV2Api.BusinessLayer;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CodeMatcherV2Api.Dtos
+namespace CodeMatcherV2Api.Dtos.RequestDtos
 {
-    public class CodeGenerationDto : AuditEntity
+    public class EmbeddingsDto : AuditEntity
     {
         [Key]
         public int Id { get; set; }
@@ -19,12 +18,11 @@ namespace CodeMatcherV2Api.Dtos
         [ForeignKey("SegmentTypeId")]
         public LookupDto SegmentType { get; set; }
 
+        public int EmbeddingFrequencyId { get; set; }
+
+        [ForeignKey("EmbeddingFrequencyId")]
+        public LookupDto EmbeddingFrequency { get; set; }
+
         public string RunSchedule { get; set; }
-
-        public string Threshold { get; set; }
-
-        public string LatestLink { get; set; }
-
-        public string ClientId { get; set; }
     }
 }
