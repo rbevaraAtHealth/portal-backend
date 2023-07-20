@@ -1,15 +1,8 @@
-﻿using CodeMatcherV2Api.BusinessLayer;
-using CodeMatcherV2Api.BusinessLayer.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
-using CodeMatcherV2Api.Models;
 using System.Net.Http;
-using CodeMatcherV2Api.ApiRequestModels;
-using CodeMatcherV2Api.Middlewares.HttpHelper;
-using CodeMatcherV2Api.ApiResponeModel;
-using Newtonsoft.Json;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -24,21 +17,61 @@ namespace CodeMatcherV2Api.Controllers
             _schedule = schedule;
             _httpClientFactory = httpClientFactory;
         }
-        [HttpGet]
-        public async Task<IActionResult> ScheduleJob()
+        [HttpGet,Route("Code Generation Schedule Run")]
+        public async Task<IActionResult> CgScheduleJob()
         {
-
             try
             {
-                var scheduleJob = await _schedule.ScheduleJobAsync();
+                var scheduleJob = await _schedule.GetCgScheduleJobAsync();
                 return Ok(scheduleJob);
-
             }
             catch (Exception ex)
             {
                 return BadRequest(ex);
             }
         }
+        [HttpGet, Route("Weekly Embedding Schedule Run")]
+        public async Task<IActionResult> WeeklyScheduleJob()
+        {
+            try
+            {
+                var scheduleJob = await _schedule.GetweeklyJobScheduleAsync();
+                return Ok(scheduleJob);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+        [HttpGet, Route("Monthly Schedule Run")]
+        public async Task<IActionResult> MonthlyScheduleJob()
+        {
+            try
+            {
+                var scheduleJob = await _schedule.GetMonthlyScheduleJobAsync();
+                return Ok(scheduleJob);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+       
+        [HttpGet, Route("Get All Scheduled Jobs List")]
+        public async Task<IActionResult> GetAllScheduledJobs()
+        {
+            try
+            {
+                var scheduleJob = await _schedule.GetAllScheduleJobsAsync();
+                return Ok(scheduleJob);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        // public
         //[HttpPost,Route("CodeGenerationScheduleJob")]
         ////[HttpGet]
         //public async Task<IActionResult> CodeGenerationScheduleJob([FromBody] CgScheduledModel schedule)

@@ -1,12 +1,8 @@
-﻿using AutoMapper;
-using CodeMatcherV2Api.ApiRequestModels;
+﻿using CodeMatcherV2Api.ApiRequestModels;
 using CodeMatcherV2Api.ApiResponeModel;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
-using CodeMatcherV2Api.Dtos;
 using CodeMatcherV2Api.Models;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -14,9 +10,23 @@ namespace CodeMatcherV2Api.BusinessLayer
 {
     public class Trigger : ITrigger
     {
-        public async Task<string> GetAllTriggerAsync(string segment)
+        public async Task<string> GetAllTriggerAsync()
         {
             return "Job Triggered Successfully";
+        }
+        public async Task<string> GetCgTriggerJobAsync()
+        {
+            return "Code generation job triggered successfully";
+        }
+
+        public async Task<string> GetMonthlyTriggerJobAsync()
+        {
+            return "Monthly job triggered successfully";
+        }
+
+        public async Task<string> GetWeeklyTriggerJobAsync()
+        {
+            return "Weekly job triggered successfully";
         }
         public CgTriggeredRunReqModel CgApiRequestGet(CgTriggerRunModel trigger)
         {
@@ -42,14 +52,12 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return responseViewModel;
         }
-
         public MonthlyEmbedTriggeredRunReqModel MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger)
         {
             MonthlyEmbedTriggeredRunReqModel requestModel = new MonthlyEmbedTriggeredRunReqModel();
             requestModel.Segment = trigger.Segment;
             return requestModel;
         }
-
         public WeeklyEmbedTriggeredRunReqModel WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger)
         {
             WeeklyEmbedTriggeredRunReqModel requestModel = new WeeklyEmbedTriggeredRunReqModel();
@@ -57,7 +65,6 @@ namespace CodeMatcherV2Api.BusinessLayer
             requestModel.LatestLink = "32342";
             return requestModel;
         }
-
         public MonthlyEmbedTriggeredRunResModel MonthlyEmbedApiResponseSave(HttpResponseMessage httpResponse)
         {
             MonthlyEmbedTriggeredRunResModel responseModel = new MonthlyEmbedTriggeredRunResModel();
@@ -73,7 +80,6 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return responseModel;
         }
-
         public WeeklyEmbedTriggeredRunResModel WeeklyEmbedApiResponseSave(HttpResponseMessage httpResponse)
         {
             WeeklyEmbedTriggeredRunResModel responseModel = new WeeklyEmbedTriggeredRunResModel();
@@ -82,7 +88,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                 string httpResult = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 if (!string.IsNullOrWhiteSpace(httpResult))
                     responseModel = JsonConvert.DeserializeObject<WeeklyEmbedTriggeredRunResModel>(httpResult);
-                 return responseModel;
+                return responseModel;
             }
             return responseModel;
         }
