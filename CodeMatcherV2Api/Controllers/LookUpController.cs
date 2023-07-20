@@ -18,7 +18,7 @@ namespace CodeMatcherV2Api.Controllers
             _lookupTypes = lookupTypes; 
         }
 
-        [HttpGet,Route("GetLookups")]
+        [HttpGet,Route("Get Lookups")]
         public async Task<IActionResult> GetLookups(string lookupType)
         {
             try
