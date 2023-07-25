@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CodeMatcherV2Api.Dtos.RequestDtos
 {
-    public class EmbeddingsDto : AuditEntity
+    public class EmbeddingsRequestDto : AuditEntity
     {
         [Key]
         public int Id { get; set; }

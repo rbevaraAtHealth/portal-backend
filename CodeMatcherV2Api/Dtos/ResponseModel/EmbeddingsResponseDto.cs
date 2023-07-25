@@ -13,9 +13,9 @@ namespace CodeMatcherV2Api.Dtos.ResponseModel
         public int RequestId { get; set; }
 
         [ForeignKey("RequestId")]
-        public EmbeddingsDto Request { get; set; }
+        public EmbeddingsRequestDto Request { get; set; }
 
-        public bool? IsSuccess { get; set; }
+        public bool IsSuccess { get; set; } = false;
 
         public string ResponseMessage { get; set; }
 

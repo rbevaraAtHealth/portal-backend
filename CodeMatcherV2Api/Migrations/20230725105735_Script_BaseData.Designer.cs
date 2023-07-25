@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CodeMatcherV2Api.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20230719100035_InitialModel")]
-    partial class InitialModel
+    [DbContext(typeof(CodeMatcherDbContext))]
+    [Migration("20230725105735_Script_BaseData")]
+    partial class Script_BaseData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,7 +64,7 @@ namespace CodeMatcherV2Api.Migrations
                     b.ToTable("LookupTypes");
                 });
 
-            modelBuilder.Entity("CodeMatcherV2Api.Dtos.RequestDtos.CodeGenerationDto", b =>
+            modelBuilder.Entity("CodeMatcherV2Api.Dtos.RequestDtos.CodeGenerationRequestDto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -111,10 +111,10 @@ namespace CodeMatcherV2Api.Migrations
 
                     b.HasIndex("SegmentTypeId");
 
-                    b.ToTable("CodeGenerations");
+                    b.ToTable("CodeGenerationRequests");
                 });
 
-            modelBuilder.Entity("CodeMatcherV2Api.Dtos.RequestDtos.EmbeddingsDto", b =>
+            modelBuilder.Entity("CodeMatcherV2Api.Dtos.RequestDtos.EmbeddingsRequestDto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -157,7 +157,91 @@ namespace CodeMatcherV2Api.Migrations
 
                     b.HasIndex("SegmentTypeId");
 
-                    b.ToTable("Embeddings");
+                    b.ToTable("EmbeddingRequests");
+                });
+
+            modelBuilder.Entity("CodeMatcherV2Api.Dtos.ResponseModel.CodeGenerationResponseDto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RequestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ResponseMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("CodeGenerationResponses");
+                });
+
+            modelBuilder.Entity("CodeMatcherV2Api.Dtos.ResponseModel.EmbeddingsResponseDto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RequestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ResponseMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("EmbeddingsResponses");
                 });
 
             modelBuilder.Entity("CodeMatcherV2Api.Dtos.LookupDto", b =>
@@ -171,7 +255,7 @@ namespace CodeMatcherV2Api.Migrations
                     b.Navigation("LookupType");
                 });
 
-            modelBuilder.Entity("CodeMatcherV2Api.Dtos.RequestDtos.CodeGenerationDto", b =>
+            modelBuilder.Entity("CodeMatcherV2Api.Dtos.RequestDtos.CodeGenerationRequestDto", b =>
                 {
                     b.HasOne("CodeMatcherV2Api.Dtos.LookupDto", "RunType")
                         .WithMany()
@@ -190,7 +274,7 @@ namespace CodeMatcherV2Api.Migrations
                     b.Navigation("SegmentType");
                 });
 
-            modelBuilder.Entity("CodeMatcherV2Api.Dtos.RequestDtos.EmbeddingsDto", b =>
+            modelBuilder.Entity("CodeMatcherV2Api.Dtos.RequestDtos.EmbeddingsRequestDto", b =>
                 {
                     b.HasOne("CodeMatcherV2Api.Dtos.LookupDto", "EmbeddingFrequency")
                         .WithMany()
@@ -215,6 +299,28 @@ namespace CodeMatcherV2Api.Migrations
                     b.Navigation("RunType");
 
                     b.Navigation("SegmentType");
+                });
+
+            modelBuilder.Entity("CodeMatcherV2Api.Dtos.ResponseModel.CodeGenerationResponseDto", b =>
+                {
+                    b.HasOne("CodeMatcherV2Api.Dtos.RequestDtos.CodeGenerationRequestDto", "Request")
+                        .WithMany()
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Request");
+                });
+
+            modelBuilder.Entity("CodeMatcherV2Api.Dtos.ResponseModel.EmbeddingsResponseDto", b =>
+                {
+                    b.HasOne("CodeMatcherV2Api.Dtos.RequestDtos.EmbeddingsRequestDto", "Request")
+                        .WithMany()
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Request");
                 });
 #pragma warning restore 612, 618
         }

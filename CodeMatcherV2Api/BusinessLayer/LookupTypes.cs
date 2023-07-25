@@ -9,9 +9,9 @@ namespace CodeMatcherV2Api.BusinessLayer
 {
     public class LookupTypes : ILookupTypes
     {
-        private AppDbContext _context;
+        private CodeMatcherDbContext _context;
         private readonly IMapper _mapper;
-        public LookupTypes(AppDbContext context,IMapper mapper)
+        public LookupTypes(CodeMatcherDbContext context,IMapper mapper)
         {
             _context= context;
             _mapper= mapper;

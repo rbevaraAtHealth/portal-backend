@@ -13,9 +13,9 @@ namespace CodeMatcherV2Api.Dtos.ResponseModel
         public int RequestId { get; set; }
 
         [ForeignKey("RequestId")]
-        public CodeGenerationDto Request { get; set; }
+        public CodeGenerationRequestDto Request { get; set; }
 
-        public bool? IsSuccess { get; set; }
+        public bool IsSuccess { get; set; } = false;
 
         public string ResponseMessage { get; set; }
 

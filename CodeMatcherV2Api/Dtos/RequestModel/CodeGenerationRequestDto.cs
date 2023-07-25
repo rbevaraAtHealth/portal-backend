@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CodeMatcherV2Api.Dtos.RequestDtos
 {
-    public class CodeGenerationDto : ClientAuditEntity
+    public class CodeGenerationRequestDto : ClientAuditEntity
     {
         [Key]
         public int Id { get; set; }

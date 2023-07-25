@@ -43,7 +43,7 @@ namespace CodeMatcherV2Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CodeGenerations",
+                name: "CodeGenerationRequests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -62,21 +62,21 @@ namespace CodeMatcherV2Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CodeGenerations", x => x.Id);
+                    table.PrimaryKey("PK_CodeGenerationRequests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CodeGenerations_Lookups_RunTypeId",
+                        name: "FK_CodeGenerationRequests_Lookups_RunTypeId",
                         column: x => x.RunTypeId,
                         principalTable: "Lookups",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_CodeGenerations_Lookups_SegmentTypeId",
+                        name: "FK_CodeGenerationRequests_Lookups_SegmentTypeId",
                         column: x => x.SegmentTypeId,
                         principalTable: "Lookups",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Embeddings",
+                name: "EmbeddingRequests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -93,48 +93,112 @@ namespace CodeMatcherV2Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Embeddings", x => x.Id);
+                    table.PrimaryKey("PK_EmbeddingRequests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Embeddings_Lookups_EmbeddingFrequencyId",
+                        name: "FK_EmbeddingRequests_Lookups_EmbeddingFrequencyId",
                         column: x => x.EmbeddingFrequencyId,
                         principalTable: "Lookups",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Embeddings_Lookups_RunTypeId",
+                        name: "FK_EmbeddingRequests_Lookups_RunTypeId",
                         column: x => x.RunTypeId,
                         principalTable: "Lookups",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Embeddings_Lookups_SegmentTypeId",
+                        name: "FK_EmbeddingRequests_Lookups_SegmentTypeId",
                         column: x => x.SegmentTypeId,
                         principalTable: "Lookups",
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CodeGenerationResponses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RequestId = table.Column<int>(type: "int", nullable: false),
+                    IsSuccess = table.Column<bool>(type: "bit", nullable: false),
+                    ResponseMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Reference = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CodeGenerationResponses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CodeGenerationResponses_CodeGenerationRequests_RequestId",
+                        column: x => x.RequestId,
+                        principalTable: "CodeGenerationRequests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmbeddingsResponses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RequestId = table.Column<int>(type: "int", nullable: false),
+                    IsSuccess = table.Column<bool>(type: "bit", nullable: false),
+                    ResponseMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Reference = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmbeddingsResponses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmbeddingsResponses_EmbeddingRequests_RequestId",
+                        column: x => x.RequestId,
+                        principalTable: "EmbeddingRequests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_CodeGenerations_RunTypeId",
-                table: "CodeGenerations",
+                name: "IX_CodeGenerationRequests_RunTypeId",
+                table: "CodeGenerationRequests",
                 column: "RunTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CodeGenerations_SegmentTypeId",
-                table: "CodeGenerations",
+                name: "IX_CodeGenerationRequests_SegmentTypeId",
+                table: "CodeGenerationRequests",
                 column: "SegmentTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Embeddings_EmbeddingFrequencyId",
-                table: "Embeddings",
+                name: "IX_CodeGenerationResponses_RequestId",
+                table: "CodeGenerationResponses",
+                column: "RequestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmbeddingRequests_EmbeddingFrequencyId",
+                table: "EmbeddingRequests",
                 column: "EmbeddingFrequencyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Embeddings_RunTypeId",
-                table: "Embeddings",
+                name: "IX_EmbeddingRequests_RunTypeId",
+                table: "EmbeddingRequests",
                 column: "RunTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Embeddings_SegmentTypeId",
-                table: "Embeddings",
+                name: "IX_EmbeddingRequests_SegmentTypeId",
+                table: "EmbeddingRequests",
                 column: "SegmentTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmbeddingsResponses_RequestId",
+                table: "EmbeddingsResponses",
+                column: "RequestId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lookups_LookupTypeId",
@@ -145,10 +209,16 @@ namespace CodeMatcherV2Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CodeGenerations");
+                name: "CodeGenerationResponses");
 
             migrationBuilder.DropTable(
-                name: "Embeddings");
+                name: "EmbeddingsResponses");
+
+            migrationBuilder.DropTable(
+                name: "CodeGenerationRequests");
+
+            migrationBuilder.DropTable(
+                name: "EmbeddingRequests");
 
             migrationBuilder.DropTable(
                 name: "Lookups");
