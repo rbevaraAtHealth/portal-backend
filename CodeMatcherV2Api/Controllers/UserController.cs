@@ -42,7 +42,7 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
 
-        [HttpPost, Route("CreateUser")]
+        [HttpPost, Route("Create User")]
         public async Task<IActionResult> CreateUser([FromBody] UserModel user)
         {
             try
@@ -56,7 +56,7 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
 
-        [HttpPut, Route("UpdateUser")]
+        [HttpPut, Route("Update User")]
         public async Task<IActionResult> UpdateUser([FromBody] UserModel user)
         {
             try

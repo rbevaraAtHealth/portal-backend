@@ -9,7 +9,9 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
 {
     public interface ITrigger
     {
-        Task<string> GetAllTriggerAsync(string segment);
+        Task<string> GetCgTriggerJobAsync();
+        Task<string> GetMonthlyTriggerJobAsync();
+        Task<string> GetWeeklyTriggerJobAsync();
         CgTriggeredRunReqModel CgApiRequestGet(CgTriggerRunModel trigger);
         CgTriggeredRunResModel CgAPiResponseSave(HttpResponseMessage response);
         MonthlyEmbedTriggeredRunReqModel MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger);

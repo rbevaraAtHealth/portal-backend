@@ -20,7 +20,7 @@ namespace CodeMatcherV2Api.Controllers
             _codeMapping = codeMapping;
           //  _responseView = new ResponseViewModel();
         }
-        [HttpGet,Route("GetCodeMappingRecords")]
+        [HttpGet,Route("Get CodeMapping Records")]
         public async Task<IActionResult> GetCodeMappingRecords()
         {
             try

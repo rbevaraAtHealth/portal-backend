@@ -25,8 +25,48 @@ namespace CodeMatcherV2Api.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        [HttpPost, Route("CodeGenerationTriggerRun")]
-        //[HttpGet]
+        [HttpGet,Route("Code Generation Trigger Run")]
+        public async Task<IActionResult> CgTriggerJob()
+        {
+            try
+            {
+                var triggerJob = await _trigger.GetCgTriggerJobAsync();
+                return Ok(triggerJob);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet, Route("Monthly Trigger Run")]
+        public async Task<IActionResult> MonthlyTriggerJob()
+        {
+            try
+            {
+                var triggerJob = await _trigger.GetMonthlyTriggerJobAsync();
+                return Ok(triggerJob);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+        [HttpGet, Route("Weekly Trigger Run")]
+        public async Task<IActionResult> WeeklyTriggerJob()
+        {
+            try
+            {
+                var triggerJob = await _trigger.GetWeeklyTriggerJobAsync();
+                return Ok(triggerJob);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPost, Route("Code Generation TriggerRun")]
         public async Task<IActionResult> CodeGenerationTriggerdRun(CgTriggerRunModel trigger)
         {
             try
@@ -36,14 +76,14 @@ namespace CodeMatcherV2Api.Controllers
                 var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel, url);
                 var SavedData = _trigger.CgAPiResponseSave(apiResponse);
                 return Ok(SavedData);
-
             }
             catch (Exception ex)
             {
                 return BadRequest(ex);
             }
         }
-        [HttpPost,Route("MonthlyEmbeddingTriggeredRun")]
+
+        [HttpPost,Route("Monthly Embedding TriggeredRun")]
         public async Task<IActionResult> MonthlyEmbedTriggereddRun(MonthlyEmbedTriggeredRunModel trigger)
         {
             try
@@ -53,7 +93,6 @@ namespace CodeMatcherV2Api.Controllers
                 var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel, url);
                 var SavedData = _trigger.MonthlyEmbedApiResponseSave(apiResponse);
                 return Ok(SavedData);
-
             }
             catch (Exception ex)
             {
@@ -61,7 +100,8 @@ namespace CodeMatcherV2Api.Controllers
             }
 
         }
-        [HttpPost,Route("WeeklyEmeddingTriggerRun")]
+
+        [HttpPost,Route("Weekly Emedding TriggerRun")]
         public async Task<IActionResult> WeeklyEmbedTriggeredRun(WeeklyEmbedTriggeredRunModel trigger)
         {
             try
@@ -71,14 +111,11 @@ namespace CodeMatcherV2Api.Controllers
                 var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel, url);
                 var SavedData = _trigger.WeeklyEmbedApiResponseSave(apiResponse);
                 return Ok(SavedData);
-
             }
             catch (Exception ex)
             {
                 return BadRequest(ex);
             }
-
         }
-
     }
 }
