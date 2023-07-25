@@ -17,3 +17,17 @@ steps:
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
     tags: '1'
+
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'codeconv-rg01_serviceconnection'
+    appType: 'webAppContainer'
+    WebAppName: 'codeconv-app01'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'codeconv-rg01'
+    SlotName: 'production'
+    DockerNamespace: 'codeconvacr01.azurecr.io'
+    DockerRepository: 'portal-backend'
+    DockerImageTag: '1'

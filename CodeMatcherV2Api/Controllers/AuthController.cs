@@ -16,7 +16,6 @@ namespace CodeMatcherV2Api.Controllers
     public class AuthController : ControllerBase
     {   
         private readonly IConfiguration _configuration;
-
         public AuthController(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -26,7 +25,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             if (user == null)
             {
-                return BadRequest("Invalid client request");
+                return Ok(user);
             }
 
             if ((user.UserName.ToLower() == "admin" || user.UserName.ToLower() == "internaluser" )  && user.Password == "Password@123")
@@ -43,15 +42,14 @@ namespace CodeMatcherV2Api.Controllers
                     audience: _configuration["JWT:ValidAudience"],
                     claims: authClaims,
                     expires: DateTime.Now.AddHours(3),
-                    signingCredentials: signinCredentials
-                );
+                    signingCredentials: signinCredentials);
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
                 return Ok(new { Token = tokenString });
             }
             else
             {
-                return Unauthorized();
+                return BadRequest();
             }
         }
     }

@@ -22,11 +22,10 @@ namespace CodeMatcherV2Api.Controllers
             {
                 var users = await _User.GetAllUsersAsync();
                 return Ok(users);
-
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
         [HttpGet("{id}")]
@@ -37,13 +36,13 @@ namespace CodeMatcherV2Api.Controllers
                 var user = await _User.GetUserByIdAsync(id);
                 return Ok(user);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return BadRequest(ex); 
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpPost,Route("CreateUser")]
+        [HttpPost, Route("Create User")]
         public async Task<IActionResult> CreateUser([FromBody] UserModel user)
         {
             try
@@ -51,13 +50,13 @@ namespace CodeMatcherV2Api.Controllers
                 var userModel = await _User.CreateUserAsync(user);
                 return Ok(userModel);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpPut,Route("UpdateUser")]
+        [HttpPut, Route("Update User")]
         public async Task<IActionResult> UpdateUser([FromBody] UserModel user)
         {
             try
@@ -65,9 +64,9 @@ namespace CodeMatcherV2Api.Controllers
                 var userModel = await _User.UpdateUserAsync(user);
                 return Ok(userModel);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
         [HttpDelete("{id}")]
@@ -78,11 +77,10 @@ namespace CodeMatcherV2Api.Controllers
                 var message = await _User.DeleteUserAsync(id);
                 return Ok(message);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
-
     }
 }

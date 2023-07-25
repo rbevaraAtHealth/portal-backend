@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Dtos;
+using CodeMatcherV2Api.Middlewares;
+using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -28,6 +30,7 @@ namespace CodeMatcherV2Api.BusinessLayer
 
         public async Task<IEnumerable<UserModel>> GetAllUsersAsync()
         {
+            
             List<UserDto> users = new List<UserDto>
             {
                 new UserDto { Email = "teena@123@nstarxinc.com", FirstName = "teena", LastName = "gera" },

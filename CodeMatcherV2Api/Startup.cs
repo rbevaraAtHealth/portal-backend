@@ -1,3 +1,5 @@
+using System;
+using System.Net.Http.Headers;
 using System.Text;
 using AutoMapper;
 using CodeMatcherV2Api.BusinessLayer;
@@ -63,11 +65,16 @@ namespace CodeMatcherV2Api
             services.AddTransient<ITrigger, Trigger>();
             services.AddTransient<ISchedule, Schedule>();
             services.AddTransient<ILookUp, LookUp>();
-            services.AddTransient<IUploadCSV, UploadCSV>();
+            services.AddTransient<ICsvUpload, CsvUpload>();
             services.AddTransient<ICodeMapping, CodeMapping>();
             services.AddTransient<ILookupTypes, LookupTypes>();
-
-
+            //services.AddHttpClient();
+            services.AddHttpClient("CodeMatcher", c =>
+            {
+                c.BaseAddress = new Uri("http://codeconv-app02.azurewebsites.net/");
+                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
+            
             services
                 .AddSwaggerGen(c =>
                 {
