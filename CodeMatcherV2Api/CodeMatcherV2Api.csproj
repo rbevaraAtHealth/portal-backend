@@ -32,10 +32,13 @@
 
   <ItemGroup>
     <Folder Include="Middlewares\" />
-    <Folder Include="Migrations\Scripts\" />
     <Folder Include="Resources\Files\" />
     <Folder Include="Repositories\" />
     <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CodeMappingEfCore\CodeMappingEfCore.csproj" />
   </ItemGroup>
 
 </Project>

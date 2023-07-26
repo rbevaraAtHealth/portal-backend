@@ -1,16 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System.IO;
-using System;
 
 #nullable disable
 
-namespace CodeMatcherV2Api.Migrations
+namespace CodeMappingEfCore.Migrations
 {
     public partial class Script_BaseData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var sqlFile = Path.Combine(Environment.CurrentDirectory, @"Migrations\Scripts\");
+            var sqlFile = Path.Combine(Environment.CurrentDirectory, @"..\CodeMappingEfCore\Migrations\Scripts\");
 
             foreach (var file in Directory.GetFiles(sqlFile))
             {

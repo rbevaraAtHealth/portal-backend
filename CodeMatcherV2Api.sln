@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeMatcherV2Api", "CodeMat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{C9361C82-D9BF-4ED5-89CA-82AB90E7C57E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTest", "UnitTests\XUnitTest\XUnitTest.csproj", "{2BB36509-00DF-4F1F-855F-EBCB4C3F1F14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTest", "UnitTests\XUnitTest\XUnitTest.csproj", "{2BB36509-00DF-4F1F-855F-EBCB4C3F1F14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMappingEfCore", "CodeMappingEfCore\CodeMappingEfCore.csproj", "{7FE84C9A-34C8-4B7B-BAFA-A590B35A25DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{2BB36509-00DF-4F1F-855F-EBCB4C3F1F14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BB36509-00DF-4F1F-855F-EBCB4C3F1F14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BB36509-00DF-4F1F-855F-EBCB4C3F1F14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FE84C9A-34C8-4B7B-BAFA-A590B35A25DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FE84C9A-34C8-4B7B-BAFA-A590B35A25DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FE84C9A-34C8-4B7B-BAFA-A590B35A25DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FE84C9A-34C8-4B7B-BAFA-A590B35A25DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

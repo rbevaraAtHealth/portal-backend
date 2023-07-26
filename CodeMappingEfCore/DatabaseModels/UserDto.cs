@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CodeMatcherV2Api.Dtos
+namespace CodeMappingEfCore.DatabaseModels
 {
     public class UserDto
     {
