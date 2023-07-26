@@ -1,10 +1,9 @@
-﻿using CodeMatcherV2Api.Dtos.RequestDtos;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CodeMatcherV2Api.Dtos.ResponseModel
+namespace CodeMappingEfCore.DatabaseModels
 {
-    public class CodeGenerationResponseDto : AuditEntity
+    public class CodeMappingResponseDto : AuditEntity
     {
         [Key]
         public int Id { get; set; }
@@ -13,12 +12,10 @@ namespace CodeMatcherV2Api.Dtos.ResponseModel
         public int RequestId { get; set; }
 
         [ForeignKey("RequestId")]
-        public CodeGenerationRequestDto Request { get; set; }
+        public CodeMappingRequestDto Request { get; set; }
 
         public bool IsSuccess { get; set; } = false;
 
         public string ResponseMessage { get; set; }
-
-        public string Reference { get; set; }
     }
 }

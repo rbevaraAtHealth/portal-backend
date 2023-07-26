@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CodeMatcherV2Api.Dtos
+namespace CodeMappingEfCore.DatabaseModels
 {
     public class LookupTypeDto
     {

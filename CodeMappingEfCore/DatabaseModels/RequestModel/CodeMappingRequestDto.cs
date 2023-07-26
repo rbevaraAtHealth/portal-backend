@@ -1,10 +1,9 @@
-﻿using CodeMatcherV2Api.BusinessLayer;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CodeMatcherV2Api.Dtos.RequestDtos
+namespace CodeMappingEfCore.DatabaseModels
 {
-    public class CodeGenerationRequestDto : ClientAuditEntity
+    public class CodeMappingRequestDto : AuditEntity
     {
         [Key]
         public int Id { get; set; }
@@ -13,13 +12,18 @@ namespace CodeMatcherV2Api.Dtos.RequestDtos
         public int RunTypeId { get; set; }
 
         [ForeignKey("RunTypeId")]
-        public LookupDto RunType { get; set; }
+        public LookupDto? RunType { get; set; }
 
         [Required]
         public int SegmentTypeId { get; set; }
 
         [ForeignKey("SegmentTypeId")]
-        public LookupDto SegmentType { get; set; }
+        public LookupDto? SegmentType { get; set; }
+
+        public int CodeMappingId { get; set; }
+
+        [ForeignKey("CodeMappingId")]
+        public LookupDto? CodeMappingType { get; set; }
 
         public string RunSchedule { get; set; }
 

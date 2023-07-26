@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CodeMatcherV2Api.Dtos.RequestModel
+namespace CodeMappingEfCore.DatabaseModels
 {
     public class CSVUploadDto
     {

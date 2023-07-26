@@ -2,7 +2,6 @@
 using CodeMatcherV2Api.ApiRequestModels;
 using CodeMatcherV2Api.ApiResponeModel;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
-using CodeMatcherV2Api.Dtos;
 using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

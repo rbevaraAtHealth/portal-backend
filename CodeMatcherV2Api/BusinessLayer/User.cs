@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using CodeMappingEfCore.DatabaseModels;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
-using CodeMatcherV2Api.Dtos;
 using CodeMatcherV2Api.Middlewares;
 using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Models;

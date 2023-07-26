@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using System;
 
-namespace CodeMatcherV2Api.Dtos
+namespace CodeMappingEfCore.DatabaseModels
 {
     public abstract class AuditEntity
     {
