@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CodeMappingEfCore\CodeMappingEfCore.csproj" />
+    <ProjectReference Include="..\CodeMappingEfCore\CodeMatcher.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>
