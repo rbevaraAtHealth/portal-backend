@@ -21,4 +21,4 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 
 # Define the command to start the app
-ENTRYPOINT ["dotnet", "CodeMatcherV2Api.dll", "--urls", "http://0.0.0.0:80"]
+ENTRYPOINT ["dotnet", "CodeMatcher.Api.V2.dll", "--urls", "http://0.0.0.0:80"]
