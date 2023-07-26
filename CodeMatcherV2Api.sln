@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeMatcherV2Api", "CodeMatcherV2Api\CodeMatcherV2Api.csproj", "{BEF3B14F-D0D1-4022-9F81-5B38D43ED2FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeMatcher.Api.V2", "CodeMatcherV2Api\CodeMatcher.Api.V2.csproj", "{BEF3B14F-D0D1-4022-9F81-5B38D43ED2FA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTest", "UnitTests\XUnitTest\XUnitTest.csproj", "{2BB36509-00DF-4F1F-855F-EBCB4C3F1F14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeMatcher.UnitTests", "UnitTests\XUnitTest\CodeMatcher.UnitTests.csproj", "{2BB36509-00DF-4F1F-855F-EBCB4C3F1F14}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeMappingEfCore", "CodeMappingEfCore\CodeMappingEfCore.csproj", "{7FE84C9A-34C8-4B7B-BAFA-A590B35A25DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeMatcher.EntityFrameworkCore", "CodeMappingEfCore\CodeMatcher.EntityFrameworkCore.csproj", "{7FE84C9A-34C8-4B7B-BAFA-A590B35A25DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
