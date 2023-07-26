@@ -1,4 +1,4 @@
-﻿namespace CodeMatcherV2Api.Dtos
+﻿namespace CodeMappingEfCore.DatabaseModels
 {
     public abstract class ClientAuditEntity : AuditEntity
     {

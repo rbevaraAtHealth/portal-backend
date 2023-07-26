@@ -12,8 +12,8 @@ namespace CodeMatcherV2Api.BusinessLayer
     public class LookUp : ILookUp
     {
         private readonly IMapper _mapper;
-        private AppDbContext _context;
-        public LookUp(IMapper mapper, AppDbContext context)
+        private CodeMatcherDbContext _context;
+        public LookUp(IMapper mapper, CodeMatcherDbContext context)
         {
             _context = context;
             _mapper = mapper;

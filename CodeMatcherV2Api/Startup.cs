@@ -35,7 +35,7 @@ namespace CodeMatcherV2Api
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             });
-            services.AddDbContext<AppDbContext>(options =>
+            services.AddDbContext<CodeMatcherDbContext>(options =>
                                         options.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
             services.AddControllers();
 

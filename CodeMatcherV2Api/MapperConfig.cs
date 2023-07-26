@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CodeMatcherV2Api.Dtos;
+using CodeMappingEfCore.DatabaseModels;
 using CodeMatcherV2Api.Models;
 
 namespace CodeMatcherV2Api

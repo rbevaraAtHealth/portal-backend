@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CodeMatcherV2Api.Dtos
+namespace CodeMappingEfCore.DatabaseModels
 {
     public class LookupDto
     {
