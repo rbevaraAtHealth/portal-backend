@@ -5,11 +5,9 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeMatcherV2Api", "CodeMatcherV2Api\CodeMatcherV2Api.csproj", "{BEF3B14F-D0D1-4022-9F81-5B38D43ED2FA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{C9361C82-D9BF-4ED5-89CA-82AB90E7C57E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTest", "UnitTests\XUnitTest\XUnitTest.csproj", "{2BB36509-00DF-4F1F-855F-EBCB4C3F1F14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMappingEfCore", "CodeMappingEfCore\CodeMappingEfCore.csproj", "{7FE84C9A-34C8-4B7B-BAFA-A590B35A25DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeMappingEfCore", "CodeMappingEfCore\CodeMappingEfCore.csproj", "{7FE84C9A-34C8-4B7B-BAFA-A590B35A25DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,9 +30,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{2BB36509-00DF-4F1F-855F-EBCB4C3F1F14} = {C9361C82-D9BF-4ED5-89CA-82AB90E7C57E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3AF6FFC4-C464-4375-896B-492D4692B63C}

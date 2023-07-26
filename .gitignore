@@ -17,5 +17,5 @@
 /CodeMatcherV2Api/obj/CodeMatcherV2Api.csproj.nuget.dgspec.json
 /CodeMappingEfCore/bin/Debug/net6.0
 /CodeMappingEfCore/obj
-/UnitTests/XUnitTest/bin/Debug/net6.0
-/UnitTests/XUnitTest/obj
+/XUnitTest/bin/Debug/net6.0
+/XUnitTest/obj
