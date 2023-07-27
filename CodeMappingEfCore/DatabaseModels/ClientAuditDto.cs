@@ -2,6 +2,6 @@
 {
     public abstract class ClientAuditEntity : AuditEntity
     {
-        public virtual string ClientId { get; set; }
+        public virtual string? ClientId { get; set; }
     }
 }

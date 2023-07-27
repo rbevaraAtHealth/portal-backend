@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CodeMappingEfCore.DatabaseModels
 {
-    public class CodeMappingRequestDto : AuditEntity
+    public class CodeMappingRequestDto : ClientAuditEntity
     {
         [Key]
         public int Id { get; set; }
@@ -25,10 +25,11 @@ namespace CodeMappingEfCore.DatabaseModels
         [ForeignKey("CodeMappingId")]
         public LookupDto? CodeMappingType { get; set; }
 
-        public string RunSchedule { get; set; }
+        public string? RunSchedule { get; set; }
 
-        public string Threshold { get; set; }
+        public string? Threshold { get; set; }
 
-        public string LatestLink { get; set; }
+        public string? LatestLink { get; set; }
+
     }
 }
