@@ -2,6 +2,7 @@
 using CodeMatcherV2Api.EntityFrameworkCore;
 using System.Net.Http;
 using System.Net;
+using System.Linq;
 
 namespace CodeMatcherV2Api.Middlewares.SqlHelper
 {
@@ -18,6 +19,16 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
 
             context.CodeMappingResponses.Add(responseDto);
             context.SaveChanges();
+        }
+        public static int GetLookupType(int id,CodeMatcherDbContext context)
+        {
+            var lookup = context.Lookups.FirstOrDefault(x => x.Id == id);
+            return lookup.Id;
+        }
+        public static int GetLookupType(string type, CodeMatcherDbContext context)
+        {
+            var lookup = context.Lookups.FirstOrDefault(x => x.Name == type);
+            return lookup.Id;
         }
     }
 }

@@ -19,16 +19,16 @@ namespace CodeMatcherV2Api.Controllers
         }
 
         [HttpGet,Route("Get Lookups")]
-        public async Task<IActionResult> GetLookups(string lookupType)
+        public IActionResult GetLookups(string lookupType)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(lookupType))
                     throw new ArgumentNullException("Lookup Type cannot be null",nameof(lookupType));
-                LookupTypeModel lookupTypes =await _lookupTypes.GetLookupByNameAsync(lookupType);
+                LookupTypeModel lookupTypes = _lookupTypes.GetLookupByNameAsync(lookupType);
                 if(lookupTypes == null)
                     throw new ArgumentNullException("Lookup type not found", nameof(lookupType));
-                var lookups =await _lookUp.GetLookupByIdAsync(lookupTypes.LookupTypeId);                
+                var lookups = _lookUp.GetLookupByIdAsync(lookupTypes.LookupTypeId);                
                 return Ok(lookups);
             }
             catch(Exception ex)
