@@ -21,6 +21,7 @@ namespace CodeMatcherV2Api.RepoModelAdapter
             codeMappingRequestDto.CodeMappingId=codeMapping.Id;
             codeMappingRequestDto.RunTypeId = runTypeId;
             codeMappingRequestDto.SegmentTypeId = segmentId;
+            codeMappingRequestDto.ClientId = "All";
             return codeMappingRequestDto;
         }
     }

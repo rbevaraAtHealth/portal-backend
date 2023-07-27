@@ -25,6 +25,7 @@ namespace CodeMatcherV2Api.RepoModelAdapter
             cgDBRequestModel.Threshold = pyAPIModel.Threshold.ToString();
             cgDBRequestModel.LatestLink = pyAPIModel.LatestLink;
             cgDBRequestModel.RunSchedule = pyAPIModel.RunSchedule;
+            cgDBRequestModel.ClientId = pyAPIModel.ClientId;
             return cgDBRequestModel;
         }
     }
