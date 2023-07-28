@@ -3,6 +3,7 @@ using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
 using CodeMatcherV2Api.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.BusinessLayer
@@ -16,9 +17,9 @@ namespace CodeMatcherV2Api.BusinessLayer
             _context= context;
             _mapper= mapper;
         }
-        public async Task<LookupTypeModel> GetLookupByNameAsync(string lookUpType)
+        public LookupTypeModel GetLookupByNameAsync(string lookUpType)
         {
-            var lookup = await _context.LookupTypes.FirstOrDefaultAsync(x => x.LookupTypeKey == lookUpType);
+            var lookup = _context.LookupTypes.FirstOrDefault(x => x.LookupTypeKey == lookUpType);
            return _mapper.Map<LookupTypeModel>(lookup);
            
         }

@@ -19,3 +19,4 @@
 /CodeMappingEfCore/obj
 /UnitTests/XUnitTest/bin/Debug/net6.0
 /UnitTests/XUnitTest/obj
+/CodeMatcherV2Api/obj/staticwebassets.pack.sentinel

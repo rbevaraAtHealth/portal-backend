@@ -14,9 +14,7 @@
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\Scripts\" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<Folder Include="Migrations\Scripts\" />
+	</ItemGroup>
 </Project>
