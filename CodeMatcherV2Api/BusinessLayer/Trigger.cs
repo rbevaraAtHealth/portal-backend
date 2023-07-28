@@ -68,7 +68,6 @@ namespace CodeMatcherV2Api.BusinessLayer
                 if (!string.IsNullOrWhiteSpace(httpResult))
                 {
                     responseViewModel = JsonConvert.DeserializeObject<CgTriggeredRunResModel>(httpResult);
-                    //CodeMappingDbModelAdapter dbModelAdapter= new CodeMappingDbModelAdapter();
                     var codeMappingDto= CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
                     int codeMappingId=SqlHelper.SaveCodeMappingData(codeMappingDto, _context);
                 }
@@ -104,7 +103,11 @@ namespace CodeMatcherV2Api.BusinessLayer
                 var responseDto = adapter.DbResponseModelGet(httpResponse, requestId);
                 SqlHelper.SaveResponseseMessage(responseDto, requestId, _context);
                 if (!string.IsNullOrWhiteSpace(httpResult))
+                {
                     responseModel = JsonConvert.DeserializeObject<MonthlyEmbedTriggeredRunResModel>(httpResult);
+                    var codeMappingDto = CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
+                    int codeMappingId = SqlHelper.SaveCodeMappingData(codeMappingDto, _context);
+                }
                 if (responseModel != null)
                 {
                     return responseModel;
@@ -122,7 +125,11 @@ namespace CodeMatcherV2Api.BusinessLayer
             {
                 string httpResult = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 if (!string.IsNullOrWhiteSpace(httpResult))
+                {
                     responseModel = JsonConvert.DeserializeObject<WeeklyEmbedTriggeredRunResModel>(httpResult);
+                    var codeMappingDto = CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
+                    int codeMappingId = SqlHelper.SaveCodeMappingData(codeMappingDto, _context);
+                }
                 return responseModel;
             }
             return responseModel;

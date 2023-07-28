@@ -17,7 +17,7 @@ namespace CodeMatcherV2Api.Controllers
             _schedule = schedule;
             _httpClientFactory = httpClientFactory;
         }
-        [HttpGet,Route("Code Generation Schedule Run")]
+        [HttpGet,Route("CodeGenerationScheduleRun")]
         public async Task<IActionResult> CgScheduleJob()
         {
             try
@@ -30,7 +30,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(ex);
             }
         }
-        [HttpGet, Route("Weekly Embedding Schedule Run")]
+        [HttpGet, Route("WeeklyEmbeddingScheduleRun")]
         public async Task<IActionResult> WeeklyScheduleJob()
         {
             try
@@ -43,7 +43,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(ex);
             }
         }
-        [HttpGet, Route("Monthly Schedule Run")]
+        [HttpGet, Route("MonthlyScheduleRun")]
         public async Task<IActionResult> MonthlyScheduleJob()
         {
             try
@@ -57,7 +57,7 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
        
-        [HttpGet, Route("Get All Scheduled Jobs List")]
+        [HttpGet, Route("GetAllScheduledJobsList")]
         public async Task<IActionResult> GetAllScheduledJobs()
         {
             try

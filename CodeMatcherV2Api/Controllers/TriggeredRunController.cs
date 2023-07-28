@@ -21,7 +21,7 @@ namespace CodeMatcherV2Api.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        [HttpGet,Route("Code Generation Trigger Run")]
+        [HttpGet,Route("CodeGenerationTriggerRun")]
         public async Task<IActionResult> CgTriggerJob()
         {
             try
@@ -35,7 +35,7 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
 
-        [HttpGet, Route("Monthly Trigger Run")]
+        [HttpGet, Route("MonthlyTriggerRun")]
         public async Task<IActionResult> MonthlyTriggerJob()
         {
             try
@@ -48,7 +48,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(ex);
             }
         }
-        [HttpGet, Route("Weekly Trigger Run")]
+        [HttpGet, Route("WeeklyTriggerRun")]
         public async Task<IActionResult> WeeklyTriggerJob()
         {
             try
@@ -62,7 +62,7 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
 
-        [HttpPost, Route("Code Generation TriggerRun")]
+        [HttpPost, Route("CodeGenerationTriggerRun")]
         public async Task<IActionResult> CodeGenerationTriggerdRun(CgTriggerRunModel trigger)
         {
             try
@@ -79,7 +79,7 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
 
-        [HttpPost,Route("Monthly Embedding TriggeredRun")]
+        [HttpPost,Route("MonthlyEmbeddingTriggeredRun")]
         public async Task<IActionResult> MonthlyEmbedTriggereddRun(MonthlyEmbedTriggeredRunModel trigger)
         {
             try
@@ -97,7 +97,7 @@ namespace CodeMatcherV2Api.Controllers
 
         }
 
-        [HttpPost,Route("Weekly Emedding TriggerRun")]
+        [HttpPost,Route("WeeklyEmeddingTriggerRun")]
         public async Task<IActionResult> WeeklyEmbedTriggeredRun(WeeklyEmbedTriggeredRunModel trigger)
         {
             try
