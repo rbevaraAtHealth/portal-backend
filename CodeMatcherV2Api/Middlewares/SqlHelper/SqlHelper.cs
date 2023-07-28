@@ -30,5 +30,11 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             var lookup = context.Lookups.FirstOrDefault(x => x.Name == type);
             return lookup.Id;
         }
+        public static int SaveCodeMappingData(CodeMappingDto codeMapping,CodeMatcherDbContext context)
+        {
+            context.CodeMappings.Add(codeMapping);
+            context.SaveChanges();
+            return (codeMapping.Id);
+        }
     }
 }

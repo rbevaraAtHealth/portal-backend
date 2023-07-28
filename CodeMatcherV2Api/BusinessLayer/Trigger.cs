@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CodeMatcher.Api.V2.BusinessLayer.Enums;
+using CodeMatcher.Api.V2.RepoModelAdapter;
 using CodeMatcherV2Api.ApiRequestModels;
 using CodeMatcherV2Api.ApiResponeModel;
 using CodeMatcherV2Api.BusinessLayer.Enums;
@@ -67,6 +68,9 @@ namespace CodeMatcherV2Api.BusinessLayer
                 if (!string.IsNullOrWhiteSpace(httpResult))
                 {
                     responseViewModel = JsonConvert.DeserializeObject<CgTriggeredRunResModel>(httpResult);
+                    //CodeMappingDbModelAdapter dbModelAdapter= new CodeMappingDbModelAdapter();
+                    var codeMappingDto= CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
+                    int codeMappingId=SqlHelper.SaveCodeMappingData(codeMappingDto, _context);
                 }
             }
             return responseViewModel;
