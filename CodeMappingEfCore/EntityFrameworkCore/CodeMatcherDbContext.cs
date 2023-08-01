@@ -24,6 +24,15 @@ namespace CodeMatcherV2Api.EntityFrameworkCore
 
             modelBuilder.Entity<CodeMappingRequestDto>().HasOne(s => s.CodeMappingType)
                 .WithMany().OnDelete(DeleteBehavior.NoAction);
+
+            //modelBuilder.Entity<CodeGenerationSummaryDto>().HasOne(s => s.CodeMappingRequest)
+            //    .WithMany().OnDelete(DeleteBehavior.NoAction);
+
+            //modelBuilder.Entity<MonthlyEmbeddingsSummaryDto>().HasOne(s => s.CodeMappingRequest)
+            //    .WithOne().OnDelete(DeleteBehavior.NoAction);
+
+            //modelBuilder.Entity<WeeklyEmbeddingsSummaryDto>().HasOne(s => s.CodeMappingRequest)
+            //    .WithOne().OnDelete(DeleteBehavior.NoAction);
         }
 
         public DbSet<LookupTypeDto> LookupTypes { get; set; }

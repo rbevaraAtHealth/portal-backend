@@ -70,8 +70,8 @@ namespace CodeMatcherV2Api.Controllers
                 string url = "code-generation/triggered-run";
                 var requestModel = _trigger.CgApiRequestGet(trigger);
                 var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
-                var SavedData = _trigger.CgAPiResponseSave(apiResponse,requestModel.Item2);
-                return Ok(SavedData);
+                var savedData = _trigger.CgAPiResponseSave(apiResponse, requestModel.Item2);
+                return Ok(savedData);
             }
             catch (Exception ex)
             {
@@ -113,5 +113,6 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(ex);
             }
         }
+        
     }
 }

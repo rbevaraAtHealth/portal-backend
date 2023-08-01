@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 
-namespace CodeMatcherV2Api.ApiResponeModel
+namespace CodeMatcherV2Api.ApiResponseModel
 {
     public class CgScheduledRunResModel
     {

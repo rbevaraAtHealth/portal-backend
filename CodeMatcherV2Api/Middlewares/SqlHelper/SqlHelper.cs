@@ -3,6 +3,11 @@ using CodeMatcherV2Api.EntityFrameworkCore;
 using System.Net.Http;
 using System.Net;
 using System.Linq;
+using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
+using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CodeMatcherV2Api.Middlewares.SqlHelper
 {
@@ -35,6 +40,39 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             context.CodeMappings.Add(codeMapping);
             context.SaveChanges();
             return (codeMapping.Id);
+        }
+        public static void SaveCodeGenerationSummary(CodeGenerationSummaryDto cgSummary,CodeMatcherDbContext context)
+        {
+            context.CodeGenerationSummary.Add(cgSummary);
+            context.SaveChanges();
+            int i = cgSummary.Id;
+        }
+        public static void SaveMonthlyEmbedSummary(MonthlyEmbeddingsSummaryDto monthlySummary, CodeMatcherDbContext context)
+        {
+            context.MonthlyEmbeddingsSummary.Add(monthlySummary);
+            context.SaveChanges();
+            int i = monthlySummary.Id;
+        }
+        public static void SaveWeeklyEmbedSummary(WeeklyEmbeddingsSummaryDto weeklySummary, CodeMatcherDbContext context)
+        {
+            context.WeeklyEmbeddingsSummary.Add(weeklySummary);
+            context.SaveChanges();
+            int i = weeklySummary.Id;
+        }
+        public static int GetRequestId(Guid taskId,CodeMatcherDbContext context)
+        {
+            var codemap=context.CodeMappings.FirstOrDefault(x => x.Reference == taskId.ToString());
+            return codemap.Id;
+        }
+        public static int GetCodeMappingId(int requestId,CodeMatcherDbContext context)
+        {
+           var codeMapping= context.CodeMappingRequests.FirstOrDefault(x => x.Id == requestId);
+            return codeMapping.CodeMappingId;
+        }
+        public static List<CodeMappingDto> GetCodeMappings(CodeMatcherDbContext context)
+        {
+            return context.CodeMappings.Where(x=>x.Status.Equals("In progress")).ToList();
+           // return context.CodeMappings.AsNoTracking().ToList();
         }
     }
 }

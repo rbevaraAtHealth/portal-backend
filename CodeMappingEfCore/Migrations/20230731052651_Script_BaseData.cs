@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace CodeMappingEfCore.Migrations
+namespace CodeMatcher.EntityFrameworkCore.Migrations
 {
     public partial class Script_BaseData : Migration
     {
