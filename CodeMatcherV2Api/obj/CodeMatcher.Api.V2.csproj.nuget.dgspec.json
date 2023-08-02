@@ -136,6 +136,10 @@
               "target": "Package",
               "version": "[12.0.1, )"
             },
+            "Azure.Storage.Files.Shares": {
+              "target": "Package",
+              "version": "[12.15.0, )"
+            },
             "Gremlin.Net": {
               "target": "Package",
               "version": "[3.6.4, )"

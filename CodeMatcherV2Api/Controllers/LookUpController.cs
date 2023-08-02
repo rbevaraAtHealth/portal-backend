@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace CodeMatcherV2Api.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class LookUpController : BaseController
     {
         private readonly ILookUp _lookUp;
