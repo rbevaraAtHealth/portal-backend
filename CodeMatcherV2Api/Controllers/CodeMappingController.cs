@@ -1,4 +1,5 @@
-﻿using CodeMatcherV2Api.BusinessLayer.Interfaces;
+﻿using CodeMatcher.Api.V2.Models;
+using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,105 +22,21 @@ namespace CodeMatcherV2Api.Controllers
             _httpClientFactory = httpClientFactory;
             _context = context;
         }
-        //[HttpGet,Route("GetCodeMappingRecords")]
-        //public async Task<IActionResult> GetCodeMappingRecords()
-        //{
-        //    try
-        //    {
-        //       var records = await _codeMapping.GetCodeMappingsRecordsAsync();
-        //        //var mappings = _codeMapping.GetCodeGenerationMappings();
-        //        //return Ok(mappings);
-        //        return Ok(records);
-        //    }
-        //    catch(Exception ex) 
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-        [HttpGet, Route("CodeGenerationMappingRecords")]
-        public async Task<IActionResult> GetCodeGenerationMapping()
+        
+        [HttpPost,Route("UpdateSummary")]
+        public async Task<IActionResult> UpdateSummary([FromBody]CodeMappingSummaryViewModel viewModel)
         {
             try
             {
-                var records = _codeMapping.GetCodeGenerationMappingRecords();
-                return Ok(records);
+                  int summaryId = _codeMapping.SaveSummary(viewModel.TaskId,viewModel.Summary);
+                return Ok(summaryId);
+                //return Ok();
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet, Route("MonthlyEmbeddingsMappingRecords")]
-        public async Task<IActionResult> GetMonthlyEmbedMapping()
-        {
-            try
-            {
-                var records = _codeMapping.GetMonthlyEmbeddingMappingRecords();
-                return Ok(records);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet, Route("WeeklyEmbeddingsMappingRecords")]
-        public async Task<IActionResult> GetWeeklyEmbedMapping()
-        {
-            try
-            {
-                var records = _codeMapping.GetWeeklyEmbeddingsMappingRecords();
-                return Ok(records);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet, Route("ResultsforPendingIds")]
-        public async Task<IActionResult> GetSummaryForPendingTasks()
-        {
-            _codeMapping.GetMappingsInProcessTasks();
-            return Ok();
-        }
-        //[HttpGet,Route("GetCodeGenerationMappingByTaskId")]
-        //public async Task<IActionResult> GetCgMappingRecordsByTaskId(Guid taskId)
-        //{
-        //    var response= _codeMapping.GetJobResult(taskId);
-        //    var records=_codeMapping.GetCgMappingsPythApi(response,taskId);
-        //    return Ok(records);
-        //}
-        //[HttpGet, Route("GetCodeGenerationMappingByTaskIdTest")]
-        //public async Task<IActionResult> GetCgMappingRecordsByTaskIdTest(Guid taskId)
-        //{
-
-        //    var response = _codeMapping.GetJobResult(taskId);
-
-        //   // foreach (var item in codeMapping)
-        //    //{
-
-
-        //        int requestId = SqlHelper.GetRequestId(taskId, _context);
-        //        int frequncyId = SqlHelper.GetCodeMappingId(requestId, _context);
-
-        //        switch (frequncyId)
-        //        {
-        //            case ((int)CodeMappingType.CodeGeneration):
-        //                _codeMapping.GetCgMappingsPythApi(response, taskId);
-        //                break;
-        //            case ((int)CodeMappingType.MonthlyEmbeddings):
-        //                _codeMapping.GetMonthlyEmbedMappingsPythApi(response, taskId);
-        //                break;
-        //            case ((int)CodeMappingType.WeeklyEmbeddings):
-        //                _codeMapping.GetWeeklyEmbedMappingsPythApi(response, taskId);
-        //                break;
-        //            default: break;
-        //        }
-
-        //        var records = _codeMapping.GetCgMappingsPythApi(response, taskId);
-        //        return Ok(records);
-        //  //  }
-
-
     }
 
 }

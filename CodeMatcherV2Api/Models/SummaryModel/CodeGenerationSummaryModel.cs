@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using AutoMapper.Execution;
 
-namespace CodeMatcher.Api.V2.Models
+namespace CodeMatcher.Api.V2.Models.SummaryModel
 {
     public class CodeGenerationSummaryModel
     {
         public Guid TaskId { get; set; }
-       // public int RequestId { get; set; }
+        // public int RequestId { get; set; }
         //public CodeMappingRequestDto CodeMappingRequest { get; set; }
         //public DateTime Date { get; set; }
         [JsonPropertyName("Date")]

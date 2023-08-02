@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 
 namespace CodeMatcherV2Api.Middlewares.SqlHelper
 {
@@ -41,23 +42,24 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             context.SaveChanges();
             return (codeMapping.Id);
         }
-        public static void SaveCodeGenerationSummary(CodeGenerationSummaryDto cgSummary,CodeMatcherDbContext context)
+        public static int SaveCodeGenerationSummary(CodeGenerationSummaryDto cgSummary,CodeMatcherDbContext context)
         {
             context.CodeGenerationSummary.Add(cgSummary);
             context.SaveChanges();
-            int i = cgSummary.Id;
+            //context.CodeMappings.
+            return cgSummary.Id;
         }
-        public static void SaveMonthlyEmbedSummary(MonthlyEmbeddingsSummaryDto monthlySummary, CodeMatcherDbContext context)
+        public static int SaveMonthlyEmbedSummary(MonthlyEmbeddingsSummaryDto monthlySummary, CodeMatcherDbContext context)
         {
             context.MonthlyEmbeddingsSummary.Add(monthlySummary);
             context.SaveChanges();
-            int i = monthlySummary.Id;
+            return monthlySummary.Id;
         }
-        public static void SaveWeeklyEmbedSummary(WeeklyEmbeddingsSummaryDto weeklySummary, CodeMatcherDbContext context)
+        public static int SaveWeeklyEmbedSummary(WeeklyEmbeddingsSummaryDto weeklySummary, CodeMatcherDbContext context)
         {
             context.WeeklyEmbeddingsSummary.Add(weeklySummary);
             context.SaveChanges();
-            int i = weeklySummary.Id;
+            return weeklySummary.Id;
         }
         public static int GetRequestId(Guid taskId,CodeMatcherDbContext context)
         {
@@ -71,8 +73,18 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
         }
         public static List<CodeMappingDto> GetCodeMappings(CodeMatcherDbContext context)
         {
-            return context.CodeMappings.Where(x=>x.Status.Equals("In progress")).ToList();
+           var codeMappingList= context.CodeMappings.Where(x=>x.Status.Equals("In progress")).ToList();
+            return codeMappingList;
            // return context.CodeMappings.AsNoTracking().ToList();
+        }
+        public static void UpdateCodeMappingStatus(Guid taskId,CodeMatcherDbContext context)
+        {
+            var codeMap = context.CodeMappings.FirstOrDefault(x => x.Reference==taskId.ToString());
+            codeMap.Status = "Completed";
+            context.Entry(codeMap).State = EntityState.Modified;
+            //context.CodeMappings.Update(codeMap);
+            context.SaveChanges();
+            
         }
     }
 }

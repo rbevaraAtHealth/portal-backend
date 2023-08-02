@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
 using System.Net.Http;
+using CodeMatcherV2Api.Models;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -71,17 +72,15 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
 
-        // public
-        //[HttpPost,Route("CodeGenerationScheduleJob")]
-        ////[HttpGet]
+        //[HttpPost, Route("CodeGenerationScheduleJob")]
         //public async Task<IActionResult> CodeGenerationScheduleJob([FromBody] CgScheduledModel schedule)
         //{
         //    try
         //    {
         //        string url = "code-generation/scheduled-run";
-        //        var requestModel =  _schedule.ApiRequestGet(schedule);
-        //        var apiResponse=await  HttpHelper.Post_HttpClient(_httpClientFactory, requestModel,url);
-        //        var SavedData= _schedule.APiResponseSave(apiResponse);
+        //        var requestModel = _schedule.ApiRequestGet(schedule);
+        //        var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel, url);
+        //        var SavedData = _schedule.APiResponseSave(apiResponse);
         //        return Ok(SavedData);
 
         //    }

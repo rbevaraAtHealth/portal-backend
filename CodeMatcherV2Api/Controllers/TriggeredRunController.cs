@@ -21,47 +21,6 @@ namespace CodeMatcherV2Api.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        [HttpGet,Route("CodeGenerationTriggerRun")]
-        public async Task<IActionResult> CgTriggerJob()
-        {
-            try
-            {
-                var triggerJob = await _trigger.GetCgTriggerJobAsync();
-                return Ok(triggerJob);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        [HttpGet, Route("MonthlyTriggerRun")]
-        public async Task<IActionResult> MonthlyTriggerJob()
-        {
-            try
-            {
-                var triggerJob = await _trigger.GetMonthlyTriggerJobAsync();
-                return Ok(triggerJob);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-        [HttpGet, Route("WeeklyTriggerRun")]
-        public async Task<IActionResult> WeeklyTriggerJob()
-        {
-            try
-            {
-                var triggerJob = await _trigger.GetWeeklyTriggerJobAsync();
-                return Ok(triggerJob);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
         [HttpPost, Route("CodeGenerationTriggerRun")]
         public async Task<IActionResult> CodeGenerationTriggerdRun(CgTriggerRunModel trigger)
         {
@@ -94,7 +53,6 @@ namespace CodeMatcherV2Api.Controllers
             {
                 return BadRequest(ex);
             }
-
         }
 
         [HttpPost,Route("WeeklyEmeddingTriggerRun")]
@@ -113,6 +71,5 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(ex);
             }
         }
-        
     }
 }

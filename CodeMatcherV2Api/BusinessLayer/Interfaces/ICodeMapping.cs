@@ -1,4 +1,4 @@
-﻿using CodeMatcher.Api.V2.Models;
+﻿using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 using CodeMatcherV2Api.Models;
 using System;
@@ -14,10 +14,9 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
         List<CodeGenerationSummaryModel> GetCodeGenerationMappingRecords();
         List<MonthlyEmbedSummaryModel> GetMonthlyEmbeddingMappingRecords();
         List<WeeklyEmbedSummaryModel> GetWeeklyEmbeddingsMappingRecords();
-       // HttpResponseMessage GetJobResult(Guid taskId);
-        CodeGenerationSummaryModel GetCgMappingsPythApi(HttpResponseMessage httpResponse, Guid taskId);
-        MonthlyEmbedSummaryModel GetMonthlyEmbedMappingsPythApi(HttpResponseMessage httpResponse, Guid taskId);
-        WeeklyEmbedSummaryModel GetWeeklyEmbedMappingsPythApi(HttpResponseMessage httpResponse, Guid taskId);
-        void GetMappingsInProcessTasks();
+        int GetCgMappingsPythApi(Guid taskId, string summary);
+        int GetMonthlyEmbedMappingsPythApi(Guid taskId, string summary);
+        int GetWeeklyEmbedMappingsPythApi(Guid taskId, string summary);
+        int SaveSummary(Guid taskId, string summary);
     }
 }
