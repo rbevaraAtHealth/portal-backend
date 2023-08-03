@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace CodeMatcherV2Api.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class UserController : BaseController
     {
         private readonly IUser _User;
