@@ -2,6 +2,8 @@ using System;
 using System.Net.Http.Headers;
 using System.Text;
 using AutoMapper;
+using CodeMatcher.Api.V2.BusinessLayer;
+using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.BusinessLayer;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
@@ -68,6 +70,7 @@ namespace CodeMatcherV2Api
             services.AddTransient<ICsvUpload, CsvUpload>();
             services.AddTransient<ICodeMapping, CodeMapping>();
             services.AddTransient<ILookupTypes, LookupTypes>();
+            services.AddTransient<IScheduler, Scheduler>();
             //services.AddHttpClient();
             services.AddHttpClient("CodeMatcher", c =>
             {
