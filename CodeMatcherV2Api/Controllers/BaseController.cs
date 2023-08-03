@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CodeMatcherV2Api.Controllers
 {
    
-    //[Authorize]
+    [Authorize]
     public class BaseController : ControllerBase
     {
 

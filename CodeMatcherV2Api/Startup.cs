@@ -4,6 +4,8 @@ using System.Text;
 using AutoMapper;
 using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
+using CodeMatcherApiV2.BusinessLayer.Interfaces;
+using CodeMatcherApiV2.Repositories;
 using CodeMatcherV2Api.BusinessLayer;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
@@ -71,6 +73,9 @@ namespace CodeMatcherV2Api
             services.AddTransient<ICodeMapping, CodeMapping>();
             services.AddTransient<ILookupTypes, LookupTypes>();
             services.AddTransient<IScheduler, Scheduler>();
+
+            services.AddScoped<IAuthRepository, AuthRepository>();
+
             //services.AddHttpClient();
             services.AddHttpClient("CodeMatcher", c =>
             {

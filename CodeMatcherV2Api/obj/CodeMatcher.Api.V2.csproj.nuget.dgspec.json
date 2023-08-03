@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\VerityWorkspace\\DataServices-Portal\\CodeMatcherV2Api\\CodeMatcher.Api.V2.csproj": {}
+    "C:\\Users\\JJ Raj\\source\\repos\\portal-backend\\CodeMatcherV2Api\\CodeMatcher.Api.V2.csproj": {}
   },
   "projects": {
-    "D:\\VerityWorkspace\\DataServices-Portal\\CodeMappingEfCore\\CodeMatcher.EntityFrameworkCore.csproj": {
+    "C:\\Users\\JJ Raj\\source\\repos\\portal-backend\\CodeMappingEfCore\\CodeMatcher.EntityFrameworkCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\VerityWorkspace\\DataServices-Portal\\CodeMappingEfCore\\CodeMatcher.EntityFrameworkCore.csproj",
+        "projectUniqueName": "C:\\Users\\JJ Raj\\source\\repos\\portal-backend\\CodeMappingEfCore\\CodeMatcher.EntityFrameworkCore.csproj",
         "projectName": "CodeMatcher.EntityFrameworkCore",
-        "projectPath": "D:\\VerityWorkspace\\DataServices-Portal\\CodeMappingEfCore\\CodeMatcher.EntityFrameworkCore.csproj",
-        "packagesPath": "C:\\Users\\Uday Kiran\\.nuget\\packages\\",
-        "outputPath": "D:\\VerityWorkspace\\DataServices-Portal\\CodeMappingEfCore\\obj\\",
+        "projectPath": "C:\\Users\\JJ Raj\\source\\repos\\portal-backend\\CodeMappingEfCore\\CodeMatcher.EntityFrameworkCore.csproj",
+        "packagesPath": "C:\\Users\\JJ Raj\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\JJ Raj\\source\\repos\\portal-backend\\CodeMappingEfCore\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Uday Kiran\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\JJ Raj\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,7 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
+          "C:\\Program Files\\dotnet\\sdk\\7.0.306\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -79,25 +75,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\VerityWorkspace\\DataServices-Portal\\CodeMatcherV2Api\\CodeMatcher.Api.V2.csproj": {
+    "C:\\Users\\JJ Raj\\source\\repos\\portal-backend\\CodeMatcherV2Api\\CodeMatcher.Api.V2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\VerityWorkspace\\DataServices-Portal\\CodeMatcherV2Api\\CodeMatcher.Api.V2.csproj",
+        "projectUniqueName": "C:\\Users\\JJ Raj\\source\\repos\\portal-backend\\CodeMatcherV2Api\\CodeMatcher.Api.V2.csproj",
         "projectName": "CodeMatcher.Api.V2",
-        "projectPath": "D:\\VerityWorkspace\\DataServices-Portal\\CodeMatcherV2Api\\CodeMatcher.Api.V2.csproj",
-        "packagesPath": "C:\\Users\\Uday Kiran\\.nuget\\packages\\",
-        "outputPath": "D:\\VerityWorkspace\\DataServices-Portal\\CodeMatcherV2Api\\obj\\",
+        "projectPath": "C:\\Users\\JJ Raj\\source\\repos\\portal-backend\\CodeMatcherV2Api\\CodeMatcher.Api.V2.csproj",
+        "packagesPath": "C:\\Users\\JJ Raj\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\JJ Raj\\source\\repos\\portal-backend\\CodeMatcherV2Api\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Uday Kiran\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\JJ Raj\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -105,15 +97,15 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
+          "C:\\Program Files\\dotnet\\sdk\\7.0.306\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\VerityWorkspace\\DataServices-Portal\\CodeMappingEfCore\\CodeMatcher.EntityFrameworkCore.csproj": {
-                "projectPath": "D:\\VerityWorkspace\\DataServices-Portal\\CodeMappingEfCore\\CodeMatcher.EntityFrameworkCore.csproj"
+              "C:\\Users\\JJ Raj\\source\\repos\\portal-backend\\CodeMappingEfCore\\CodeMatcher.EntityFrameworkCore.csproj": {
+                "projectPath": "C:\\Users\\JJ Raj\\source\\repos\\portal-backend\\CodeMappingEfCore\\CodeMatcher.EntityFrameworkCore.csproj"
               }
             }
           }
@@ -202,7 +194,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     }
