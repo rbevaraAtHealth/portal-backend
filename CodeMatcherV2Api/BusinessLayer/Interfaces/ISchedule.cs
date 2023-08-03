@@ -1,5 +1,5 @@
 ﻿using CodeMatcherV2Api.ApiRequestModels;
-using CodeMatcherV2Api.ApiResponeModel;
+using CodeMatcherV2Api.ApiResponseModel;
 using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -7,11 +7,13 @@ namespace CodeMatcherV2Api.Middlewares.HttpHelper
     public static class HttpHelper
     {
         
-        public static async Task<string> Get_HttpClient(IHttpClientFactory httpClientFactory,string url)
+        public static async Task<HttpResponseMessage> Get_HttpClient(IHttpClientFactory httpClientFactory,string extensionurl)
         {
             var httpClient = httpClientFactory.CreateClient("CodeMatcher");
+            var url = httpClient.BaseAddress + extensionurl;
             var response = await httpClient.GetAsync(url);
-            return await response.Content.ReadAsStringAsync();
+            //return await response.Content.ReadAsStringAsync();
+            return response;
         }
         public static  async Task<HttpResponseMessage> Post_HttpClient(IHttpClientFactory httpClientFactory,object requestModel,string extensionurl)
         {

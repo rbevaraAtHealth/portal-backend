@@ -1,5 +1,5 @@
 ﻿//using CodeMatcherV2Api.ApiRequestModels;
-//using CodeMatcherV2Api.ApiResponeModel;
+//using CodeMatcherV2Api.ApiResponseModel;
 //using CodeMatcherV2Api.Models;
 //using System.Collections.Generic;
 //using System.Net.Http;
@@ -21,7 +21,7 @@
 //    }
 //}
 using CodeMatcherV2Api.ApiRequestModels;
-using CodeMatcherV2Api.ApiResponeModel;
+using CodeMatcherV2Api.ApiResponseModel;
 using CodeMatcherV2Api.Models;
 using System;
 using System.Collections.Generic;
@@ -41,6 +41,7 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
         MonthlyEmbedTriggeredRunResModel MonthlyEmbedApiResponseSave(HttpResponseMessage response, int reuestId);
         Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger);
         WeeklyEmbedTriggeredRunResModel WeeklyEmbedApiResponseSave(HttpResponseMessage response, int requestId);
+        //void GetCgTriggerRunMappingsPythApi(HttpResponseMessage httpResponse);
     }
 }
 

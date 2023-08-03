@@ -19,7 +19,7 @@ namespace CodeMatcherV2Api.Controllers
             _lookupTypes = lookupTypes; 
         }
 
-        [HttpGet,Route("Get Lookups")]
+        [HttpGet,Route("GetLookups")]
         public IActionResult GetLookups(string lookupType)
         {
             try

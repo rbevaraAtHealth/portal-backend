@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CodeMappingEfCore.Migrations
+namespace CodeMatcher.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(CodeMatcherDbContext))]
-    [Migration("20230727080034_notnullclientid")]
-    partial class notnullclientid
+    [Migration("20230731052407_InitialModel")]
+    partial class InitialModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -195,6 +195,192 @@ namespace CodeMappingEfCore.Migrations
                     b.ToTable("LookupTypes");
                 });
 
+            modelBuilder.Entity("CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables.CodeGenerationSummaryDto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LatestLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NoOfBaseRecords")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NoOfInputRecords")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NoOfProcessedRecords")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NoOfRecordsForWhichCodeGenerated")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NoOfRecordsForWhichCodeNotGenerated")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Segment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StartLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("Threshold")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("CodeGenerationSummary");
+                });
+
+            modelBuilder.Entity("CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables.MonthlyEmbeddingsSummaryDto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NoOfRecordsEmbeddingCreated")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NoOfRecordsImportedFromDatabase")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Segment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("MonthlyEmbeddingsSummary");
+                });
+
+            modelBuilder.Entity("CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables.WeeklyEmbeddingsSummaryDto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LatestLink")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NoOfBaseRecordsBeforeRun")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NoOfBaseRecordsImportedFromDatabase")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NoOfRecordsAfterRun")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NoOfRecordsEmbeddingsCreated")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Segment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StartLink")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("WeeklyEmbeddingsSummary");
+                });
+
             modelBuilder.Entity("CodeMappingEfCore.DatabaseModels.CodeMappingDto", b =>
                 {
                     b.HasOne("CodeMappingEfCore.DatabaseModels.CodeMappingRequestDto", "Request")
@@ -253,6 +439,39 @@ namespace CodeMappingEfCore.Migrations
                         .IsRequired();
 
                     b.Navigation("LookupType");
+                });
+
+            modelBuilder.Entity("CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables.CodeGenerationSummaryDto", b =>
+                {
+                    b.HasOne("CodeMappingEfCore.DatabaseModels.CodeMappingRequestDto", "CodeMappingRequest")
+                        .WithMany()
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CodeMappingRequest");
+                });
+
+            modelBuilder.Entity("CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables.MonthlyEmbeddingsSummaryDto", b =>
+                {
+                    b.HasOne("CodeMappingEfCore.DatabaseModels.CodeMappingRequestDto", "CodeMappingRequest")
+                        .WithMany()
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CodeMappingRequest");
+                });
+
+            modelBuilder.Entity("CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables.WeeklyEmbeddingsSummaryDto", b =>
+                {
+                    b.HasOne("CodeMappingEfCore.DatabaseModels.CodeMappingRequestDto", "CodeMappingRequest")
+                        .WithMany()
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CodeMappingRequest");
                 });
 #pragma warning restore 612, 618
         }

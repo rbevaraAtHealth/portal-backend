@@ -1,13 +1,18 @@
 ﻿using AutoMapper;
 using CodeMatcher.Api.V2.BusinessLayer.Enums;
+using CodeMatcher.Api.V2.Models;
+using CodeMatcher.Api.V2.RepoModelAdapter;
+using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 using CodeMatcherV2Api.ApiRequestModels;
-using CodeMatcherV2Api.ApiResponeModel;
+using CodeMatcherV2Api.ApiResponseModel;
 using CodeMatcherV2Api.BusinessLayer.Enums;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
+using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Middlewares.SqlHelper;
 using CodeMatcherV2Api.Models;
 using CodeMatcherV2Api.RepoModelAdapter;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -67,8 +72,11 @@ namespace CodeMatcherV2Api.BusinessLayer
                 if (!string.IsNullOrWhiteSpace(httpResult))
                 {
                     responseViewModel = JsonConvert.DeserializeObject<CgTriggeredRunResModel>(httpResult);
+                    var codeMappingDto= CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
+                    int codeMappingId=SqlHelper.SaveCodeMappingData(codeMappingDto, _context);
                 }
             }
+            
             return responseViewModel;
         }
         public Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger)
@@ -100,7 +108,11 @@ namespace CodeMatcherV2Api.BusinessLayer
                 var responseDto = adapter.DbResponseModelGet(httpResponse, requestId);
                 SqlHelper.SaveResponseseMessage(responseDto, requestId, _context);
                 if (!string.IsNullOrWhiteSpace(httpResult))
+                {
                     responseModel = JsonConvert.DeserializeObject<MonthlyEmbedTriggeredRunResModel>(httpResult);
+                    var codeMappingDto = CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
+                    int codeMappingId = SqlHelper.SaveCodeMappingData(codeMappingDto, _context);
+                }
                 if (responseModel != null)
                 {
                     return responseModel;
@@ -118,10 +130,45 @@ namespace CodeMatcherV2Api.BusinessLayer
             {
                 string httpResult = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 if (!string.IsNullOrWhiteSpace(httpResult))
+                {
                     responseModel = JsonConvert.DeserializeObject<WeeklyEmbedTriggeredRunResModel>(httpResult);
+                    var codeMappingDto = CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
+                    int codeMappingId = SqlHelper.SaveCodeMappingData(codeMappingDto, _context);
+                }
                 return responseModel;
             }
             return responseModel;
         }
+        //public void GetJobResult(IHttpClientFactory httpClientFactory,Guid taskId)
+        //{
+        //    var response = HttpHelper.Get_HttpClient(httpClientFactory, "task/" + taskId + "/result/");
+        //    GetCgTriggerRunMappingsPythApi(response.Result);
+
+        //}
+        //public void GetCgTriggerRunMappingsPythApi(HttpResponseMessage httpResponse)
+        //{
+            
+        //    string httpResult = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            
+        //    //var cgSummary = JsonConvert.DeserializeObject<CodeGenerationSummaryDto>(httpResult);
+        //    var result = JsonConvert.DeserializeObject<Root>(httpResult);
+        //    var cgSummary = JsonConvert.DeserializeObject<CodeGenerationSummaryModel>(result.result.run_summary);
+        //    //JsonConvert.DeserializeObject<Root>(httpResult);
+        //   var cgSummaryDto= _mapper.Map<CodeGenerationSummaryDto>(cgSummary);
+        //    SqlHelper.SaveCodeGenerationSummary(cgSummaryDto, _context);
+
+        //}
+        //public class Result
+        //{
+        //    public string status { get; set; }
+        //    public string code_generation { get; set; }
+        //    public string run_summary { get; set; }
+        //}
+
+        //public class Root
+        //{
+        //    public string status { get; set; }
+        //    public Result result { get; set; }
+        //}
     }
 }

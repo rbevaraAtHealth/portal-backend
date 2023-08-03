@@ -1,4 +1,5 @@
 ﻿using CodeMappingEfCore.DatabaseModels;
+using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -23,6 +24,15 @@ namespace CodeMatcherV2Api.EntityFrameworkCore
 
             modelBuilder.Entity<CodeMappingRequestDto>().HasOne(s => s.CodeMappingType)
                 .WithMany().OnDelete(DeleteBehavior.NoAction);
+
+            //modelBuilder.Entity<CodeGenerationSummaryDto>().HasOne(s => s.CodeMappingRequest)
+            //    .WithMany().OnDelete(DeleteBehavior.NoAction);
+
+            //modelBuilder.Entity<MonthlyEmbeddingsSummaryDto>().HasOne(s => s.CodeMappingRequest)
+            //    .WithOne().OnDelete(DeleteBehavior.NoAction);
+
+            //modelBuilder.Entity<WeeklyEmbeddingsSummaryDto>().HasOne(s => s.CodeMappingRequest)
+            //    .WithOne().OnDelete(DeleteBehavior.NoAction);
         }
 
         public DbSet<LookupTypeDto> LookupTypes { get; set; }
@@ -30,5 +40,8 @@ namespace CodeMatcherV2Api.EntityFrameworkCore
         public DbSet<CodeMappingRequestDto> CodeMappingRequests { get; set; }
         public DbSet<CodeMappingResponseDto> CodeMappingResponses { get; set; }
         public DbSet<CodeMappingDto> CodeMappings { get; set; }
+        public DbSet<CodeGenerationSummaryDto>CodeGenerationSummary { get; set; }
+        public DbSet<MonthlyEmbeddingsSummaryDto>MonthlyEmbeddingsSummary { get; set; }
+        public DbSet<WeeklyEmbeddingsSummaryDto>WeeklyEmbeddingsSummary { get; set; }
     }
 }

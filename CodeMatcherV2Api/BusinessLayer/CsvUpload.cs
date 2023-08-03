@@ -2,7 +2,7 @@
 using Azure;
 using Azure.Storage.Files.Shares;
 using CodeMatcherV2Api.ApiRequestModels;
-using CodeMatcherV2Api.ApiResponeModel;
+using CodeMatcherV2Api.ApiResponseModel;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Http;

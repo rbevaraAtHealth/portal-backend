@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 
-namespace CodeMatcherV2Api.ApiResponeModel
+namespace CodeMatcher.Api.V2.ApiResponseModel
 {
-    public class CgUploadCsvResModel
+    public class ApiResModel
     {
         [JsonProperty(PropertyName = "message")]
         public string Message { get; set; }
