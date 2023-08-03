@@ -1,7 +1,9 @@
 ﻿using CodeMatcher.Api.V2.Models;
+using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -24,13 +26,16 @@ namespace CodeMatcherV2Api.Controllers
         }
         
         [HttpPost,Route("UpdateSummary")]
-        public async Task<IActionResult> UpdateSummary([FromBody]CodeMappingSummaryViewModel viewModel)
+        public async Task<IActionResult> UpdateSummary([FromBody] CodeMappingSummaryViewModel response)
         {
             try
             {
-                  int summaryId = _codeMapping.SaveSummary(viewModel.TaskId,viewModel.Summary);
-                return Ok(summaryId);
-                //return Ok();
+                 int summaryId = _codeMapping.SaveSummary(response.TaskId,response.Summary);
+
+                if (summaryId == 0)
+                    return Ok("Task Id not found");
+                else
+                    return Ok("Summary Saved");
             }
             catch (Exception ex) 
             {

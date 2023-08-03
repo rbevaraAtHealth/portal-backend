@@ -14,6 +14,7 @@ namespace CodeMatcher.Api.V2.Models.SummaryModel
         public int RequestId { get; set; }
         public string Date { get; set; }
         public string Segment { get; set; }
+
         [JsonProperty(PropertyName = "No_New_BaseRecords_Imported_From_Database")]
         public int NoOfBaseRecordsImportedFromDatabase { get; set; }
 

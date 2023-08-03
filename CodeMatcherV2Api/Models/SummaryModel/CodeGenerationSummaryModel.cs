@@ -12,9 +12,7 @@ namespace CodeMatcher.Api.V2.Models.SummaryModel
     public class CodeGenerationSummaryModel
     {
         public Guid TaskId { get; set; }
-        // public int RequestId { get; set; }
-        //public CodeMappingRequestDto CodeMappingRequest { get; set; }
-        //public DateTime Date { get; set; }
+
         [JsonPropertyName("Date")]
         public string Date { get; set; }
         public string Segment { get; set; }

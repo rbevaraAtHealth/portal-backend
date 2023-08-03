@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CodeMappingEfCore.DatabaseModels;
-using CodeMatcher.Api.V2.Models;
+using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 using CodeMatcherV2Api.Models;
 

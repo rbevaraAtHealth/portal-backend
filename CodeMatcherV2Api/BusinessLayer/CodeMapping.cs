@@ -62,14 +62,10 @@ namespace CodeMatcherV2Api.BusinessLayer
             var weeklyEmbedModel = _mapper.Map<List<WeeklyEmbedSummaryModel>>(weeklyEmbed);
             return weeklyEmbedModel;
         }
-        public int GetCgMappingsPythApi( Guid taskId,string summary)
+        public int GetCgMappingsPythApi( Guid taskId,string summary,int requestId)
 
         {
-            int requestId = SqlHelper.GetRequestId(taskId, _context);
-            if (requestId == 0)
-                return 0;
-            var result= JsonConvert.DeserializeObject<Root>(summary);
-            var cgSummary = JsonConvert.DeserializeObject<CodeGenerationSummaryModel>(result.result.run_summary);
+            var cgSummary = JsonConvert.DeserializeObject<CodeGenerationSummaryModel>(summary);
             cgSummary.TaskId = taskId;
             var cgSummaryDto = _mapper.Map<CodeGenerationSummaryDto>(cgSummary);
             cgSummaryDto.RequestId = requestId;
@@ -78,11 +74,8 @@ namespace CodeMatcherV2Api.BusinessLayer
             return summaryid;
         }
 
-        public int GetMonthlyEmbedMappingsPythApi(Guid taskId,string summary)
+        public int GetMonthlyEmbedMappingsPythApi(Guid taskId,string summary,int requestId)
         {
-            int requestId = SqlHelper.GetRequestId(taskId, _context);
-            if (requestId == 0)
-                return 0;
             var cgSummary = JsonConvert.DeserializeObject<MonthlyEmbedSummaryModel>(summary);
             cgSummary.TaskId = taskId;
             var monthlySummaryDto = _mapper.Map<MonthlyEmbeddingsSummaryDto>(cgSummary);
@@ -91,11 +84,8 @@ namespace CodeMatcherV2Api.BusinessLayer
             SqlHelper.UpdateCodeMappingStatus(taskId, _context);
             return summaryId;
         }
-        public int GetWeeklyEmbedMappingsPythApi(Guid taskId,string summary)
+        public int GetWeeklyEmbedMappingsPythApi(Guid taskId,string summary,int requestId)
         {
-            int requestId = SqlHelper.GetRequestId(taskId, _context);
-            if (requestId == 0)
-                return 0;
             var cgSummary = JsonConvert.DeserializeObject<WeeklyEmbedSummaryModel>(summary);
             cgSummary.TaskId = taskId;
             var weeklySummaryDto = _mapper.Map<WeeklyEmbeddingsSummaryDto>(cgSummary);
@@ -113,13 +103,13 @@ namespace CodeMatcherV2Api.BusinessLayer
             switch (frequncyId)
             {
                 case ((int)CodeMappingType.CodeGeneration):
-                     summaryId=GetCgMappingsPythApi(taskId,summary);
+                     summaryId=GetCgMappingsPythApi(taskId,summary,requestId);
                     break;
                 case ((int)CodeMappingType.MonthlyEmbeddings):
-                     summaryId = GetMonthlyEmbedMappingsPythApi(taskId, summary);
+                     summaryId = GetMonthlyEmbedMappingsPythApi(taskId, summary,requestId);
                     break;
                 case ((int)CodeMappingType.WeeklyEmbeddings):
-                     summaryId = GetWeeklyEmbedMappingsPythApi(taskId, summary);
+                     summaryId = GetWeeklyEmbedMappingsPythApi(taskId, summary,requestId);
                     break;
                 default: break;
             }

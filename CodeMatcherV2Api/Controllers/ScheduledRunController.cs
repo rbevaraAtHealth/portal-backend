@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System;
 using System.Net.Http;
 using CodeMatcherV2Api.Models;
+using CodeMatcher.Api.V2.Models;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -18,95 +19,11 @@ namespace CodeMatcherV2Api.Controllers
             _schedule = schedule;
             _httpClientFactory = httpClientFactory;
         }
-        [HttpGet,Route("CodeGenerationScheduleRun")]
-        public async Task<IActionResult> CgScheduleJob()
+        
+        [HttpPost,Route("ScheduleJob")]
+        public async Task<IActionResult> ScheduleJob([FromBody] ScheduleJobModel scheduleJobModel)
         {
-            try
-            {
-                var scheduleJob = await _schedule.GetCgScheduleJobAsync();
-                return Ok(scheduleJob);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return Ok("Job Scheduled Sucessfully");
         }
-        [HttpGet, Route("WeeklyEmbeddingScheduleRun")]
-        public async Task<IActionResult> WeeklyScheduleJob()
-        {
-            try
-            {
-                var scheduleJob = await _schedule.GetweeklyJobScheduleAsync();
-                return Ok(scheduleJob);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-        [HttpGet, Route("MonthlyScheduleRun")]
-        public async Task<IActionResult> MonthlyScheduleJob()
-        {
-            try
-            {
-                var scheduleJob = await _schedule.GetMonthlyScheduleJobAsync();
-                return Ok(scheduleJob);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-       
-        [HttpGet, Route("GetAllScheduledJobsList")]
-        public async Task<IActionResult> GetAllScheduledJobs()
-        {
-            try
-            {
-                var scheduleJob = await _schedule.GetAllScheduleJobsAsync();
-                return Ok(scheduleJob);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        //[HttpPost, Route("CodeGenerationScheduleJob")]
-        //public async Task<IActionResult> CodeGenerationScheduleJob([FromBody] CgScheduledModel schedule)
-        //{
-        //    try
-        //    {
-        //        string url = "code-generation/scheduled-run";
-        //        var requestModel = _schedule.ApiRequestGet(schedule);
-        //        var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel, url);
-        //        var SavedData = _schedule.APiResponseSave(apiResponse);
-        //        return Ok(SavedData);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex);
-        //    }
-        //}
-        //[HttpPost,Route("MonthlyEmbedScheduledRun")]
-        //public async Task<IActionResult> MonthlyEmbedScheduledRun([FromBody] CgScheduledModel schedule)
-        //{
-        //    try
-        //    {
-        //        string url = "code-generation/scheduled-run";
-        //        var requestModel = _schedule.ApiRequestGet(schedule);
-        //        var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel, url);
-        //        var SavedData = _schedule.APiResponseSave(apiResponse);
-        //        return Ok(SavedData);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex);
-        //    }
-
-        //}
-
     }
 }
