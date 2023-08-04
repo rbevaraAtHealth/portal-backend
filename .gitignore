@@ -20,3 +20,6 @@
 /UnitTests/XUnitTest/bin/Debug/net6.0
 /UnitTests/XUnitTest/obj
 /CodeMatcherV2Api/obj/staticwebassets.pack.sentinel
+/CodeMatcherV2Api/obj/CodeMatcher.Api.V2.csproj.nuget.dgspec.json
+/CodeMatcherV2Api/obj/CodeMatcher.Api.V2.csproj.nuget.g.props
+/CodeMatcherV2Api/obj/CodeMatcher.Api.V2.csproj.nuget.g.targets
