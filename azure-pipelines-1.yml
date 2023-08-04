@@ -26,7 +26,7 @@ steps:
     appType: 'webAppContainer'
     WebAppName: 'codeconv-priv-app01'
     deployToSlotOrASE: true
-    ResourceGroupName: 'codeconv-priv-app03_group'
+    ResourceGroupName: 'codeconv-rg01'
     SlotName: 'production'
     DockerNamespace: 'codeconvacr01.azurecr.io'
     DockerRepository: 'portal-backend'
