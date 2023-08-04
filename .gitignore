@@ -4,6 +4,7 @@
 
 /.vs
 /CodeMatcherV2Api/.vs
+/CodeMatcherV2Api/obj
 /CodeMatcherV2Api/bin/Debug
 /CodeMatcherV2Api/obj/Debug
 /CodeMatcherV2Api/obj/webapplication.csproj.nuget.g.targets
