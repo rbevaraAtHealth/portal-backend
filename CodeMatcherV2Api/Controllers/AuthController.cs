@@ -31,7 +31,7 @@ namespace CodeMatcherV2Api.Controllers
         public async Task<IActionResult> Login([FromBody]LoginModel user)
         {
             //Logic for process the user info against the client specific db//
-            bool isAuth =await ProcessLogin(user);
+            //bool isAuth =await ProcessLogin(user);
 
             if (user == null)
             {
