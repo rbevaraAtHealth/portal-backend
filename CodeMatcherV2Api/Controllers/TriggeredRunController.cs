@@ -16,7 +16,7 @@ namespace CodeMatcherV2Api.Controllers
     {
         private readonly ITrigger _trigger;
         private readonly IHttpClientFactory _httpClientFactory;
-        public TriggeredRunController(ITrigger trigger, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public TriggeredRunController(ITrigger trigger, IHttpClientFactory httpClientFactory)
         {
             _trigger = trigger;
             _httpClientFactory = httpClientFactory;

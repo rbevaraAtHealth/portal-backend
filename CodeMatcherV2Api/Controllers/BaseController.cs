@@ -11,16 +11,17 @@ namespace CodeMatcherV2Api.Controllers
     [Authorize]
     public class BaseController : ControllerBase
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public BaseController(IHttpContextAccessor httpContextAccessor)
+        //private readonly IHttpContextAccessor _httpContextAccessor;
+        public BaseController()
         {
-            _httpContextAccessor = httpContextAccessor;
         }
         [NonAction]
         public LoginModel GetUserInfo()
         {
-            if (_httpContextAccessor?.HttpContext?.User != null)
-                return new LoginModel() { UserName= _httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.Name)};
+            if (User != null)
+                return new LoginModel() { UserName= User.FindFirstValue(ClaimTypes.Name),
+                    Role= User.FindFirstValue(ClaimTypes.Role)
+                };
             return new LoginModel();
         }
     }

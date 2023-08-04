@@ -12,7 +12,7 @@ namespace CodeMatcher.Api.V2.Controllers
     public class SchedulerController : BaseController
     {
         public readonly IScheduler _scheduler;
-        public SchedulerController(IScheduler scheduler, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public SchedulerController(IScheduler scheduler)
         {
             _scheduler = scheduler;
         }

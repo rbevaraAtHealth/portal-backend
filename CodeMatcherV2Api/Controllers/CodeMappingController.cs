@@ -19,7 +19,7 @@ namespace CodeMatcherV2Api.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly CodeMatcherDbContext _context;
 
-        public CodeMappingController(ICodeMapping codeMapping, IHttpClientFactory httpClientFactory, CodeMatcherDbContext context, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public CodeMappingController(ICodeMapping codeMapping, IHttpClientFactory httpClientFactory, CodeMatcherDbContext context)
         {
             _codeMapping = codeMapping;
             _httpClientFactory = httpClientFactory;

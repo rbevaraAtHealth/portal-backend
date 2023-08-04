@@ -15,7 +15,7 @@ namespace CodeMatcherV2Api.Controllers
     {
         private readonly ISchedule _schedule;
         private readonly IHttpClientFactory _httpClientFactory;
-        public ScheduledRunController(ISchedule schedule, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public ScheduledRunController(ISchedule schedule, IHttpClientFactory httpClientFactory)
         {
             _schedule = schedule;
             _httpClientFactory = httpClientFactory;

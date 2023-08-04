@@ -12,7 +12,7 @@ namespace CodeMatcherV2Api.Controllers
     public class UserController : BaseController
     {
         private readonly IUser _User;
-        public UserController(IUser user, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public UserController(IUser user)
         {
             _User = user;
         }

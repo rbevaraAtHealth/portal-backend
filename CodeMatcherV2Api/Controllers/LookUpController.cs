@@ -14,7 +14,7 @@ namespace CodeMatcherV2Api.Controllers
     {
         private readonly ILookUp _lookUp;
         private readonly ILookupTypes _lookupTypes;
-        public LookUpController(ILookUp lookUp, ILookupTypes lookupTypes, IHttpContextAccessor httpContextAccessor):base(httpContextAccessor)
+        public LookUpController(ILookUp lookUp, ILookupTypes lookupTypes)
         {
             _lookUp = lookUp;
             _lookupTypes = lookupTypes; 

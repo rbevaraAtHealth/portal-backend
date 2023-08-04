@@ -15,7 +15,7 @@ namespace CodeMatcherV2Api.Controllers
     {
         private readonly ICsvUpload _Upload;
         private readonly IHttpClientFactory _httpClientFactory;
-        public CsvUploadController(ICsvUpload upload,IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public CsvUploadController(ICsvUpload upload,IHttpClientFactory httpClientFactory)
         {
             _Upload = upload;
             _httpClientFactory = httpClientFactory;
