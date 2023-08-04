@@ -11,11 +11,11 @@ namespace CodeMatcherV2Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CsvUploadController : ControllerBase
+    public class CsvUploadController : BaseController
     {
         private readonly ICsvUpload _Upload;
         private readonly IHttpClientFactory _httpClientFactory;
-        public CsvUploadController(ICsvUpload upload,IHttpClientFactory httpClientFactory)
+        public CsvUploadController(ICsvUpload upload,IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _Upload = upload;
             _httpClientFactory = httpClientFactory;

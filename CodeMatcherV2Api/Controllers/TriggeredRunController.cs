@@ -1,6 +1,7 @@
 ﻿using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net.Http;
@@ -15,7 +16,7 @@ namespace CodeMatcherV2Api.Controllers
     {
         private readonly ITrigger _trigger;
         private readonly IHttpClientFactory _httpClientFactory;
-        public TriggeredRunController(ITrigger trigger, IHttpClientFactory httpClientFactory)
+        public TriggeredRunController(ITrigger trigger, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _trigger = trigger;
             _httpClientFactory = httpClientFactory;

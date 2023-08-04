@@ -5,6 +5,7 @@ using System;
 using System.Net.Http;
 using CodeMatcherV2Api.Models;
 using CodeMatcher.Api.V2.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -14,7 +15,7 @@ namespace CodeMatcherV2Api.Controllers
     {
         private readonly ISchedule _schedule;
         private readonly IHttpClientFactory _httpClientFactory;
-        public ScheduledRunController(ISchedule schedule, IHttpClientFactory httpClientFactory)
+        public ScheduledRunController(ISchedule schedule, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _schedule = schedule;
             _httpClientFactory = httpClientFactory;

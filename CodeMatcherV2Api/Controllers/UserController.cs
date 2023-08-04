@@ -1,5 +1,6 @@
 ﻿using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace CodeMatcherV2Api.Controllers
     public class UserController : BaseController
     {
         private readonly IUser _User;
-        public UserController(IUser user)
+        public UserController(IUser user, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _User = user;
         }

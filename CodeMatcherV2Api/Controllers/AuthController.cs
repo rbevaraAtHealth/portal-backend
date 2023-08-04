@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CodeMatcherV2Api.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -44,10 +43,11 @@ namespace CodeMatcherV2Api.Controllers
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
-                var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName)
-                };
+                var authClaims = new List<Claim>();
+
+                authClaims.Add(new Claim(ClaimTypes.Name, user.UserName));
+                authClaims.Add(new Claim(ClaimTypes.Role, "admin"));
+
                 var tokenOptions = new JwtSecurityToken(
                     issuer: _configuration["JWT:ValidIssuer"],
                     audience: _configuration["JWT:ValidAudience"],

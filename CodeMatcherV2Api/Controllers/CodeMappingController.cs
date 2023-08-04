@@ -2,6 +2,7 @@
 using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -18,7 +19,7 @@ namespace CodeMatcherV2Api.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly CodeMatcherDbContext _context;
 
-        public CodeMappingController(ICodeMapping codeMapping, IHttpClientFactory httpClientFactory, CodeMatcherDbContext context)
+        public CodeMappingController(ICodeMapping codeMapping, IHttpClientFactory httpClientFactory, CodeMatcherDbContext context, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _codeMapping = codeMapping;
             _httpClientFactory = httpClientFactory;

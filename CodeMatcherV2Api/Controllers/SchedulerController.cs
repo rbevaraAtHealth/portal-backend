@@ -2,15 +2,17 @@
 using System.Threading.Tasks;
 using System;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
+using CodeMatcherV2Api.Controllers;
+using Microsoft.AspNetCore.Http;
 
 namespace CodeMatcher.Api.V2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SchedulerController : ControllerBase
+    public class SchedulerController : BaseController
     {
         public readonly IScheduler _scheduler;
-        public SchedulerController(IScheduler scheduler)
+        public SchedulerController(IScheduler scheduler, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _scheduler = scheduler;
         }
