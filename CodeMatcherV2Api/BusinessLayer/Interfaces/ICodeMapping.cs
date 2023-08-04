@@ -18,5 +18,7 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
         int GetMonthlyEmbedMappingsPythApi(Guid taskId, string summary, int requestId);
         int GetWeeklyEmbedMappingsPythApi(Guid taskId, string summary, int requestId);
         int SaveSummary(Guid taskId, string summary);
+        GenericSummaryViewModel GetMappings(Guid taskId);
+        List<GenericSummaryViewModel> GetCodeMappings();
     }
 }
