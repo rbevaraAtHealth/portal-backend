@@ -1,6 +1,7 @@
 ﻿using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net.Http;

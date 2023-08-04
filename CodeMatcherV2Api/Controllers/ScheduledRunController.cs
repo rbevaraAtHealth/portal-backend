@@ -5,6 +5,7 @@ using System;
 using System.Net.Http;
 using CodeMatcherV2Api.Models;
 using CodeMatcher.Api.V2.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace CodeMatcherV2Api.Controllers
 {
