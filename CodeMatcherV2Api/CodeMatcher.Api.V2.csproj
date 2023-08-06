@@ -34,12 +34,29 @@
   <ItemGroup>
     <Folder Include="Middlewares\" />
     <Folder Include="Resources\Files\" />
-    <Folder Include="Repositories\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CodeMappingEfCore\CodeMatcher.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ADODB">
+      <HintPath>CommonDLLs\adodb.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>CommonDLLs\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>CommonDLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="QeDataNet">
+      <HintPath>CommonDLLs\QeDataNet.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>CommonDLLs\System.Web.Helpers.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
