@@ -143,10 +143,6 @@ namespace CodeMatcherV2Api.BusinessLayer
                     default: break;
                 }
             }
-
-            
-            
-            
             return viewModel;
         }
         public List<CodeGenerationSummaryModel> GetCodeGenerationMappingRecords()
