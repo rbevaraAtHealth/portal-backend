@@ -1,27 +1,18 @@
 ﻿using AutoMapper;
-using Azure.Core;
-using CodeMappingEfCore.DatabaseModels;
 using CodeMatcher.Api.V2.BusinessLayer.Enums;
-using CodeMatcher.Api.V2.Models.JsonResultModels;
 using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
-using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Middlewares.SqlHelper;
 using CodeMatcherV2Api.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CodeMatcherV2Api.BusinessLayer
 {
