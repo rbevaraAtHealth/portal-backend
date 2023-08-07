@@ -65,39 +65,16 @@ namespace CodeMatcherV2Api.BusinessLayer
                 {
                     case ((int)CodeMappingType.CodeGeneration):
                         cgSummaryDto = _context.CodeGenerationSummary.FirstOrDefault(x => x.TaskId == taskId);
-                        //summaryViewModel.TaskId = cgSummaryDto.TaskId;
-                        //summaryViewModel.RequestId = cgSummaryDto.RequestId;
-                        //summaryViewModel.Date = cgSummaryDto.Date.ToString();
-                        //summaryViewModel.Segment = cgSummaryDto.Segment;
-                        //summaryViewModel.Threshold = cgSummaryDto.Threshold;
-                        //summaryViewModel.NoOfBaseRecords = cgSummaryDto.NoOfBaseRecords;
-                        //summaryViewModel.NoOfInputRecords = cgSummaryDto.NoOfInputRecords;
-                        //summaryViewModel.NoOfProcessedRecords = cgSummaryDto.NoOfProcessedRecords;
-                        //summaryViewModel.NoOfRecordsForWhichCodeNotGenerated = cgSummaryDto.NoOfRecordsForWhichCodeNotGenerated;
-                        //summaryViewModel.StartLink = cgSummaryDto.StartLink;
-                        //summaryViewModel.LatestLink = cgSummaryDto.LatestLink;
-                        //summaryViewModel.ClientId = cgSummaryDto.ClientId;
                         break;
                     case ((int)CodeMappingType.MonthlyEmbeddings):
                         monthlyembedSummaryDto = _context.MonthlyEmbeddingsSummary.FirstOrDefault(x => x.TaskId == taskId);
                         summaryViewModel.TaskId = monthlyembedSummaryDto.TaskId.ToString();
                         summaryViewModel.RequestId = monthlyembedSummaryDto.RequestId;
-                        //summaryViewModel.Date = monthlyembedSummaryDto.Date.ToString();
-                        //summaryViewModel.Segment = monthlyembedSummaryDto.Segment;
-                        //summaryViewModel.NoOfBaseRecordsImportedFromDatabase = monthlyembedSummaryDto.NoOfRecordsImportedFromDatabase;
-                        //summaryViewModel.NoOfRecordsEmbeddingCreated = monthlyembedSummaryDto.NoOfRecordsEmbeddingCreated;
                         break;
                     case ((int)CodeMappingType.WeeklyEmbeddings):
                         weeklyEmbedSummaryDto = _context.WeeklyEmbeddingsSummary.FirstOrDefault(x => x.TaskId == taskId);
                         summaryViewModel.TaskId = weeklyEmbedSummaryDto.TaskId.ToString();
                         summaryViewModel.RequestId = weeklyEmbedSummaryDto.RequestId;
-                        //summaryViewModel.Date = weeklyEmbedSummaryDto?.Date.ToString();
-                        //summaryViewModel.Segment = weeklyEmbedSummaryDto?.Segment;
-                        //summaryViewModel.NoOfBaseRecordsImportedFromDatabase = weeklyEmbedSummaryDto.NoOfBaseRecordsImportedFromDatabase;
-                        //summaryViewModel.NoOfBaseRecordsBeforeRun = weeklyEmbedSummaryDto.NoOfBaseRecordsBeforeRun;
-                        //summaryViewModel.NoOfRecordsAfterRun = weeklyEmbedSummaryDto.NoOfRecordsAfterRun;
-                        //summaryViewModel.StartLink = weeklyEmbedSummaryDto.StartLink.ToString();
-                        //summaryViewModel.LatestLink = weeklyEmbedSummaryDto.LatestLink.ToString();
                         break;
                     default: break;
                 }
