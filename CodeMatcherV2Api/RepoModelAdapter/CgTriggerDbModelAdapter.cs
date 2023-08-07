@@ -10,6 +10,8 @@ using System.Net.Http;
 using CodeMatcher.Api.V2.BusinessLayer.Enums;
 using System.Linq;
 using CodeMatcherV2Api.Middlewares.SqlHelper;
+using CodeMatcherV2Api.Controllers;
+
 
 namespace CodeMatcherV2Api.RepoModelAdapter
 {

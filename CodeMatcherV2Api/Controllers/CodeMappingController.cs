@@ -25,25 +25,30 @@ namespace CodeMatcherV2Api.Controllers
             _httpClientFactory = httpClientFactory;
             _context = context;
         }
-        //[HttpGet, Route("GetCodeMappingRecords")]
-        //public async Task<IActionResult> GetCodeMappingRecords()
-        //{
-        //    try
-        //    {
-        //        var records = await _codeMapping.GetCodeMappingsRecordsAsync();
-        //        return Ok(records);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-        [HttpGet,Route("GetCodeMappingSummary")]
-        public async Task<IActionResult> GetCodeMappingSummary()
+        
+        [HttpGet,Route("GetCodeMappings")]
+        public async Task<IActionResult> GetCodeMappings()
         {
-           // var summaryViewModel = _codeMapping.GetMappings(taskId);
             var summaryViewModel = _codeMapping.GetCodeMappings();
             return Ok(summaryViewModel);
+        }
+        [HttpGet,Route("CodeGeneration/GetCodeMappings")]
+        public async Task<IActionResult> GetCodeGenerationCodeMappings()
+        {
+            var cgCodeMappings = _codeMapping.GetCodeGenerationMappingRecords();
+            return Ok(cgCodeMappings);
+        }
+        [HttpGet, Route("MonthlyEmbedings/GetEmbeddings")]
+        public async Task<IActionResult> GetMonthlyEmbedings()
+        {
+            var embeddings = _codeMapping.GetMonthlyEmbeddingMappingRecords();
+            return Ok(embeddings); ;
+        }
+        [HttpGet, Route("WeeklyEmbeddings/GetEmbeddings")]
+        public async Task<IActionResult> GetWeeklyEmbeddings()
+        {
+            var embeddings = _codeMapping.GetWeeklyEmbeddingsMappingRecords();
+            return Ok(embeddings); ;
         }
 
         [HttpPost,Route("UpdateSummary")]

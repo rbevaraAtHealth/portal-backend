@@ -11,9 +11,9 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
     public interface ICodeMapping
     {
         Task<List<CodeMappingModel>> GetCodeMappingsRecordsAsync();
-        List<CodeGenerationSummaryModel> GetCodeGenerationMappingRecords();
-        List<MonthlyEmbedSummaryModel> GetMonthlyEmbeddingMappingRecords();
-        List<WeeklyEmbedSummaryModel> GetWeeklyEmbeddingsMappingRecords();
+        List<GenericSummaryViewModel> GetCodeGenerationMappingRecords();
+        List<GenericSummaryViewModel> GetMonthlyEmbeddingMappingRecords();
+        List<GenericSummaryViewModel> GetWeeklyEmbeddingsMappingRecords();
         int GetCgMappingsPythApi(Guid taskId, string summary,int requestId);
         int GetMonthlyEmbedMappingsPythApi(Guid taskId, string summary, int requestId);
         int GetWeeklyEmbedMappingsPythApi(Guid taskId, string summary, int requestId);

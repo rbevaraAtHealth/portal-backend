@@ -11,6 +11,7 @@ namespace CodeMatcher.Api.V2.Models.SummaryModel
         public int RequestId { get; set; }
         public DateTime TimeStamp { get; set; }
         public string Segment { get; set; }
+        public string CodeMappingType { get; set; }
         public float Threshold { get; set; }
         public int NoOfRecords { get; set; }
         public int NoofMatches { get; set; }

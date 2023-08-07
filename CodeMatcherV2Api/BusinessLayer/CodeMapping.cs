@@ -106,62 +106,111 @@ namespace CodeMatcherV2Api.BusinessLayer
         }
         public List<GenericSummaryViewModel> GetCodeMappings()
         {
-            List<GenericSummaryViewModel> viewModel= new List<GenericSummaryViewModel>();
-            var codeMappings=_context.CodeMappings.Include("Request").AsNoTracking();
-            List<int> ids = new List<int>();
-            foreach (var codeMapping in codeMappings)
-            {
-                ids.Add(codeMapping.RequestId);
-            }
-            var reuests = _context.CodeMappingRequests.Where(x => ids.Contains(x.Id)).Include("RunType").Include("SegmentType").Include("CodeMappingType").ToList();
-            var cgsummary = _context.CodeGenerationSummary.Include("CodeMappingRequest");
-            var monthlyEmbedSummary = _context.MonthlyEmbeddingsSummary.Include("CodeMappingRequest");
-            var weeklyEmbedSummary = _context.WeeklyEmbeddingsSummary.Include("CodeMappingRequest");
+            List<GenericSummaryViewModel> viewModel = new List<GenericSummaryViewModel>();
+            var codeMappings = _context.CodeMappings.Include("Request").AsNoTracking();
+
             foreach (var item in codeMappings)
             {
                 GenericSummaryViewModel model = new GenericSummaryViewModel();
                 model.TaskId = item.Reference;
                 model.RequestId = item.RequestId;
                 model.TimeStamp = item.Request.CreatedTime;
-                var requestDto = reuests.FirstOrDefault(x => x.Id == item.RequestId);
-                model.Segment = requestDto.SegmentType.Name;
-               // model.Threshold =requestDto.Threshold;
-                model.RunType = requestDto.RunType.Name;
-                model.RunBy = requestDto.CreatedBy;
+                var reuestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").FirstOrDefault(x => x.Id == item.Id);
+                model.Segment = reuestDto.SegmentType.Name;
+                model.RunType = reuestDto.RunType.Name;
+                model.CodeMappingType = reuestDto.CodeMappingType.Name;
+                model.RunBy = reuestDto.CreatedBy;
 
-                switch (requestDto.RunTypeId)
+                switch (reuestDto.CodeMappingType.Id)
                 {
                     case ((int)CodeMappingType.CodeGeneration):
-                        model.Summary = _context.CodeGenerationSummary.FirstOrDefault(x => x.RequestId == item.RequestId);
+                        model.Summary = _context.CodeGenerationSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
                         break;
                     case ((int)CodeMappingType.MonthlyEmbeddings):
-                        model.Summary = _context.MonthlyEmbeddingsSummary.FirstOrDefault(x => x.RequestId == item.RequestId);
+                        model.Summary = _context.MonthlyEmbeddingsSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
                         break;
                     case ((int)CodeMappingType.WeeklyEmbeddings):
-                        model.Summary = _context.WeeklyEmbeddingsSummary.FirstOrDefault(x => x.RequestId == item.RequestId);
+                        model.Summary = _context.WeeklyEmbeddingsSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
                         break;
                     default: break;
+                }
+                viewModel.Add(model);
+            }
+            return viewModel;
+        }
+        public List<GenericSummaryViewModel> GetCodeGenerationMappingRecords()
+        {
+            List<GenericSummaryViewModel> viewModel = new List<GenericSummaryViewModel>();
+            var codeMappings = _context.CodeMappings.Include("Request").AsNoTracking();
+
+            foreach (var item in codeMappings)
+            {
+                var reuestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").FirstOrDefault(x => x.Id == item.Id);
+                if (reuestDto.CodeMappingType.Id == (int)CodeMappingType.CodeGeneration)
+                {
+                    GenericSummaryViewModel model = new GenericSummaryViewModel();
+
+                    model.TaskId = item.Reference;
+                    model.RequestId = item.RequestId;
+                    model.TimeStamp = item.Request.CreatedTime;
+                    model.Segment = reuestDto.SegmentType.Name;
+                    model.RunType = reuestDto.RunType.Name;
+                    model.CodeMappingType = reuestDto.CodeMappingType.Name;
+                    model.RunBy = reuestDto.CreatedBy;
+                    model.Summary = _context.CodeGenerationSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
+                    viewModel.Add(model);
                 }
             }
             return viewModel;
         }
-        public List<CodeGenerationSummaryModel> GetCodeGenerationMappingRecords()
+        public List<GenericSummaryViewModel> GetMonthlyEmbeddingMappingRecords()
         {
-            var codeGeneration = _context.CodeGenerationSummary.AsNoTracking().ToList();
-            var codeGenerationModel = _mapper.Map<List<CodeGenerationSummaryModel>>(codeGeneration);
-            return codeGenerationModel;
+            List<GenericSummaryViewModel> viewModel = new List<GenericSummaryViewModel>();
+            var codeMappings = _context.CodeMappings.Include("Request").AsNoTracking();
+
+            foreach (var item in codeMappings)
+            {
+                var reuestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").FirstOrDefault(x => x.Id == item.Id);
+                if (reuestDto.CodeMappingType.Id == (int)CodeMappingType.MonthlyEmbeddings)
+                {
+                    GenericSummaryViewModel model = new GenericSummaryViewModel();
+                    model.TaskId = item.Reference;
+                    model.RequestId = item.RequestId;
+                    model.TimeStamp = item.Request.CreatedTime;
+                    model.Segment = reuestDto.SegmentType.Name;
+                    model.RunType = reuestDto.RunType.Name;
+                    model.CodeMappingType = reuestDto.CodeMappingType.Name;
+                    model.RunBy = reuestDto.CreatedBy;
+                    model.Summary = _context.CodeGenerationSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
+                    viewModel.Add(model);
+                }
+            }
+            return viewModel;
         }
-        public List<MonthlyEmbedSummaryModel> GetMonthlyEmbeddingMappingRecords()
+        public List<GenericSummaryViewModel> GetWeeklyEmbeddingsMappingRecords()
         {
-            var monthlyEmbed = _context.MonthlyEmbeddingsSummary.AsNoTracking().ToList();
-            var monthlyEmbedModel = _mapper.Map<List<MonthlyEmbedSummaryModel>>(monthlyEmbed);
-            return monthlyEmbedModel;
-        }
-        public List<WeeklyEmbedSummaryModel> GetWeeklyEmbeddingsMappingRecords()
-        {
-            var weeklyEmbed = _context.WeeklyEmbeddingsSummary.AsNoTracking().ToList();
-            var weeklyEmbedModel = _mapper.Map<List<WeeklyEmbedSummaryModel>>(weeklyEmbed);
-            return weeklyEmbedModel;
+            List<GenericSummaryViewModel> viewModel = new List<GenericSummaryViewModel>();
+            var codeMappings = _context.CodeMappings.Include("Request").AsNoTracking();
+
+            foreach (var item in codeMappings)
+            {
+                var reuestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").FirstOrDefault(x => x.Id == item.Id);
+                if (reuestDto.CodeMappingType.Id == (int)CodeMappingType.WeeklyEmbeddings)
+                {
+                    GenericSummaryViewModel model = new GenericSummaryViewModel();
+
+                    model.TaskId = item.Reference;
+                    model.RequestId = item.RequestId;
+                    model.TimeStamp = item.Request.CreatedTime;
+                    model.Segment = reuestDto.SegmentType.Name;
+                    model.RunType = reuestDto.RunType.Name;
+                    model.CodeMappingType = reuestDto.CodeMappingType.Name;
+                    model.RunBy = reuestDto.CreatedBy;
+                    model.Summary = _context.CodeGenerationSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
+                    viewModel.Add(model);
+                }
+            }
+            return viewModel;
         }
         public int GetCgMappingsPythApi(Guid taskId, string summary, int requestId)
 
@@ -174,7 +223,6 @@ namespace CodeMatcherV2Api.BusinessLayer
             SqlHelper.UpdateCodeMappingStatus(taskId, _context);
             return summaryid;
         }
-
         public int GetMonthlyEmbedMappingsPythApi(Guid taskId, string summary, int requestId)
         {
             var cgSummary = JsonConvert.DeserializeObject<MonthlyEmbedSummaryModel>(summary);
@@ -216,6 +264,5 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return summaryId;
         }
-
     }
 }
