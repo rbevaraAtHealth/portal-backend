@@ -35,12 +35,12 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
         Task<string> GetCgTriggerJobAsync();
         Task<string> GetMonthlyTriggerJobAsync();
         Task<string> GetWeeklyTriggerJobAsync();
-        Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger);
-        CgTriggeredRunResModel CgAPiResponseSave(HttpResponseMessage response, int RequestId);
-        Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger);
-        MonthlyEmbedTriggeredRunResModel MonthlyEmbedApiResponseSave(HttpResponseMessage response, int reuestId);
-        Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger);
-        WeeklyEmbedTriggeredRunResModel WeeklyEmbedApiResponseSave(HttpResponseMessage response, int requestId);
+        Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger,LoginModel user);
+        CgTriggeredRunResModel CgAPiResponseSave(HttpResponseMessage response, int RequestId,LoginModel user);
+        Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger,LoginModel user);
+        MonthlyEmbedTriggeredRunResModel MonthlyEmbedApiResponseSave(HttpResponseMessage response, int reuestId,LoginModel user);
+        Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger,LoginModel user);
+        WeeklyEmbedTriggeredRunResModel WeeklyEmbedApiResponseSave(HttpResponseMessage response, int requestId,LoginModel user);
         //void GetCgTriggerRunMappingsPythApi(HttpResponseMessage httpResponse);
     }
 }

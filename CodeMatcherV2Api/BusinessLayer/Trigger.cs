@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CodeMappingEfCore.DatabaseModels;
 using CodeMatcher.Api.V2.BusinessLayer.Enums;
 using CodeMatcher.Api.V2.Models;
 using CodeMatcher.Api.V2.RepoModelAdapter;
@@ -7,6 +8,7 @@ using CodeMatcherV2Api.ApiRequestModels;
 using CodeMatcherV2Api.ApiResponseModel;
 using CodeMatcherV2Api.BusinessLayer.Enums;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using CodeMatcherV2Api.Controllers;
 using CodeMatcherV2Api.EntityFrameworkCore;
 using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Middlewares.SqlHelper;
@@ -14,6 +16,7 @@ using CodeMatcherV2Api.Models;
 using CodeMatcherV2Api.RepoModelAdapter;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Polly;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -27,9 +30,11 @@ namespace CodeMatcherV2Api.BusinessLayer
         private readonly IMapper _mapper;
         public Trigger(CodeMatcherDbContext context, IMapper mapper)
         {
+            BaseController baseController = new BaseController();
             _context = context;
             _cgTriggerDbModelAdapter = new CgTriggerDbModelAdapter();
             _mapper = mapper;
+            var user=baseController.GetUserInfo();
         }
         public async Task<string> GetAllTriggerAsync()
         {
@@ -49,22 +54,30 @@ namespace CodeMatcherV2Api.BusinessLayer
         {
             return "Weekly job triggered successfully";
         }
-        public Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger)
+        public Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger,LoginModel user)
         {
+            CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
+            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType((int)RequestType.Triggered, _context);
+            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(trigger.Segment, _context);
+            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType((int)CodeMappingType.CodeGeneration, _context);
+            codeMappingRequestDto.Threshold = trigger.Threshold.ToString();
+            codeMappingRequestDto.LatestLink = "1";
+            codeMappingRequestDto.ClientId = "All";
+            codeMappingRequestDto.CreatedBy = user.UserName;
+            int reuestId = SqlHelper.SaveCodeMappingRequest(codeMappingRequestDto, _context);
             CgTriggeredRunReqModel requestModel = new CgTriggeredRunReqModel();
             requestModel.Segment = trigger.Segment;
             requestModel.Threshold = trigger.Threshold;
-            requestModel.LatestLink = "1";
-            requestModel.ClientId = "All";
-            var cgReqDbModel = _cgTriggerDbModelAdapter.RequestModel_Get(requestModel, RequestType.Triggered,CodeMappingType.CodeGeneration, _context);
-            int reuestId = SqlHelper.SaveCodeMappingRequest(cgReqDbModel, _context);
+            requestModel.LatestLink = codeMappingRequestDto.LatestLink;
+            requestModel.ClientId = codeMappingRequestDto.ClientId;
             return new Tuple<CgTriggeredRunReqModel, int>(requestModel, reuestId);
         }
-        public CgTriggeredRunResModel CgAPiResponseSave(HttpResponseMessage httpResponse, int requestId)
+        public CgTriggeredRunResModel CgAPiResponseSave(HttpResponseMessage httpResponse, int requestId,LoginModel user)
         {
             CgTriggeredRunResModel responseViewModel = new CgTriggeredRunResModel();
             CodeMappingResponseDbModelAdapter adapter=new CodeMappingResponseDbModelAdapter();
             var responseDto = adapter.DbResponseModelGet(httpResponse, requestId);
+            responseDto.CreatedBy=user.UserName;
             SqlHelper.SaveResponseseMessage(responseDto, requestId, _context);
             if (httpResponse.IsSuccessStatusCode)
             {
@@ -79,26 +92,35 @@ namespace CodeMatcherV2Api.BusinessLayer
             
             return responseViewModel;
         }
-        public Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger)
+        public Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger,LoginModel user)
         {
+            CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
+            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType((int)RequestType.Triggered, _context);
+            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(trigger.Segment, _context);
+            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType((int)CodeMappingType.MonthlyEmbeddings, _context);
+            codeMappingRequestDto.ClientId = "All";
+            codeMappingRequestDto.CreatedBy = user.UserName;
+            int requestId = SqlHelper.SaveCodeMappingRequest(codeMappingRequestDto, _context);
             MonthlyEmbedTriggeredRunReqModel requestModel = new MonthlyEmbedTriggeredRunReqModel();
             requestModel.Segment = trigger.Segment;
-            MonthlyEmbedTriggeredDbModelAdapter adapter = new MonthlyEmbedTriggeredDbModelAdapter();
-            var EmbedDbModel = adapter.RequestModel_Get(requestModel, RequestType.Triggered,CodeMappingType.MonthlyEmbeddings, _context);
-            int requestId = SqlHelper.SaveCodeMappingRequest(EmbedDbModel, _context);
             return new Tuple<MonthlyEmbedTriggeredRunReqModel, int>(requestModel, requestId);
         }
-        public Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger)
+        public Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger,LoginModel user)
         {
+            CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
+            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType(RequestType.Triggered.ToString(), _context);
+            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(trigger.Segment, _context);
+            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType((int)CodeMappingType.WeeklyEmbeddings, _context);
+            codeMappingRequestDto.ClientId = "All";
+            codeMappingRequestDto.CreatedBy = user.UserName;
+            int requestId = SqlHelper.SaveCodeMappingRequest(codeMappingRequestDto, _context);
             WeeklyEmbedTriggeredRunReqModel requestModel = new WeeklyEmbedTriggeredRunReqModel();
             requestModel.Segment = trigger.Segment;
             requestModel.LatestLink = "6";
-            WeeklyEmbedTriggeredDbModelAdapter adapter = new WeeklyEmbedTriggeredDbModelAdapter();
-            var EmbedDbModel = adapter.RequestModel_Get(requestModel, RequestType.Triggered,CodeMappingType.WeeklyEmbeddings, _context);
-            int requestId = SqlHelper.SaveCodeMappingRequest(EmbedDbModel, _context);
+           
             return new Tuple<WeeklyEmbedTriggeredRunReqModel, int>(requestModel, requestId);
         }
-        public MonthlyEmbedTriggeredRunResModel MonthlyEmbedApiResponseSave(HttpResponseMessage httpResponse, int requestId)
+        public MonthlyEmbedTriggeredRunResModel MonthlyEmbedApiResponseSave(HttpResponseMessage httpResponse, int requestId,LoginModel user)
         {
             MonthlyEmbedTriggeredRunResModel responseModel = new MonthlyEmbedTriggeredRunResModel();
             if (httpResponse.IsSuccessStatusCode)
@@ -106,6 +128,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                 string httpResult = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 CodeMappingResponseDbModelAdapter adapter = new CodeMappingResponseDbModelAdapter();
                 var responseDto = adapter.DbResponseModelGet(httpResponse, requestId);
+                responseDto.CreatedBy= user.UserName;
                 SqlHelper.SaveResponseseMessage(responseDto, requestId, _context);
                 if (!string.IsNullOrWhiteSpace(httpResult))
                 {
@@ -120,11 +143,12 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return responseModel;
         }
-        public WeeklyEmbedTriggeredRunResModel WeeklyEmbedApiResponseSave(HttpResponseMessage httpResponse, int requestId)
+        public WeeklyEmbedTriggeredRunResModel WeeklyEmbedApiResponseSave(HttpResponseMessage httpResponse, int requestId,LoginModel user)
         {
             WeeklyEmbedTriggeredRunResModel responseModel = new WeeklyEmbedTriggeredRunResModel();
             CodeMappingResponseDbModelAdapter adapter = new CodeMappingResponseDbModelAdapter();
             var responseDto = adapter.DbResponseModelGet(httpResponse, requestId);
+            responseDto.CreatedBy= user.UserName;
             SqlHelper.SaveResponseseMessage(responseDto, requestId, _context);
             if (httpResponse.IsSuccessStatusCode)
             {
@@ -139,36 +163,5 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return responseModel;
         }
-        //public void GetJobResult(IHttpClientFactory httpClientFactory,Guid taskId)
-        //{
-        //    var response = HttpHelper.Get_HttpClient(httpClientFactory, "task/" + taskId + "/result/");
-        //    GetCgTriggerRunMappingsPythApi(response.Result);
-
-        //}
-        //public void GetCgTriggerRunMappingsPythApi(HttpResponseMessage httpResponse)
-        //{
-            
-        //    string httpResult = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            
-        //    //var cgSummary = JsonConvert.DeserializeObject<CodeGenerationSummaryDto>(httpResult);
-        //    var result = JsonConvert.DeserializeObject<Root>(httpResult);
-        //    var cgSummary = JsonConvert.DeserializeObject<CodeGenerationSummaryModel>(result.result.run_summary);
-        //    //JsonConvert.DeserializeObject<Root>(httpResult);
-        //   var cgSummaryDto= _mapper.Map<CodeGenerationSummaryDto>(cgSummary);
-        //    SqlHelper.SaveCodeGenerationSummary(cgSummaryDto, _context);
-
-        //}
-        //public class Result
-        //{
-        //    public string status { get; set; }
-        //    public string code_generation { get; set; }
-        //    public string run_summary { get; set; }
-        //}
-
-        //public class Root
-        //{
-        //    public string status { get; set; }
-        //    public Result result { get; set; }
-        //}
     }
 }

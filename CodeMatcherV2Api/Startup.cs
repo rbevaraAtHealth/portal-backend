@@ -80,11 +80,15 @@ namespace CodeMatcherV2Api
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             //services.AddHttpClient();
-            services.AddHttpClient("CodeMatcher", c =>
-            {
-                c.BaseAddress = new Uri("http://codeconv-app02.azurewebsites.net/");
+            //services.AddHttpClient("CodeMatcher", c =>
+            //{
+            //    c.BaseAddress = new Uri("http://codeconv-app02.azurewebsites.net/");
+            //    c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //});
+            services.AddHttpClient("CodeMatcher", c => { c.BaseAddress = new Uri(Configuration["PythonApi:BaseUrl"]);
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
+                
             
             services
                 .AddSwaggerGen(c =>
