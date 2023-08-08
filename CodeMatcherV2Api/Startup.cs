@@ -4,15 +4,19 @@ using System.Text;
 using AutoMapper;
 using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
+using CodeMatcherApiV2.BusinessLayer.Interfaces;
+using CodeMatcherApiV2.Repositories;
 using CodeMatcherV2Api.BusinessLayer;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -71,12 +75,20 @@ namespace CodeMatcherV2Api
             services.AddTransient<ICodeMapping, CodeMapping>();
             services.AddTransient<ILookupTypes, LookupTypes>();
             services.AddTransient<IScheduler, Scheduler>();
+
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             //services.AddHttpClient();
-            services.AddHttpClient("CodeMatcher", c =>
-            {
-                c.BaseAddress = new Uri("http://codeconv-app02.azurewebsites.net/");
+            //services.AddHttpClient("CodeMatcher", c =>
+            //{
+            //    c.BaseAddress = new Uri("http://codeconv-app02.azurewebsites.net/");
+            //    c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //});
+            services.AddHttpClient("CodeMatcher", c => { c.BaseAddress = new Uri(Configuration["PythonApi:BaseUrl"]);
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
+                
             
             services
                 .AddSwaggerGen(c =>

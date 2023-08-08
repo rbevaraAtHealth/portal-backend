@@ -1,6 +1,7 @@
 ﻿using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net.Http;
@@ -26,10 +27,11 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
+                var user=GetUserInfo();
                 string url = "code-generation/triggered-run";
-                var requestModel = _trigger.CgApiRequestGet(trigger);
+                var requestModel = _trigger.CgApiRequestGet(trigger, user);
                 var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
-                var savedData = _trigger.CgAPiResponseSave(apiResponse, requestModel.Item2);
+                var savedData = _trigger.CgAPiResponseSave(apiResponse, requestModel.Item2, user);
                 return Ok(savedData);
             }
             catch (Exception ex)
@@ -43,10 +45,11 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
+                var user=GetUserInfo();
                 string url = "monthly-embeddings/triggered-run";
-                var requestModel = _trigger.MonthlyEmbedApiRequestGet(trigger);
+                var requestModel = _trigger.MonthlyEmbedApiRequestGet(trigger, user);
                 var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
-                var SavedData = _trigger.MonthlyEmbedApiResponseSave(apiResponse,requestModel.Item2);
+                var SavedData = _trigger.MonthlyEmbedApiResponseSave(apiResponse,requestModel.Item2,user);
                 return Ok(SavedData);
             }
             catch (Exception ex)
@@ -60,10 +63,11 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
+                var user = GetUserInfo();
                 string url = "weekly-embeddings/triggered-run";
-                var requestModel = _trigger.WeeklyEmbedApiRequestGet(trigger);
+                var requestModel = _trigger.WeeklyEmbedApiRequestGet(trigger,user);
                 var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
-                var SavedData = _trigger.WeeklyEmbedApiResponseSave(apiResponse,requestModel.Item2);
+                var SavedData = _trigger.WeeklyEmbedApiResponseSave(apiResponse,requestModel.Item2,user);
                 return Ok(SavedData);
             }
             catch (Exception ex)

@@ -2,6 +2,7 @@
 using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -25,6 +26,31 @@ namespace CodeMatcherV2Api.Controllers
             _context = context;
         }
         
+        [HttpGet,Route("GetCodeMappings")]
+        public async Task<IActionResult> GetCodeMappings()
+        {
+            var summaryViewModel = _codeMapping.GetCodeMappings();
+            return Ok(summaryViewModel);
+        }
+        [HttpGet,Route("CodeGeneration/GetCodeMappings")]
+        public async Task<IActionResult> GetCodeGenerationCodeMappings()
+        {
+            var cgCodeMappings = _codeMapping.GetCodeGenerationMappingRecords();
+            return Ok(cgCodeMappings);
+        }
+        [HttpGet, Route("MonthlyEmbedings/GetEmbeddings")]
+        public async Task<IActionResult> GetMonthlyEmbedings()
+        {
+            var embeddings = _codeMapping.GetMonthlyEmbeddingMappingRecords();
+            return Ok(embeddings); ;
+        }
+        [HttpGet, Route("WeeklyEmbeddings/GetEmbeddings")]
+        public async Task<IActionResult> GetWeeklyEmbeddings()
+        {
+            var embeddings = _codeMapping.GetWeeklyEmbeddingsMappingRecords();
+            return Ok(embeddings); ;
+        }
+
         [HttpPost,Route("UpdateSummary")]
         public async Task<IActionResult> UpdateSummary([FromBody] CodeMappingSummaryViewModel response)
         {
