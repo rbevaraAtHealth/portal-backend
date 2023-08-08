@@ -2,6 +2,7 @@
 using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -50,7 +51,7 @@ namespace CodeMatcherV2Api.Controllers
             var embeddings = _codeMapping.GetWeeklyEmbeddingsMappingRecords();
             return Ok(embeddings); ;
         }
-
+        [AllowAnonymous]
         [HttpPost,Route("UpdateSummary")]
         public async Task<IActionResult> UpdateSummary([FromBody] CodeMappingSummaryViewModel response)
         {
@@ -61,7 +62,7 @@ namespace CodeMatcherV2Api.Controllers
                 if (summaryId == 0)
                     return Ok("Task Id not found");
                 else
-                    return Ok("Summary Saved");
+                    return Ok("Summary Saved Successfully");
             }
             catch (Exception ex) 
             {
