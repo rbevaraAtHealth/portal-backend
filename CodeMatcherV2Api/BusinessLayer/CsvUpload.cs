@@ -67,13 +67,14 @@ namespace CodeMatcherV2Api.BusinessLayer
             string connectionString = _configuration["AzureFileStorage:ConnectionString"];
 
             string shareName = _configuration["AzureFileStorage:ShareName"];
-            string dirName = _configuration["AzureFileStorage:DirectoryName"];
+            string inputdirName = _configuration["AzureFileStorage:InputDirPath"];
+            string outputDirName = _configuration["AzureFileStorage:OutputDirPath"];
             string fileName = $"{DateTime.Now.Ticks}_{file.FileName}";
 
             ShareClient share = new(connectionString, shareName);
             share.CreateIfNotExists();
 
-            ShareDirectoryClient directory = share.GetDirectoryClient(dirName);
+            ShareDirectoryClient directory = share.GetDirectoryClient(inputdirName);
             directory.CreateIfNotExists();
 
             // Get a reference to a file and upload it
@@ -85,7 +86,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                     new HttpRange(0, stream.Length),
                     stream);
             }
-            return fileName;
+            return $"{outputDirName}{inputdirName}/{fileName}";
         }
 
     }
