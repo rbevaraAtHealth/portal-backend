@@ -180,33 +180,36 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return viewModel;
         }
-        public int GetCgMappingsPythApi(Guid taskId, string summary, int requestId)
+        public int SaveCgMappingsPythApi(Guid taskId, string summary, int requestId)
 
         {
             var cgSummary = JsonConvert.DeserializeObject<CodeGenerationSummaryModel>(summary);
             cgSummary.TaskId = taskId;
             var cgSummaryDto = _mapper.Map<CodeGenerationSummaryDto>(cgSummary);
             cgSummaryDto.RequestId = requestId;
+            cgSummaryDto.CreatedBy = "Admin";
             int summaryid = SqlHelper.SaveCodeGenerationSummary(cgSummaryDto, _context);
             SqlHelper.UpdateCodeMappingStatus(taskId, _context);
             return summaryid;
         }
-        public int GetMonthlyEmbedMappingsPythApi(Guid taskId, string summary, int requestId)
+        public int SaveMonthlyEmbedMappingsPythApi(Guid taskId, string summary, int requestId)
         {
             var cgSummary = JsonConvert.DeserializeObject<MonthlyEmbedSummaryModel>(summary);
             cgSummary.TaskId = taskId;
             var monthlySummaryDto = _mapper.Map<MonthlyEmbeddingsSummaryDto>(cgSummary);
             monthlySummaryDto.RequestId = requestId;
+            monthlySummaryDto.CreatedBy = "Admin";
             int summaryId = SqlHelper.SaveMonthlyEmbedSummary(monthlySummaryDto, _context);
             SqlHelper.UpdateCodeMappingStatus(taskId, _context);
             return summaryId;
         }
-        public int GetWeeklyEmbedMappingsPythApi(Guid taskId, string summary, int requestId)
+        public int SaveWeeklyEmbedMappingsPythApi(Guid taskId, string summary, int requestId)
         {
             var cgSummary = JsonConvert.DeserializeObject<WeeklyEmbedSummaryModel>(summary);
             cgSummary.TaskId = taskId;
             var weeklySummaryDto = _mapper.Map<WeeklyEmbeddingsSummaryDto>(cgSummary);
             weeklySummaryDto.RequestId = requestId;
+            weeklySummaryDto.CreatedBy = "Admin";
             int summaryId = SqlHelper.SaveWeeklyEmbedSummary(weeklySummaryDto, _context);
             SqlHelper.UpdateCodeMappingStatus(taskId, _context);
             return summaryId;
@@ -220,13 +223,13 @@ namespace CodeMatcherV2Api.BusinessLayer
             switch (frequncyId)
             {
                 case ((int)CodeMappingType.CodeGeneration):
-                    summaryId = GetCgMappingsPythApi(taskId, summary, requestId);
+                    summaryId = SaveCgMappingsPythApi(taskId, summary, requestId);
                     break;
                 case ((int)CodeMappingType.MonthlyEmbeddings):
-                    summaryId = GetMonthlyEmbedMappingsPythApi(taskId, summary, requestId);
+                    summaryId = SaveMonthlyEmbedMappingsPythApi(taskId, summary, requestId);
                     break;
                 case ((int)CodeMappingType.WeeklyEmbeddings):
-                    summaryId = GetWeeklyEmbedMappingsPythApi(taskId, summary, requestId);
+                    summaryId = SaveWeeklyEmbedMappingsPythApi(taskId, summary, requestId);
                     break;
                 default: break;
             }
