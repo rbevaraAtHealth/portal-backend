@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeMatcher.UnitTests", "Un
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeMatcher.EntityFrameworkCore", "CodeMappingEfCore\CodeMatcher.EntityFrameworkCore.csproj", "{7FE84C9A-34C8-4B7B-BAFA-A590B35A25DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerProcessor", "SchedulerProcessor\SchedulerProcessor.csproj", "{3F62E594-B6DB-428C-BAB0-3303BEC4130A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{7FE84C9A-34C8-4B7B-BAFA-A590B35A25DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FE84C9A-34C8-4B7B-BAFA-A590B35A25DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FE84C9A-34C8-4B7B-BAFA-A590B35A25DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F62E594-B6DB-428C-BAB0-3303BEC4130A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F62E594-B6DB-428C-BAB0-3303BEC4130A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F62E594-B6DB-428C-BAB0-3303BEC4130A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F62E594-B6DB-428C-BAB0-3303BEC4130A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
