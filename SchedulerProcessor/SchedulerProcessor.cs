@@ -8,7 +8,7 @@ namespace SchedulerProcessor
     public class SchedulerProcessor
     {
         [FunctionName("Processor")]
-        public void Run([TimerTrigger("*/2 * * * *")]TimerInfo myTimer, ILogger log)
+        public void Run([TimerTrigger("*/1 * * * *")]TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
         }
