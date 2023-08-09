@@ -8,7 +8,7 @@ namespace CodeMatcherV2Api.Models
         public int RecordParticulars { get; set; }
         public DateTime TimeStamp { get; set; }
         public string Segment_type { get; set; }
-        public float Threshhold { get; set;}
+        public string Threshhold { get; set;}
         public int BaseRecords { get; set; }
         public int InputRecords { get; set; }
         public int NoisyRecords { get; set; }

@@ -61,7 +61,7 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             context.SaveChanges();
             return weeklySummary.Id;
         }
-        public static int GetRequestId(Guid taskId,CodeMatcherDbContext context)
+        public static int GetRequestId(string taskId,CodeMatcherDbContext context)
         {
             var codemap=context.CodeMappings.FirstOrDefault(x => x.Reference == taskId.ToString());
             return codemap.Id;
@@ -77,7 +77,7 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             return codeMappingList;
            // return context.CodeMappings.AsNoTracking().ToList();
         }
-        public static void UpdateCodeMappingStatus(Guid taskId,CodeMatcherDbContext context)
+        public static void UpdateCodeMappingStatus(string taskId,CodeMatcherDbContext context)
         {
             var codeMap = context.CodeMappings.FirstOrDefault(x => x.Reference==taskId.ToString());
             codeMap.Status = "Completed";

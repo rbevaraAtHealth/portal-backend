@@ -1,7 +1,13 @@
 {
-    "IsEncrypted": false,
-    "Values": {
-        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-        "FUNCTIONS_WORKER_RUNTIME": "dotnet"
-    }
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "EveryTwoMin": "*/2 * * * *",
+    "EveryMin": "*/1 * * * *"
+  },
+  "MyServerOptions": {
+    //"ApiUrl": "https://codeconv-app01.codeconv-ase01.p.azurewebsites.net/"
+    "ApiUrl": "http://localhost:5000/api/"
+  }
 }

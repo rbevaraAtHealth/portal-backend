@@ -4,6 +4,6 @@
     {
         public string Segment { get; set; }
         public string RunSchedule { get; set; }
-        public float Threshold { get; set; }
+        public string Threshold { get; set; }
     }
 }

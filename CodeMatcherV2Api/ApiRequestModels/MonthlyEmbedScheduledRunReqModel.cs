@@ -10,6 +10,6 @@ namespace CodeMatcherV2Api.ApiRequestModels
         [JsonProperty(PropertyName = "run_schedule")]
         public string  Runschedule { get; set; }
         [JsonProperty(PropertyName = "threshold")]
-        public float Threshold { get; set; }
+        public string Threshold { get; set; }
     }
 }

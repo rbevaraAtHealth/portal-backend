@@ -11,12 +11,12 @@ namespace CodeMatcher.Api.V2.Models.SummaryModel
 {
     public class CodeGenerationSummaryModel
     {
-        public Guid TaskId { get; set; }
+        public string TaskId { get; set; }
 
         [JsonPropertyName("Date")]
         public string Date { get; set; }
         public string Segment { get; set; }
-        public float Threshold { get; set; }
+        public string Threshold { get; set; }
 
         [JsonProperty(PropertyName = "No_of_BaseRecords")]
         public int NoOfBaseRecords { get; set; }

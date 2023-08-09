@@ -8,6 +8,6 @@ namespace CodeMatcherV2Api.ApiRequestModels
         [JsonProperty(PropertyName = "segment")]
         public string Segment { get; set; }
         [JsonProperty(PropertyName = "threshold")]
-        public float Threshold { get; set; }
+        public string Threshold { get; set; }
     }
 }

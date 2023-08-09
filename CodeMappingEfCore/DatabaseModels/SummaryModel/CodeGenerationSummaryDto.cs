@@ -9,7 +9,7 @@ namespace CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables
         [Key]
         public int Id { get; set; }
         [Required]
-        public Guid TaskId { get; set; }
+        public string TaskId { get; set; }
         [Required]
         public int RequestId { get; set; }
         [ForeignKey("RequestId")]
@@ -19,7 +19,7 @@ namespace CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables
         [Required]
         public string Segment { get; set; }
         [Required]
-        public float Threshold { get; set; }
+        public string Threshold { get; set; }
         [Required]
         public int NoOfBaseRecords { get; set; }
         [Required]

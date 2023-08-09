@@ -16,7 +16,6 @@ using CodeMatcherV2Api.Models;
 using CodeMatcherV2Api.RepoModelAdapter;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using Polly;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
