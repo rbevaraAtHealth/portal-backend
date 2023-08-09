@@ -12,9 +12,9 @@ namespace CodeMatcher.Api.V2.BusinessLayer.Interfaces
     public interface IScheduler
     {
         Task<List<SchedulerModel>> GetAllSchedulersAsync();
-        Task<string> GetMonthlyScheduleJobAsync();
-        Task<string> GetweeklyJobScheduleAsync();
-        Tuple<CgScheduledRunReqModel, int> ApiRequestGet(CgScheduledModel schedule, LoginModel user);
+        Tuple<CgScheduledRunReqModel, int> GetMonthlyScheduleJobAsync(CgScheduledModel schedule, LoginModel user);
+        Tuple<CgScheduledRunReqModel, int> GetweeklyJobScheduleAsync(CgScheduledModel schedule, LoginModel user);
+        Tuple<CgScheduledRunReqModel, int> GetCodeGenerationScheduleAsync(CgScheduledModel schedule, LoginModel user);
 
     }
 }

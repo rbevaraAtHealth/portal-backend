@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Net.Http.Headers;
 
 [assembly: FunctionsStartup(typeof(SchedulerProcessor.Startup))]
 
@@ -23,6 +24,11 @@ namespace SchedulerProcessor
                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                .AddEnvironmentVariables()
                .Build();
+            
+            builder.Services.AddHttpClient("AzureFunction", c => {
+                c.BaseAddress = new Uri(configuration["MyServerOptions:ApiUrl"]);
+                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
             builder.Services.AddHttpClient();
 
 
