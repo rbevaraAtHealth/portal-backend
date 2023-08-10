@@ -87,11 +87,11 @@ namespace CodeMatcher.EntityFrameworkCore.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TaskId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TaskId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RequestId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Segment = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Threshold = table.Column<float>(type: "real", nullable: false),
+                    Threshold = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NoOfBaseRecords = table.Column<int>(type: "int", nullable: false),
                     NoOfInputRecords = table.Column<int>(type: "int", nullable: false),
                     NoOfProcessedRecords = table.Column<int>(type: "int", nullable: false),
@@ -171,7 +171,7 @@ namespace CodeMatcher.EntityFrameworkCore.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TaskId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TaskId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RequestId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Segment = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -200,7 +200,7 @@ namespace CodeMatcher.EntityFrameworkCore.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TaskId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TaskId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RequestId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Segment = table.Column<string>(type: "nvarchar(max)", nullable: false),

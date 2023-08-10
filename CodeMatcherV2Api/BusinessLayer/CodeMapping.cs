@@ -33,17 +33,17 @@ namespace CodeMatcherV2Api.BusinessLayer
         public async Task<List<CodeMappingModel>> GetCodeMappingsRecordsAsync()
         {
             List<CodeMappingModel> codeMappingRecords = new List<CodeMappingModel>
-            {new CodeMappingModel{ TimeStamp = DateTime.Now ,Segment="Insurance",NumberOfRecord=100,NumberOfMatches=97,RunBy="John Smith",RunType="Scheduled",CodeMappingSummary =new CodeMappingSummary{TimeStamp=DateTime.Now,RecordParticulars=38983,Segment_type="State License",Threshhold=87,BaseRecords=2599,InputRecords=107,NoisyRecords=3,ProcessedRecords=104,CodeGeneratedRecords=99,CodeNotGeneratedRecords=5} },
-                new CodeMappingModel { TimeStamp = DateTime.Now, Segment = "Hospital", NumberOfRecord = 110, NumberOfMatches = 95, RunBy = "Joe Smith", RunType = "Triggered" ,CodeMappingSummary =new CodeMappingSummary{TimeStamp=DateTime.Now,RecordParticulars=38983,Segment_type="State License",Threshhold=87,BaseRecords=2599,InputRecords=107,NoisyRecords=3,ProcessedRecords=104,CodeGeneratedRecords=99,CodeNotGeneratedRecords=5}},
-                new CodeMappingModel { TimeStamp = DateTime.Now, Segment = "State License", NumberOfRecord = 110, NumberOfMatches = 97, RunBy = "John Smith", RunType = "Scheduled" , CodeMappingSummary = new CodeMappingSummary{ TimeStamp = DateTime.Now, RecordParticulars = 38983, Segment_type = "State License", Threshhold = 87, BaseRecords = 2599, InputRecords = 107, NoisyRecords = 3, ProcessedRecords = 104, CodeGeneratedRecords = 99, CodeNotGeneratedRecords = 5 }},
-                new CodeMappingModel { TimeStamp = DateTime.Now, Segment = "School", NumberOfRecord = 100, NumberOfMatches = 97, RunBy = "John Smith", RunType = "Scheduled" , CodeMappingSummary = new CodeMappingSummary{ TimeStamp = DateTime.Now, RecordParticulars = 38983, Segment_type = "State License", Threshhold = 87, BaseRecords = 2599, InputRecords = 107, NoisyRecords = 3, ProcessedRecords = 104, CodeGeneratedRecords = 99, CodeNotGeneratedRecords = 5 }},
-                new CodeMappingModel { TimeStamp = DateTime.Now, Segment = "Insurance", NumberOfRecord = 110, NumberOfMatches = 97, RunBy = "John Smith", RunType = "Scheduled" , CodeMappingSummary = new CodeMappingSummary{ TimeStamp = DateTime.Now, RecordParticulars = 38983, Segment_type = "State License", Threshhold = 87, BaseRecords = 2599, InputRecords = 107, NoisyRecords = 3, ProcessedRecords = 104, CodeGeneratedRecords = 99, CodeNotGeneratedRecords = 5 }}
+            {new CodeMappingModel{ TimeStamp = DateTime.Now ,Segment="Insurance",NumberOfRecord=100,NumberOfMatches=97,RunBy="John Smith",RunType="Scheduled",CodeMappingSummary =new CodeMappingSummary{TimeStamp=DateTime.Now,RecordParticulars=38983,Segment_type="State License",Threshhold="87",BaseRecords=2599,InputRecords=107,NoisyRecords=3,ProcessedRecords=104,CodeGeneratedRecords=99,CodeNotGeneratedRecords=5} },
+                new CodeMappingModel { TimeStamp = DateTime.Now, Segment = "Hospital", NumberOfRecord = 110, NumberOfMatches = 95, RunBy = "Joe Smith", RunType = "Triggered" ,CodeMappingSummary =new CodeMappingSummary{TimeStamp=DateTime.Now,RecordParticulars=38983,Segment_type="State License",Threshhold="87",BaseRecords=2599,InputRecords=107,NoisyRecords=3,ProcessedRecords=104,CodeGeneratedRecords=99,CodeNotGeneratedRecords=5}},
+                new CodeMappingModel { TimeStamp = DateTime.Now, Segment = "State License", NumberOfRecord = 110, NumberOfMatches = 97, RunBy = "John Smith", RunType = "Scheduled" , CodeMappingSummary = new CodeMappingSummary{ TimeStamp = DateTime.Now, RecordParticulars = 38983, Segment_type = "State License", Threshhold = "87", BaseRecords = 2599, InputRecords = 107, NoisyRecords = 3, ProcessedRecords = 104, CodeGeneratedRecords = 99, CodeNotGeneratedRecords = 5 }},
+                new CodeMappingModel { TimeStamp = DateTime.Now, Segment = "School", NumberOfRecord = 100, NumberOfMatches = 97, RunBy = "John Smith", RunType = "Scheduled" , CodeMappingSummary = new CodeMappingSummary{ TimeStamp = DateTime.Now, RecordParticulars = 38983, Segment_type = "State License", Threshhold = "87", BaseRecords = 2599, InputRecords = 107, NoisyRecords = 3, ProcessedRecords = 104, CodeGeneratedRecords = 99, CodeNotGeneratedRecords = 5 }},
+                new CodeMappingModel { TimeStamp = DateTime.Now, Segment = "Insurance", NumberOfRecord = 110, NumberOfMatches = 97, RunBy = "John Smith", RunType = "Scheduled" , CodeMappingSummary = new CodeMappingSummary{ TimeStamp = DateTime.Now, RecordParticulars = 38983, Segment_type = "State License", Threshhold = "87", BaseRecords = 2599, InputRecords = 107, NoisyRecords = 3, ProcessedRecords = 104, CodeGeneratedRecords = 99, CodeNotGeneratedRecords = 5 }}
             };
 
             return codeMappingRecords;
         }
 
-        public GenericSummaryViewModel GetMappings(Guid taskId)
+        public GenericSummaryViewModel GetMappings(string taskId)
         {
             var codemap = _context.CodeMappings.FirstOrDefault(x => x.Reference == taskId.ToString());
             GenericSummaryViewModel summaryViewModel = new GenericSummaryViewModel();
@@ -184,7 +184,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return viewModel;
         }
-        public int SaveCgMappingsPythApi(Guid taskId, string summary, int requestId)
+        public int SaveCgMappingsPythApi(string taskId, string summary, int requestId)
 
         {
             var cgSummary = JsonConvert.DeserializeObject<CodeGenerationSummaryModel>(summary);
@@ -196,7 +196,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             SqlHelper.UpdateCodeMappingStatus(taskId, _context);
             return summaryid;
         }
-        public int SaveMonthlyEmbedMappingsPythApi(Guid taskId, string summary, int requestId)
+        public int SaveMonthlyEmbedMappingsPythApi(string taskId, string summary, int requestId)
         {
             var cgSummary = JsonConvert.DeserializeObject<MonthlyEmbedSummaryModel>(summary);
             cgSummary.TaskId = taskId;
@@ -207,7 +207,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             SqlHelper.UpdateCodeMappingStatus(taskId, _context);
             return summaryId;
         }
-        public int SaveWeeklyEmbedMappingsPythApi(Guid taskId, string summary, int requestId)
+        public int SaveWeeklyEmbedMappingsPythApi(string taskId, string summary, int requestId)
         {
             var cgSummary = JsonConvert.DeserializeObject<WeeklyEmbedSummaryModel>(summary);
             cgSummary.TaskId = taskId;
@@ -219,7 +219,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             return summaryId;
         }
 
-        public int SaveSummary(Guid taskId, string summary)
+        public int SaveSummary(string taskId, string summary)
         {
             int requestId = SqlHelper.GetRequestId(taskId, _context);
             int frequncyId = SqlHelper.GetCodeMappingId(requestId, _context);

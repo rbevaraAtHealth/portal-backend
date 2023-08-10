@@ -10,7 +10,7 @@ namespace CodeMatcher.Api.V2.Models.SummaryModel
     public class WeeklyEmbedSummaryModel
     {
         public int Id { get; set; }
-        public Guid TaskId { get; set; }
+        public string TaskId { get; set; }
         public int RequestId { get; set; }
         public string Date { get; set; }
         public string Segment { get; set; }

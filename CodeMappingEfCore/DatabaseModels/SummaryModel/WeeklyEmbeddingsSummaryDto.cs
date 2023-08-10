@@ -9,7 +9,7 @@ namespace CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables
         [Key]
         public int Id { get; set; }
         [Required]
-        public Guid TaskId { get; set; }
+        public string TaskId { get; set; }
         [Required]
         public int RequestId { get; set; }
         [ForeignKey("RequestId")]

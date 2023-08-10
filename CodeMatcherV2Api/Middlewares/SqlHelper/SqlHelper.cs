@@ -36,6 +36,12 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             var lookup = context.Lookups.FirstOrDefault(x => x.Name == type);
             return lookup.Id;
         }
+        
+        public static int GetCodeMappingType(string type, CodeMatcherDbContext context)
+        {
+            var lookup = context.Lookups.FirstOrDefault(x => x.Name.Equals(type));
+            return lookup.Id;
+        }
         public static string GetLookupTypeName(int id, CodeMatcherDbContext context)
         {
             var lookup = context.Lookups.FirstOrDefault(x => x.Id == id);
@@ -66,7 +72,7 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             context.SaveChanges();
             return weeklySummary.Id;
         }
-        public static int GetRequestId(Guid taskId,CodeMatcherDbContext context)
+        public static int GetRequestId(string taskId,CodeMatcherDbContext context)
         {
             var codemap=context.CodeMappings.FirstOrDefault(x => x.Reference == taskId.ToString());
             return codemap.Id;
@@ -82,7 +88,7 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             return codeMappingList;
            // return context.CodeMappings.AsNoTracking().ToList();
         }
-        public static void UpdateCodeMappingStatus(Guid taskId,CodeMatcherDbContext context)
+        public static void UpdateCodeMappingStatus(string taskId,CodeMatcherDbContext context)
         {
             var codeMap = context.CodeMappings.FirstOrDefault(x => x.Reference==taskId.ToString());
             codeMap.Status = "Completed";
