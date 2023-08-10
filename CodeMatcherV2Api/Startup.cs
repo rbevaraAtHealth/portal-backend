@@ -2,6 +2,7 @@ using System;
 using System.Net.Http.Headers;
 using System.Text;
 using AutoMapper;
+using CodeMatcher.Api.V2;
 using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 using CodeMatcherApiV2.BusinessLayer.Interfaces;
@@ -107,7 +108,7 @@ namespace CodeMatcherV2Api
                         Type = SecuritySchemeType.ApiKey,
                         Scheme = "Bearer"
                     });
-                    // c.OperationFilter<SecurityRequirementsOperationFilter>();
+                    c.OperationFilter<CustomHeaderSwagger>();
                     c.AddSecurityRequirement(new OpenApiSecurityRequirement {
                     {
                         new OpenApiSecurityScheme
