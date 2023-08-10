@@ -13,10 +13,10 @@ namespace CodeMatcherV2Api.RepoModelAdapter
 {
     public class CgScheduleDbModelAdapter : IRepositoryModel<CodeMappingRequestDto, CgScheduledRunReqModel>
     {
-        public CodeMappingRequestDto RequestModel_Get(CgScheduledRunReqModel pyAPIModel, RequestType type, CodeMappingType codeMappingType, CodeMatcherDbContext context)
+        public CodeMappingRequestDto RequestModel_Get(CgScheduledRunReqModel pyAPIModel, string runType, string codeMappingType, CodeMatcherDbContext context)
         {
             CodeMappingRequestDto cgDBRequestModel = new CodeMappingRequestDto();
-            cgDBRequestModel.RunTypeId = SqlHelper.GetLookupType((int)type, context);
+            cgDBRequestModel.RunTypeId = SqlHelper.GetLookupType(runType, context);
             cgDBRequestModel.SegmentTypeId = SqlHelper.GetLookupType(pyAPIModel.Segment, context);
             cgDBRequestModel.Threshold = pyAPIModel.Threshold.ToString();
             cgDBRequestModel.LatestLink = pyAPIModel.LatestLink;
