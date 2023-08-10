@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodeMatcher.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(CodeMatcherDbContext))]
-    [Migration("20230731052651_Script_BaseData")]
+    [Migration("20230810054744_Script_BaseData")]
     partial class Script_BaseData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -256,11 +256,13 @@ namespace CodeMatcher.EntityFrameworkCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TaskId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Threshold")
-                        .HasColumnType("real");
+                    b.Property<string>("Threshold")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -309,8 +311,9 @@ namespace CodeMatcher.EntityFrameworkCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TaskId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -371,8 +374,9 @@ namespace CodeMatcher.EntityFrameworkCore.Migrations
                     b.Property<int>("StartLink")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TaskId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

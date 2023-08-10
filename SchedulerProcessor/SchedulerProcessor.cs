@@ -5,11 +5,14 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NCrontab.Advanced;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.WebSockets;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SchedulerProcessor
@@ -18,13 +21,11 @@ namespace SchedulerProcessor
     {
         public IConfiguration _configuration;
         public HttpClient _httpClient;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SchedulerProcessor(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public SchedulerProcessor(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _configuration = configuration;
             _httpClient = httpClientFactory.CreateClient("AzureFunction");
-            _httpContextAccessor = httpContextAccessor;
         }
         [FunctionName("Processor")]
         public async Task SchedulerTimeRun([TimerTrigger("*/1 * * * *",
@@ -39,7 +40,6 @@ namespace SchedulerProcessor
             string url = "Scheduler/GetSchedulerRecords";
             var address = _httpClient.BaseAddress + url;
             var response = await _httpClient.GetAsync(address);
-        
             try
             {
                 if (response.IsSuccessStatusCode)
@@ -49,42 +49,57 @@ namespace SchedulerProcessor
                     {
                         foreach (var details in data)
                         {
-                            if (details.CronExpression != null)
+                            var schedule = CrontabSchedule.TryParse(details.CronExpression).GetNextOccurrence(curExecutionDate);
+                            if (schedule >= curExecutionDate && schedule <= nextRunSchedule)
                             {
-                                if (details.CodeMapping == "Code Generation")
+                                log.LogInformation($"Call Job API");
+                                if (details.CronExpression != null)
                                 {
-                                    var cgTriggeredUrl = _httpClient.BaseAddress + "TriggeredRun/CodeGenerationTriggerRun";
-                                    var cgTriggeredResponse = await _httpClient.GetAsync(cgTriggeredUrl);
-                                    var cgData = cgTriggeredResponse.Content.ReadAsAsync<List<CgTriggerRunModel>>();
-                                }
-                                else if (details.CodeMapping == "Weekly Embedding")
-                                {
-                                    var cgTriggeredUrl = _httpClient.BaseAddress + "TriggeredRun/WeeklyEmbeddingTriggerRun";
-                                    var cgTriggeredResponse = await _httpClient.GetAsync(cgTriggeredUrl);
-                                    var cgData = cgTriggeredResponse.Content.ReadAsAsync<List<WeeklyEmbedTriggeredRunModel>>();
-                                }
-                                else if (details.CodeMapping == "Monthly Embedding")
-                                {
-                                    var cgTriggeredUrl = _httpClient.BaseAddress + "TriggeredRun/MonthlyEmbeddingTriggerRun";
-                                    var cgTriggeredResponse = await _httpClient.GetAsync(cgTriggeredUrl);
-                                    var cgData = cgTriggeredResponse.Content.ReadAsAsync<List<MonthlyEmbedTriggeredRunModel>>();
-                                }
-                                else
-                                {
+                                    if (details.CodeMapping.ToLower() == "code generation")
+                                    {
+                                        CgTriggerRunModel models = new CgTriggerRunModel();
+                                        models.Segment = details.Segment;
+                                        models.Threshold = details.Threshold;
+                                        var requestContent = JsonConvert.SerializeObject(models);
+                                        var content = new StringContent(requestContent, System.Text.Encoding.UTF8, "application/json");
 
-                                }
+                                        var cgTriggeredUrl = _httpClient.BaseAddress + "TriggeredRun/CodeGenerationTriggerRun";
+                                        var cgTriggeredResponse = await _httpClient.PostAsync(cgTriggeredUrl, content);
+                                        var cgData = cgTriggeredResponse.Content.ReadAsAsync<List<CgTriggerRunModel>>();
+                                    }
+                                    else if (details.CodeMapping.ToLower() == "weekly embedding")
+                                    {
+                                        WeeklyEmbedTriggeredRunModel models = new WeeklyEmbedTriggeredRunModel();
+                                        models.Segment = details.Segment;
+                                        var requestContent = JsonConvert.SerializeObject(models);
+                                        var content = new StringContent(requestContent, System.Text.Encoding.UTF8, "application/json");
 
-                                var schedule = CrontabSchedule.TryParse(details.CronExpression).GetNextOccurrence(curExecutionDate);
-                                if (schedule >= curExecutionDate && schedule <= nextRunSchedule)
-                                {
-                                    log.LogInformation($"Call Job API");
-                                }
-                                else
-                                {
-                                    log.LogInformation($"Next schedule for clientId - {details.ClientId} is at - {schedule}");
-                                }
+                                        var cgTriggeredUrl = _httpClient.BaseAddress + "TriggeredRun/WeeklyEmbeddingTriggerRun";
+                                        var cgTriggeredResponse = await _httpClient.PostAsync(cgTriggeredUrl, content);
+                                        var cgData = cgTriggeredResponse.Content.ReadAsAsync<List<WeeklyEmbedTriggeredRunModel>>();
+                                    }
+                                    else if (details.CodeMapping.ToLower() == "monthly embedding")
+                                    {
+                                        MonthlyEmbedTriggeredRunModel models = new MonthlyEmbedTriggeredRunModel();
+                                        models.Segment = details.Segment;
+                                        var requestContent = JsonConvert.SerializeObject(models);
+                                        var content = new StringContent(requestContent, System.Text.Encoding.UTF8, "application/json");
 
+                                        var cgTriggeredUrl = _httpClient.BaseAddress + "TriggeredRun/MonthlyEmbeddingTriggerRun";
+                                        var cgTriggeredResponse = await _httpClient.PostAsync(cgTriggeredUrl, content);
+                                        var cgData = cgTriggeredResponse.Content.ReadAsAsync<List<MonthlyEmbedTriggeredRunModel>>();
+                                    }
+                                    else
+                                    {
+                                        log.LogInformation($"");
+                                    }
+                                }
                             }
+                            else
+                            {
+                                log.LogInformation($"Next schedule for clientId - {details.ClientId} is at - {schedule}");
+                            }
+
                         }
                     }
                     else

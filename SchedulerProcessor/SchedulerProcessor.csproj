@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="k4tl3x05.yd1~" />
+    <None Remove="l5jckt0b.1sg~" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />

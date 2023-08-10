@@ -26,7 +26,7 @@ namespace SchedulerProcessor
                .Build();
             
             builder.Services.AddHttpClient("AzureFunction", c => {
-                c.BaseAddress = new Uri(configuration["MyServerOptions:ApiUrl"]);
+                c.BaseAddress = new Uri(configuration["DotNetApi:ApiUrl"]);
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
             builder.Services.AddHttpClient();
