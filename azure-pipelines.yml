@@ -15,7 +15,7 @@ steps:
     containerRegistry: 'codeconvacr01-1931'
     repository: 'portal-backend'
     command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
+    Dockerfile: 'Dockerfile-appfunction-scheduler'
     tags: '1'
 
 - task: AzureFunctionApp@2
