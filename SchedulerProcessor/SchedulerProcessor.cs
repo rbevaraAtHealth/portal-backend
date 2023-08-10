@@ -39,8 +39,7 @@ namespace SchedulerProcessor
             string url = "Scheduler/GetSchedulerRecords";
             var address = _httpClient.BaseAddress + url;
             var response = await _httpClient.GetAsync(address);
-            //_httpClient.DefaultRequestHeaders.Add("Authorization", "Bearere<>");
-            var value = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        
             try
             {
                 if (response.IsSuccessStatusCode)
