@@ -9,7 +9,6 @@ using CodeMatcherV2Api.Middlewares.SqlHelper;
 using CodeMatcherV2Api.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Polly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
