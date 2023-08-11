@@ -18,7 +18,7 @@ namespace CodeMatcherV2Api.Controllers
             _User = user;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {
             try

@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using CodeMappingEfCore.DatabaseModels;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using CodeMatcherV2Api.EntityFrameworkCore;
 using CodeMatcherV2Api.Middlewares;
 using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.BusinessLayer
@@ -12,9 +14,11 @@ namespace CodeMatcherV2Api.BusinessLayer
     public class User : IUser
     {
         private readonly IMapper _mapper;
-        public User(IMapper mapper)
+        private CodeMatcherDbContext _context;
+        public User(IMapper mapper, CodeMatcherDbContext context)
         {
                 _mapper= mapper;
+            _context= context;
         }
         public async Task<UserModel> CreateUserAsync(UserModel user)
         {
@@ -30,14 +34,9 @@ namespace CodeMatcherV2Api.BusinessLayer
 
         public async Task<IEnumerable<UserModel>> GetAllUsersAsync()
         {
-            
-            List<UserDto> users = new List<UserDto>
-            {
-                new UserDto { Email = "teena@123@nstarxinc.com", FirstName = "teena", LastName = "gera" },
-                new UserDto { Email = "anu@123@nstarxinc.com", FirstName = "anu", LastName = "sharma" },
-                new UserDto { Email = "abc@123@nstarxinc.com", FirstName = "abc", LastName = "xyz" }
-            };
 
+            List<UserDto> users = new List<UserDto>();
+            users = _context.UserDetail.ToList(); 
             return  _mapper.Map<IEnumerable<UserModel>>(users);
         }
 

@@ -43,5 +43,8 @@ namespace CodeMatcherV2Api.EntityFrameworkCore
         public DbSet<CodeGenerationSummaryDto>CodeGenerationSummary { get; set; }
         public DbSet<MonthlyEmbeddingsSummaryDto>MonthlyEmbeddingsSummary { get; set; }
         public DbSet<WeeklyEmbeddingsSummaryDto>WeeklyEmbeddingsSummary { get; set; }
+        public DbSet<CodeGenerationOverwriteDto> CodeGenerationOverwrites { get; set; }
+        public DbSet<CodeGenerationOverwriteHistoryDto> CodeGenerationOverwriteHistory { get; set; }
+        public DbSet<UserDto> UserDetail { get; set; }
     }
 }
