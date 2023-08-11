@@ -10,6 +10,6 @@
     {
         public const string Triggered = "Triggered";
         public const string Scheduled = "Scheduled";
-        public const string UploadCsv = "UploadCsv";
+        public const string UploadCsv = "Upload Csv";
     }
 }

@@ -51,9 +51,9 @@ namespace CodeMatcherV2Api.BusinessLayer
         public Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
-            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType(RequestTypeConst.Triggered, _context);
-            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(trigger.Segment, _context);
-            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType(CodeMappingTypeConst.CodeGeneration, _context);
+            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupIdOnName(RequestTypeConst.Triggered, _context);
+            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupIdOnName(trigger.Segment, _context);
+            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupIdOnName(CodeMappingTypeConst.CodeGeneration, _context);
             codeMappingRequestDto.Threshold = trigger.Threshold.ToString();
             codeMappingRequestDto.LatestLink = "1";
             codeMappingRequestDto.ClientId = clientId;
@@ -104,9 +104,9 @@ namespace CodeMatcherV2Api.BusinessLayer
         public Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
-            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType(RequestTypeConst.Triggered, _context);
-            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(trigger.Segment, _context);
-            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType(CodeMappingTypeConst.MonthlyEmbeddings, _context);
+            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupIdOnName(RequestTypeConst.Triggered, _context);
+            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupIdOnName(trigger.Segment, _context);
+            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupIdOnName(CodeMappingTypeConst.MonthlyEmbeddings, _context);
             codeMappingRequestDto.CreatedBy = user.UserName;
             codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
@@ -125,9 +125,9 @@ namespace CodeMatcherV2Api.BusinessLayer
         public Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
-            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType(RequestTypeConst.Triggered, _context);
-            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(trigger.Segment, _context);
-            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType(CodeMappingTypeConst.WeeklyEmbeddings, _context);
+            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupIdOnName(RequestTypeConst.Triggered, _context);
+            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupIdOnName(trigger.Segment, _context);
+            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupIdOnName(CodeMappingTypeConst.WeeklyEmbeddings, _context);
             codeMappingRequestDto.CreatedBy=user.UserName;
             codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
