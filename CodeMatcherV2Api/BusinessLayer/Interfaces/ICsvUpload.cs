@@ -2,6 +2,7 @@
 using CodeMatcherV2Api.ApiResponseModel;
 using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,9 +11,8 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
 {
     public interface ICsvUpload
     {
-        //public Task<string> GetUploadCsvAsync(CgCsvUploadModel uploads);
         public Task<string> WriteFile(IFormFile file);
-        public CgUploadCsvReqModel CgUploadCsvRequestGet(CgCsvUploadModel csvUpload);
-        public CgUploadCsvResModel CgUploadSaveResponse(HttpResponseMessage httpResponse);
+        public Tuple<CgUploadCsvReqModel, int> CgUploadCsvRequestGet(CgCsvUploadModel csvUpload, LoginModel user,string clientId);
+        public CgUploadCsvResModel CgUploadSaveResponse(HttpResponseMessage httpResponse, int requestId, LoginModel user);
     }
 }

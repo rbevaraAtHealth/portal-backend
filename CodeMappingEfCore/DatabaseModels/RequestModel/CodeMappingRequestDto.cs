@@ -30,6 +30,7 @@ namespace CodeMappingEfCore.DatabaseModels
         public string? Threshold { get; set; }
 
         public string? LatestLink { get; set; }
+        public string? CsvFilePath { get; set; }
 
     }
 }

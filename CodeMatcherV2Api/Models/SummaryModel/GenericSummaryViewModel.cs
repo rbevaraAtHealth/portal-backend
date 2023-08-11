@@ -6,7 +6,7 @@ namespace CodeMatcher.Api.V2.Models.SummaryModel
 {
     public class GenericSummaryViewModel
     {
-        public int Id { get; set; }
+       // public int Id { get; set; }
         public string TaskId { get; set; }
         public int RequestId { get; set; }
         public DateTime TimeStamp { get; set; }
