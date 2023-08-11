@@ -31,7 +31,7 @@ namespace CodeMatcherV2Api.Controllers
             {
                 var user=GetUserInfo();
                 string url = "code-generation/triggered-run";
-                var requestModel = _trigger.CgApiRequestGet(trigger, user);
+                var requestModel = _trigger.CgApiRequestGet(trigger, user, getClientId());
                 var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
                 var savedData = _trigger.CgAPiResponseSave(apiResponse, requestModel.Item2, user);
                 return Ok(savedData);

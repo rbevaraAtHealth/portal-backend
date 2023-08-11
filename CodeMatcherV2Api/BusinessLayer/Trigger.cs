@@ -53,7 +53,7 @@ namespace CodeMatcherV2Api.BusinessLayer
         {
             return "Weekly job triggered successfully";
         }
-        public Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger, LoginModel user)
+        public Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
             codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType((int)RequestType.Triggered, _context);
@@ -61,7 +61,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType((int)CodeMappingType.CodeGeneration, _context);
             codeMappingRequestDto.Threshold = trigger.Threshold.ToString();
             codeMappingRequestDto.LatestLink = "1";
-            codeMappingRequestDto.ClientId = "All";
+            codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
             {
                 codeMappingRequestDto.CreatedBy = user.UserName;

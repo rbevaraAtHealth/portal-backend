@@ -13,7 +13,7 @@ namespace CodeMatcher.Api.V2
 
             operation.Parameters.Add(new OpenApiParameter
             {
-                Name = "ClientId",
+                Name = "ClientID",
                 In = ParameterLocation.Header,
                 Required = true,
                 Schema = new OpenApiSchema

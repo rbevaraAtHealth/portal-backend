@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using System.Security.Claims;
 
 namespace CodeMatcherV2Api.Controllers
@@ -23,6 +24,12 @@ namespace CodeMatcherV2Api.Controllers
                     Role= User.FindFirstValue(ClaimTypes.Role)
                 };
             return new LoginModel();
+        }
+        internal string getClientId()
+        {
+            const string HeaderKeyName = "ClientID";
+            Request.Headers.TryGetValue(HeaderKeyName, out StringValues headerValue);
+            return headerValue;
         }
     }
 }
