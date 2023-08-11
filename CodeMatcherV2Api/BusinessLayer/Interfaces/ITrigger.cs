@@ -15,7 +15,7 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
         Task<string> GetWeeklyTriggerJobAsync();
         Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger,LoginModel user, string clientId);
         CgTriggeredRunResModel CgAPiResponseSave(HttpResponseMessage response, int RequestId,LoginModel user);
-        Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger,LoginModel user,string clientId);
+        Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger,LoginModel user, string clientId);
         MonthlyEmbedTriggeredRunResModel MonthlyEmbedApiResponseSave(HttpResponseMessage response, int reuestId,LoginModel user);
         Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger,LoginModel user,string clientId);
         WeeklyEmbedTriggeredRunResModel WeeklyEmbedApiResponseSave(HttpResponseMessage response, int requestId,LoginModel user);

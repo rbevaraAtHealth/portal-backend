@@ -43,7 +43,7 @@ namespace CodeMatcher.Api.V2.Controllers
             try
             {
                 var user = GetUserInfo();
-                var requestModel = _scheduler.GetCodeGenerationScheduleAsync(schedulerModel,user,getClientId());
+                var requestModel = _scheduler.GetCodeGenerationScheduleAsync(schedulerModel,user, getClientId());
                 
                 return Ok(requestModel);
             }
@@ -59,7 +59,7 @@ namespace CodeMatcher.Api.V2.Controllers
             try
             {
                 var user = GetUserInfo();
-                var requestModel = _scheduler.GetweeklyJobScheduleAsync(schedulerModel,user,getClientId());
+                var requestModel = _scheduler.GetweeklyJobScheduleAsync(schedulerModel,user, getClientId());
                 
                 return Ok(requestModel);
             }

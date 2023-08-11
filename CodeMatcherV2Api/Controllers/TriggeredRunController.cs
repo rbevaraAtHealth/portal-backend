@@ -50,7 +50,7 @@ namespace CodeMatcherV2Api.Controllers
             {
                 var user=GetUserInfo();
                 string url = "monthly-embeddings/triggered-run";
-                var requestModel = _trigger.MonthlyEmbedApiRequestGet(trigger, user,getClientId());
+                var requestModel = _trigger.MonthlyEmbedApiRequestGet(trigger, user, getClientId());
                 var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
                 var SavedData = _trigger.MonthlyEmbedApiResponseSave(apiResponse,requestModel.Item2,user);
                 return Ok(SavedData);
