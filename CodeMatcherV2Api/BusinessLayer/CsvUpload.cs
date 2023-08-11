@@ -47,7 +47,6 @@ namespace CodeMatcherV2Api.BusinessLayer
                 codeMappingRequestDto.Threshold = codeMappingRequestDto.Threshold + "," + item;
             }
             codeMappingRequestDto.LatestLink = "1";
-            codeMappingRequestDto.ClientId = "All";
             codeMappingRequestDto.CsvFilePath = csvUpload.CsvFilePath;
             codeMappingRequestDto.CreatedBy = user.UserName;
             codeMappingRequestDto.ClientId= clientId;
