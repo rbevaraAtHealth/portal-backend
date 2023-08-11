@@ -1,6 +1,7 @@
 ﻿using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,6 +23,7 @@ namespace CodeMatcherV2Api.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
+        [AllowAnonymous]
         [HttpPost, Route("CodeGenerationTriggerRun")]
         public async Task<IActionResult> CodeGenerationTriggerdRun(CgTriggerRunModel trigger)
         {
@@ -40,6 +42,7 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost,Route("MonthlyEmbeddingTriggeredRun")]
         public async Task<IActionResult> MonthlyEmbedTriggereddRun(MonthlyEmbedTriggeredRunModel trigger)
         {
@@ -58,6 +61,7 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost,Route("WeeklyEmeddingTriggerRun")]
         public async Task<IActionResult> WeeklyEmbedTriggeredRun(WeeklyEmbedTriggeredRunModel trigger)
         {

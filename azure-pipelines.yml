@@ -15,5 +15,15 @@ steps:
     containerRegistry: 'codeconvacr01-1931'
     repository: 'portal-backend'
     command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
+    Dockerfile: 'Dockerfile-appfunction-scheduler'
     tags: '1'
+
+- task: AzureFunctionApp@2
+  inputs:
+    connectedServiceNameARM: 'VerityStream-1308-Verity Production(caa88d8e-50da-4a07-9132-54b28d3060c7)'
+    appType: 'functionAppLinux'
+    appName: 
+    deployToSlotOrASE: true
+    slotName: 'production'
+    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    deploymentMethod: 'auto'

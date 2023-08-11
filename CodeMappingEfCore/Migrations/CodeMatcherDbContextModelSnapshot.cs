@@ -254,11 +254,13 @@ namespace CodeMatcher.EntityFrameworkCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TaskId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Threshold")
-                        .HasColumnType("real");
+                    b.Property<string>("Threshold")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -307,8 +309,9 @@ namespace CodeMatcher.EntityFrameworkCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TaskId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -369,8 +372,9 @@ namespace CodeMatcher.EntityFrameworkCore.Migrations
                     b.Property<int>("StartLink")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TaskId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

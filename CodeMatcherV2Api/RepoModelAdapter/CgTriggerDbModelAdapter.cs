@@ -23,7 +23,7 @@ namespace CodeMatcherV2Api.RepoModelAdapter
             codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType((int)type, context);
             codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(pyAPIModel.Segment, context);
             codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType((int)codeMappingType, context);
-            codeMappingRequestDto.Threshold = pyAPIModel.Threshold.ToString();
+            codeMappingRequestDto.Threshold = pyAPIModel.Threshold;
             codeMappingRequestDto.LatestLink = pyAPIModel.LatestLink;
             codeMappingRequestDto.ClientId = pyAPIModel.ClientId;
             return codeMappingRequestDto;
