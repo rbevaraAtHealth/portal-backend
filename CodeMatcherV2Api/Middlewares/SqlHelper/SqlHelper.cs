@@ -26,23 +26,13 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             context.CodeMappingResponses.Add(responseDto);
             context.SaveChanges();
         }
-        public static int GetLookupType(int id,CodeMatcherDbContext context)
-        {
-            var lookup = context.Lookups.FirstOrDefault(x => x.Id == id);
-            return lookup.Id;
-        }
-        public static int GetLookupType(string type, CodeMatcherDbContext context)
+      
+        public static int GetLookupIdOnName(string type, CodeMatcherDbContext context)
         {
             var lookup = context.Lookups.FirstOrDefault(x => x.Name == type);
             return lookup.Id;
         }
-        
-        public static int GetCodeMappingType(string type, CodeMatcherDbContext context)
-        {
-            var lookup = context.Lookups.FirstOrDefault(x => x.Name.Equals(type));
-            return lookup.Id;
-        }
-        public static string GetLookupTypeName(int id, CodeMatcherDbContext context)
+        public static string GetLookupName(int id, CodeMatcherDbContext context)
         {
             var lookup = context.Lookups.FirstOrDefault(x => x.Id == id);
             return lookup.Name;
