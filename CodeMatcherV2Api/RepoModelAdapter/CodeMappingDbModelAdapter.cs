@@ -17,7 +17,7 @@ namespace CodeMatcher.Api.V2.RepoModelAdapter
                 var apiResponse = JsonConvert.DeserializeObject<ApiResModel>(responseDto.ResponseMessage);
                 codeMapping.Reference = apiResponse.Reference;
                 codeMapping.Status = "In progress";
-                codeMapping.Progress = "60%";
+                codeMapping.Progress = string.Empty;
             }
             return codeMapping;
         }

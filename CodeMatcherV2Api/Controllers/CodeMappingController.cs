@@ -1,11 +1,9 @@
-﻿using CodeMatcher.Api.V2.Models;
-using CodeMatcher.Api.V2.Models.SummaryModel;
+﻿using CodeMatcher.Api.V2.BusinessLayer;
+using CodeMatcher.Api.V2.Models;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -26,13 +24,7 @@ namespace CodeMatcherV2Api.Controllers
             _httpClientFactory = httpClientFactory;
             _context = context;
         }
-        
-        [HttpGet,Route("GetCodeMappings")]
-        public async Task<IActionResult> GetCodeMappings()
-        {
-            var summaryViewModel = _codeMapping.GetCodeMappings();
-            return Ok(summaryViewModel);
-        }
+      
         [HttpGet,Route("CodeGeneration/GetCodeMappings")]
         public async Task<IActionResult> GetCodeGenerationCodeMappings()
         {
@@ -42,13 +34,13 @@ namespace CodeMatcherV2Api.Controllers
         [HttpGet, Route("MonthlyEmbedings/GetEmbeddings")]
         public async Task<IActionResult> GetMonthlyEmbedings()
         {
-            var embeddings = _codeMapping.GetMonthlyEmbeddingMappingRecords();
+            var embeddings = _codeMapping.GetEmbeddingMappingRecords(CodeMappingTypeConst.MonthlyEmbeddings);
             return Ok(embeddings); ;
         }
         [HttpGet, Route("WeeklyEmbeddings/GetEmbeddings")]
         public async Task<IActionResult> GetWeeklyEmbeddings()
         {
-            var embeddings = _codeMapping.GetWeeklyEmbeddingsMappingRecords();
+            var embeddings = _codeMapping.GetEmbeddingMappingRecords(CodeMappingTypeConst.WeeklyEmbeddings);
             return Ok(embeddings); ;
         }
         [AllowAnonymous]

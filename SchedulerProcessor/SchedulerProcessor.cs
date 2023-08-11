@@ -55,6 +55,7 @@ namespace SchedulerProcessor
                                 log.LogInformation($"Call Job API");
                                 if (details.CronExpression != null)
                                 {
+                                    _httpClient.DefaultRequestHeaders.Add("ClientID", details.ClientId);
                                     if (details.CodeMapping.ToLower() == "code generation")
                                     {
                                         CgTriggerRunModel models = new CgTriggerRunModel();

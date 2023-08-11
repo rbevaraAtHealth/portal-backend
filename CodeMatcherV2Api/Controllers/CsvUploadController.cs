@@ -42,10 +42,10 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                var requestModel = _Upload.CgUploadCsvRequestGet(upload);
+                var requestModel = _Upload.CgUploadCsvRequestGet(upload,GetUserInfo(),getClientId());
                 var url = "code-generation/csv-upload";
-                var response =await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel, url);
-                var responseModel = _Upload.CgUploadSaveResponse(response);
+                var response =await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
+                var responseModel = _Upload.CgUploadSaveResponse(response,requestModel.Item2,GetUserInfo());
                 return Ok(responseModel);
             }
             catch (Exception ex)
