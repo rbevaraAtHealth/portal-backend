@@ -43,10 +43,7 @@ namespace CodeMatcherV2Api.BusinessLayer
         public async Task<UserModel> GetUserByIdAsync(int id)
         {
             UserDto user= new UserDto();
-            user.Id = id;
-            user.FirstName = "Anu";
-            user.LastName= "Arora";
-            user.Email = "Anu@gmail.com";
+            user = _context.UserDetail.FirstOrDefault(f => f.Id == id);
             return  _mapper.Map<UserModel>(user);
         }
 

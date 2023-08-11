@@ -15,6 +15,7 @@ namespace CodeMappingEfCore.DatabaseModels
         public string Link { get; set; }
         public string Frm { get; set; }
         public string Too { get; set; }
+        public List<CodeGenerationOverwriteHistoryDto> HistoryData { get; set; }
 
     }
 }
