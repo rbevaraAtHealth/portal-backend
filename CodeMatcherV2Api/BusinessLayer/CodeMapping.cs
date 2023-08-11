@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.BusinessLayer
@@ -109,26 +110,33 @@ namespace CodeMatcherV2Api.BusinessLayer
         public List<GenericSummaryViewModel> GetCodeGenerationMappingRecords()
         {
             List<GenericSummaryViewModel> viewModel = new List<GenericSummaryViewModel>();
-            var codeMappings = _context.CodeMappings.Include("Request").AsNoTracking();
+            //var codeMappings = _context.CodeMappings.Include("Request").AsNoTracking();
+            var records = _context.CodeMappingRequests.Join(_context.CodeMappings, cmRequest => cmRequest.Id, codeMapping => codeMapping.RequestId, (cmRequest, CodeMapping) => new { cmRequest, CodeMapping }).Where(joinedTable => joinedTable.cmRequest.CodeMappingId == (int)CodeMappingType.CodeGeneration);
+            // foreach (var item in codeMappings)
+            //{
+           // var reuestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").FirstOrDefault(x => x.Id == item.Id);
+            var requestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").Join(_context.CodeMappings, cmRequest => cmRequest.Id, codeMapping => codeMapping.RequestId, (cmRequest, CodeMapping) => new { cmRequest, CodeMapping }).Where(joinedTable => joinedTable.cmRequest.CodeMappingId == (int)CodeMappingType.CodeGeneration).AsNoTracking().ToList();
+            
+            //foreach (var item in requestDto)
+            //{
+            //    GenericSummaryViewModel model = new GenericSummaryViewModel();
+                
+            //    model.TaskId = item.cmRequest.Reference;
+            //    model.RequestId = item.RequestId;
+            //    model.TimeStamp = item.Request.CreatedTime;
+            //    model.Segment= item.
+            //    //model.Segment = requestDto.SegmentType.Name;
+            //    model.RunType = requestDto.RunType.Name;
+            //    model.CodeMappingType = requestDto.CodeMappingType.Name;
+            //    model.RunBy = requestDto.CreatedBy;
+            //    model.Summary = _context.CodeGenerationSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
+            //    viewModel.Add(model);
+            //}
+            //if (requestDto.CodeMappingType.Id == (int)CodeMappingType.CodeGeneration)
+            //{
 
-            foreach (var item in codeMappings)
-            {
-                var reuestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").FirstOrDefault(x => x.Id == item.Id);
-                if (reuestDto.CodeMappingType.Id == (int)CodeMappingType.CodeGeneration)
-                {
-                    GenericSummaryViewModel model = new GenericSummaryViewModel();
-
-                    model.TaskId = item.Reference;
-                    model.RequestId = item.RequestId;
-                    model.TimeStamp = item.Request.CreatedTime;
-                    model.Segment = reuestDto.SegmentType.Name;
-                    model.RunType = reuestDto.RunType.Name;
-                    model.CodeMappingType = reuestDto.CodeMappingType.Name;
-                    model.RunBy = reuestDto.CreatedBy;
-                    model.Summary = _context.CodeGenerationSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
-                    viewModel.Add(model);
-                }
-            }
+            //}
+            //}
             return viewModel;
         }
         public List<GenericSummaryViewModel> GetMonthlyEmbeddingMappingRecords()

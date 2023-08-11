@@ -3,6 +3,7 @@
     public enum RequestType
     {
         Triggered = 5,
-        scheduled = 6
+        scheduled = 6,
+        UploadCsv=7
     }
 }

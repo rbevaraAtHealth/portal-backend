@@ -98,13 +98,14 @@ namespace CodeMatcherV2Api.BusinessLayer
 
             return responseViewModel;
         }
-        public Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger, LoginModel user)
+        public Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger, LoginModel user,string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
             codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType((int)RequestType.Triggered, _context);
             codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(trigger.Segment, _context);
             codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType((int)CodeMappingType.MonthlyEmbeddings, _context);
-            codeMappingRequestDto.ClientId = "All";
+            codeMappingRequestDto.CreatedBy = user.UserName;
+            codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
             {
                 codeMappingRequestDto.CreatedBy = user.UserName;
@@ -118,13 +119,14 @@ namespace CodeMatcherV2Api.BusinessLayer
             requestModel.Segment = trigger.Segment;
             return new Tuple<MonthlyEmbedTriggeredRunReqModel, int>(requestModel, requestId);
         }
-        public Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user)
+        public Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
             codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType(RequestType.Triggered.ToString(), _context);
             codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(trigger.Segment, _context);
             codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType((int)CodeMappingType.WeeklyEmbeddings, _context);
-            codeMappingRequestDto.ClientId = "All";
+            codeMappingRequestDto.CreatedBy=user.UserName;
+            codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
             {
                 codeMappingRequestDto.CreatedBy = user.UserName;
