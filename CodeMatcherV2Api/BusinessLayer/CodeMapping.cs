@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CodeMappingEfCore.DatabaseModels;
 using CodeMatcher.Api.V2.BusinessLayer.Enums;
 using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
@@ -14,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.BusinessLayer
@@ -109,23 +107,13 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return viewModel;
         }
+
         public List<GenericSummaryViewModel> GetCodeGenerationMappingRecords()
         {
-            // List<GenericSummaryViewModel> viewModel = new List<GenericSummaryViewModel>();
-            //       var item = (
-            //from ai in context.app_information
-            //join al in context.app_language on ai.languageid equals al.id
-            //where (al.languagecode == "es")
-            //select new AppInformation
-            //{
-            //    id = ai.id,
-            //    title = ai.title,
-            //    description = ai.description,
-            //    coverimageurl = ai.coverimageurl
-            //})
             var viewModels = (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType")
                               join cm in _context.CodeMappings on cr.Id equals cm.RequestId
                               join cs in _context.CodeGenerationSummary on cr.Id equals cs.RequestId
+                              into csA from csB in csA.DefaultIfEmpty()
                               where (cr.CodeMappingId == (int)CodeMappingType.CodeGeneration && cr.RunTypeId!=(int)RequestType.scheduled)
                               select new GenericSummaryViewModel
                               {
@@ -136,102 +124,34 @@ namespace CodeMatcherV2Api.BusinessLayer
                                   RunType = cr.RunType.Name,
                                   CodeMappingType = cr.CodeMappingType.Name,
                                   RunBy = cr.CreatedBy,
-                                  Summary=cs
+                                  Summary = csB
                               }).ToList();
-            //var viewModels2 = (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType")
-            //                  join cm in _context.CodeMappings on cr.Id equals cm.RequestId
-                             
-            //                  where (cr.CodeMappingId == (int)CodeMappingType.CodeGeneration && cr.RunTypeId != (int)RequestType.scheduled)
-            //                   into  in _context.CodeGenerationSummary.DefaultIfEmpty()
-            //                  select new GenericSummaryViewModel
-            //                  {
-            //                      TaskId = cm.Reference,
-            //                      RequestId = cr.Id,
-            //                      TimeStamp = cr.CreatedTime,
-            //                      Segment = cr.SegmentType.Name,
-            //                      RunType = cr.RunType.Name,
-            //                      CodeMappingType = cr.CodeMappingType.Name,
-            //                      RunBy = cr.CreatedBy,
-            //                      Summary = cs
-            //                  }).ToList();
-            //  var codeMappings = _context.CodeMappings.Include("Request").Where(e=>e.RequestId==).AsNoTracking();
-            //var records = _context.CodeMappingRequests.Join(_context.CodeMappings, cmRequest => cmRequest.Id, codeMapping => codeMapping.RequestId, (cmRequest, CodeMapping) => new { cmRequest, CodeMapping }).Where(joinedTable => joinedTable.cmRequest.CodeMappingId == (int)CodeMappingType.CodeGeneration);
-            // foreach (var item in codeMappings)
-            //{
-            // var reuestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").FirstOrDefault(x => x.Id == item.Id);
-            //   var requestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").Join(_context.CodeMappings, cmRequest => cmRequest.Id, codeMapping => codeMapping.RequestId, (cmRequest, CodeMapping) => new { cmRequest, CodeMapping }).Where(joinedTable => joinedTable.cmRequest.CodeMappingId == (int)CodeMappingType.CodeGeneration).AsNoTracking().ToList();
-
-            // foreach (var item in requestDto)
-            //{
-            //    GenericSummaryViewModel model = new GenericSummaryViewModel();
-
-            //    model.TaskId = item.cmRequest.Reference;
-            //    model.RequestId = item.RequestId;
-            //    model.TimeStamp = item.Request.CreatedTime;
-            //    model.Segment= item.
-            //    //model.Segment = requestDto.SegmentType.Name;
-            //    model.RunType = requestDto.RunType.Name;
-            //    model.CodeMappingType = requestDto.CodeMappingType.Name;
-            //    model.RunBy = requestDto.CreatedBy;
-            //    model.Summary = _context.CodeGenerationSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
-            //    viewModel.Add(model);
-            //}
-            //if (requestDto.CodeMappingType.Id == (int)CodeMappingType.CodeGeneration)
-            //{
-
-            //}
-            //}
+            
             return viewModels;
         }
-        public List<GenericSummaryViewModel> GetMonthlyEmbeddingMappingRecords()
+        public List<GenericSummaryViewModel> GetEmbeddingMappingRecords(CodeMappingType codeMappingType)
         {
-            List<GenericSummaryViewModel> viewModel = new List<GenericSummaryViewModel>();
-            var codeMappings = _context.CodeMappings.Include("Request").AsNoTracking();
+            var viewModels = (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType")
+                              join cm in _context.CodeMappings on cr.Id equals cm.RequestId
+                              join cs in _context.CodeGenerationSummary on cr.Id equals cs.RequestId
+                              into csA
+                              from csB in csA.DefaultIfEmpty()
+                              where (cr.CodeMappingId == (int)codeMappingType)
+                              select new GenericSummaryViewModel
+                              {
+                                  TaskId = cm.Reference,
+                                  RequestId = cr.Id,
+                                  TimeStamp = cr.CreatedTime,
+                                  Segment = cr.SegmentType.Name,
+                                  RunType = cr.RunType.Name,
+                                  CodeMappingType = cr.CodeMappingType.Name,
+                                  RunBy = cr.CreatedBy,
+                                  Summary = csB
+                              }).ToList();
 
-            foreach (var item in codeMappings)
-            {
-                var reuestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").FirstOrDefault(x => x.Id == item.Id);
-                if (reuestDto.CodeMappingType.Id == (int)CodeMappingType.MonthlyEmbeddings)
-                {
-                    GenericSummaryViewModel model = new GenericSummaryViewModel();
-                    model.TaskId = item.Reference;
-                    model.RequestId = item.RequestId;
-                    model.TimeStamp = item.Request.CreatedTime;
-                    model.Segment = reuestDto.SegmentType.Name;
-                    model.RunType = reuestDto.RunType.Name;
-                    model.CodeMappingType = reuestDto.CodeMappingType.Name;
-                    model.RunBy = reuestDto.CreatedBy;
-                    model.Summary = _context.CodeGenerationSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
-                    viewModel.Add(model);
-                }
-            }
-            return viewModel;
+            return viewModels;
         }
-        public List<GenericSummaryViewModel> GetWeeklyEmbeddingsMappingRecords()
-        {
-            List<GenericSummaryViewModel> viewModel = new List<GenericSummaryViewModel>();
-            var codeMappings = _context.CodeMappings.Include("Request").AsNoTracking();
-
-            foreach (var item in codeMappings)
-            {
-                var reuestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").FirstOrDefault(x => x.Id == item.Id);
-                if (reuestDto.CodeMappingType.Id == (int)CodeMappingType.WeeklyEmbeddings)
-                {
-                    GenericSummaryViewModel model = new GenericSummaryViewModel();
-
-                    model.TaskId = item.Reference;
-                    model.RequestId = item.RequestId;
-                    model.TimeStamp = item.Request.CreatedTime;
-                    model.Segment = reuestDto.SegmentType.Name;
-                    model.RunType = reuestDto.RunType.Name;
-                    model.CodeMappingType = reuestDto.CodeMappingType.Name;
-                    model.RunBy = reuestDto.CreatedBy;
-                    model.Summary = _context.CodeGenerationSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
-                    viewModel.Add(model);
-                }
-            }
-            return viewModel;
-        }
+        
         public int SaveCgMappingsPythApi(string taskId, string summary, int requestId)
 
         {

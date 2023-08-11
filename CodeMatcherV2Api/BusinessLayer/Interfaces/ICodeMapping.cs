@@ -1,4 +1,5 @@
-﻿using CodeMatcher.Api.V2.Models.SummaryModel;
+﻿using CodeMatcher.Api.V2.BusinessLayer.Enums;
+using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 using CodeMatcherV2Api.Models;
 using System;
@@ -12,8 +13,7 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
     {
         Task<List<CodeMappingModel>> GetCodeMappingsRecordsAsync();
         List<GenericSummaryViewModel> GetCodeGenerationMappingRecords();
-        List<GenericSummaryViewModel> GetMonthlyEmbeddingMappingRecords();
-        List<GenericSummaryViewModel> GetWeeklyEmbeddingsMappingRecords();
+        List<GenericSummaryViewModel> GetEmbeddingMappingRecords(CodeMappingType codeMappingType);
         int SaveCgMappingsPythApi(string taskId, string summary,int requestId);
         int SaveMonthlyEmbedMappingsPythApi(string taskId, string summary, int requestId);
         int SaveWeeklyEmbedMappingsPythApi(string taskId, string summary, int requestId);

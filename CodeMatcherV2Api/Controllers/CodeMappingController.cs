@@ -1,4 +1,5 @@
-﻿using CodeMatcher.Api.V2.Models;
+﻿using CodeMatcher.Api.V2.BusinessLayer.Enums;
+using CodeMatcher.Api.V2.Models;
 using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
@@ -42,13 +43,13 @@ namespace CodeMatcherV2Api.Controllers
         [HttpGet, Route("MonthlyEmbedings/GetEmbeddings")]
         public async Task<IActionResult> GetMonthlyEmbedings()
         {
-            var embeddings = _codeMapping.GetMonthlyEmbeddingMappingRecords();
+            var embeddings = _codeMapping.GetEmbeddingMappingRecords(CodeMappingType.MonthlyEmbeddings);
             return Ok(embeddings); ;
         }
         [HttpGet, Route("WeeklyEmbeddings/GetEmbeddings")]
         public async Task<IActionResult> GetWeeklyEmbeddings()
         {
-            var embeddings = _codeMapping.GetWeeklyEmbeddingsMappingRecords();
+            var embeddings = _codeMapping.GetEmbeddingMappingRecords(CodeMappingType.WeeklyEmbeddings);
             return Ok(embeddings); ;
         }
         [AllowAnonymous]
