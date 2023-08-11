@@ -24,13 +24,7 @@ namespace CodeMatcherV2Api.Controllers
             _httpClientFactory = httpClientFactory;
             _context = context;
         }
-        
-        [HttpGet,Route("GetCodeMappings")]
-        public async Task<IActionResult> GetCodeMappings()
-        {
-            var summaryViewModel = _codeMapping.GetCodeMappings();
-            return Ok(summaryViewModel);
-        }
+      
         [HttpGet,Route("CodeGeneration/GetCodeMappings")]
         public async Task<IActionResult> GetCodeGenerationCodeMappings()
         {

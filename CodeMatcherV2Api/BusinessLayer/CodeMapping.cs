@@ -74,41 +74,6 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return summaryViewModel;
         }
-        public List<GenericSummaryViewModel> GetCodeMappings()
-        {
-            List<GenericSummaryViewModel> viewModel = new List<GenericSummaryViewModel>();
-            var codeMappings = _context.CodeMappings.Include("Request").AsNoTracking();
-
-            foreach (var item in codeMappings)
-            {
-                GenericSummaryViewModel model = new GenericSummaryViewModel();
-                model.TaskId = item.Reference;
-                model.RequestId = item.RequestId;
-                model.TimeStamp = item.Request.CreatedTime;
-                var reuestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").FirstOrDefault(x => x.Id == item.Id);
-                model.Segment = reuestDto.SegmentType.Name;
-                model.RunType = reuestDto.RunType.Name;
-                model.CodeMappingType = reuestDto.CodeMappingType.Name;
-                model.RunBy = reuestDto.CreatedBy;
-
-                switch (reuestDto.CodeMappingType.Name)
-                {
-                    case (CodeMappingTypeConst.CodeGeneration):
-                        model.Summary = _context.CodeGenerationSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
-                        break;
-                    case (CodeMappingTypeConst.MonthlyEmbeddings):
-                        model.Summary = _context.MonthlyEmbeddingsSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
-                        break;
-                    case (CodeMappingTypeConst.WeeklyEmbeddings):
-                        model.Summary = _context.WeeklyEmbeddingsSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
-                        break;
-                    default: break;
-                }
-                viewModel.Add(model);
-            }
-            return viewModel;
-        }
-
         public List<GenericSummaryViewModel> GetCodeGenerationMappingRecords()
         {
             var viewModels = (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType")
