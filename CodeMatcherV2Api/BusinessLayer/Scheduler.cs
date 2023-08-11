@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using CodeMappingEfCore.DatabaseModels;
-using CodeMatcher.Api.V2.BusinessLayer.Enums;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 using CodeMatcher.Api.V2.Models;
 using CodeMatcherV2Api.ApiRequestModels;
-using CodeMatcherV2Api.BusinessLayer;
-using CodeMatcherV2Api.BusinessLayer.Enums;
 using CodeMatcherV2Api.EntityFrameworkCore;
 using CodeMatcherV2Api.Middlewares.SqlHelper;
 using CodeMatcherV2Api.Models;
-using CodeMatcherV2Api.RepoModelAdapter;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -51,7 +47,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
         public Tuple<CgScheduledRunReqModel, int> GetMonthlyScheduleJobAsync(CgScheduledModel schedule, LoginModel user, string clientId)
         {
             CodeMappingRequestDto cgDBRequestModel = new CodeMappingRequestDto();
-            cgDBRequestModel.RunTypeId = SqlHelper.GetLookupType((int)RequestType.scheduled, _context);
+            cgDBRequestModel.RunTypeId = SqlHelper.GetLookupType(RequestTypeConst.Scheduled, _context);
             cgDBRequestModel.SegmentTypeId = SqlHelper.GetLookupType(schedule.Segment, _context);
             cgDBRequestModel.CodeMappingId = SqlHelper.GetCodeMappingType(schedule.CodeMapping, _context);
             cgDBRequestModel.Threshold = schedule.Threshold;
@@ -74,7 +70,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
         public Tuple<CgScheduledRunReqModel, int> GetweeklyJobScheduleAsync(CgScheduledModel schedule, LoginModel user, string clientId)
         {
             CodeMappingRequestDto cgDBRequestModel = new CodeMappingRequestDto();
-            cgDBRequestModel.RunTypeId = SqlHelper.GetLookupType((int)RequestType.scheduled, _context);
+            cgDBRequestModel.RunTypeId = SqlHelper.GetLookupType(RequestTypeConst.Scheduled, _context);
             cgDBRequestModel.SegmentTypeId = SqlHelper.GetLookupType(schedule.Segment, _context);
             cgDBRequestModel.CodeMappingId = SqlHelper.GetCodeMappingType(schedule.CodeMapping, _context);
             cgDBRequestModel.Threshold = schedule.Threshold;
@@ -91,13 +87,14 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             requestModel.LatestLink = cgDBRequestModel.LatestLink;
             requestModel.ClientId = cgDBRequestModel.ClientId;
 
+
             return new Tuple<CgScheduledRunReqModel, int>(requestModel, reuestId);
         }
 
         public Tuple<CgScheduledRunReqModel, int> GetCodeGenerationScheduleAsync(CgScheduledModel schedule, LoginModel user, string clientId)
         {
             CodeMappingRequestDto cgDBRequestModel = new CodeMappingRequestDto();
-            cgDBRequestModel.RunTypeId = SqlHelper.GetLookupType((int)RequestType.scheduled, _context);
+            cgDBRequestModel.RunTypeId = SqlHelper.GetLookupType(RequestTypeConst.Scheduled, _context);
             cgDBRequestModel.SegmentTypeId = SqlHelper.GetLookupType(schedule.Segment, _context);
             cgDBRequestModel.CodeMappingId = SqlHelper.GetCodeMappingType(schedule.CodeMapping, _context);
             cgDBRequestModel.Threshold = schedule.Threshold;

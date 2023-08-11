@@ -1,12 +1,6 @@
 ﻿using CodeMatcherV2Api.ApiRequestModels;
-using CodeMatcherV2Api.ApiResponseModel;
-using CodeMatcherV2Api.BusinessLayer.Enums;
 using CodeMappingEfCore.DatabaseModels;
-using Microsoft.EntityFrameworkCore;
-using System.Net.Http;
 using CodeMatcherV2Api.EntityFrameworkCore;
-using CodeMatcher.Api.V2.BusinessLayer.Enums;
-using System.Linq;
 using CodeMatcherV2Api.Middlewares.SqlHelper;
 
 namespace CodeMatcherV2Api.RepoModelAdapter

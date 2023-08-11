@@ -1,19 +1,21 @@
 ﻿using AutoMapper;
 using Azure;
 using Azure.Storage.Files.Shares;
+using CodeMappingEfCore.DatabaseModels;
+using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcherV2Api.ApiRequestModels;
 using CodeMatcherV2Api.ApiResponseModel;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using CodeMatcherV2Api.EntityFrameworkCore;
+using CodeMatcherV2Api.Middlewares.SqlHelper;
 using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.BusinessLayer
@@ -22,24 +24,49 @@ namespace CodeMatcherV2Api.BusinessLayer
     {
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
-        public CsvUpload(IMapper mapper, IConfiguration configuration)
+        private readonly CodeMatcherDbContext _context;
+       // private readonly DatabaseHelper _databaseHelper;
+        public CsvUpload(IMapper mapper, IConfiguration configuration, CodeMatcherDbContext context)//, DatabaseHelper databaseHelper)
         {
             _mapper = mapper;
             _configuration = configuration;
+            _context = context;
+            //_databaseHelper = databaseHelper;
         }
 
-        public CgUploadCsvReqModel CgUploadCsvRequestGet(CgCsvUploadModel csvUpload)
+        public Tuple<CgUploadCsvReqModel, int> CgUploadCsvRequestGet(CgCsvUploadModel csvUpload, LoginModel user, string clientId)
         {
+            CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
+            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType(RequestTypeConst.UploadCsv,_context);
+            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(csvUpload.Segment, _context);
+            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType(CodeMappingTypeConst.CodeGeneration, _context);
+            foreach (var item in csvUpload.Threshold)
+            {
+                if (codeMappingRequestDto.Threshold == null)
+                    codeMappingRequestDto.Threshold = item;
+                codeMappingRequestDto.Threshold = codeMappingRequestDto.Threshold + "," + item;
+            }
+            codeMappingRequestDto.LatestLink = "1";
+            codeMappingRequestDto.CsvFilePath = csvUpload.CsvFilePath;
+            codeMappingRequestDto.CreatedBy = user.UserName;
+            codeMappingRequestDto.ClientId= clientId;
+            int reuestId = SqlHelper.SaveCodeMappingRequest(codeMappingRequestDto,_context);
             CgUploadCsvReqModel requestModel = new CgUploadCsvReqModel();
             requestModel.CsvInput = csvUpload.CsvFilePath;
             requestModel.Threshold = csvUpload.Threshold;
             requestModel.Segment = csvUpload.Segment;
-            return requestModel;
-
+            return new Tuple<CgUploadCsvReqModel, int>(requestModel, reuestId);
         }
 
-        public CgUploadCsvResModel CgUploadSaveResponse(HttpResponseMessage httpResponse)
+        public CgUploadCsvResModel CgUploadSaveResponse(HttpResponseMessage httpResponse, int requestId, LoginModel user)
         {
+            CodeMappingResponseDto responseDto = new CodeMappingResponseDto();
+            responseDto.RequestId = requestId;
+            responseDto.ResponseMessage = httpResponse.Content.ReadAsStringAsync().Result;
+            responseDto.IsSuccess = (httpResponse.StatusCode == HttpStatusCode.OK) ? true : false;
+            responseDto.CreatedBy = user.UserName;
+            
+            SqlHelper.SaveResponseseMessage(responseDto,requestId ,_context);
             CgUploadCsvResModel response = new CgUploadCsvResModel();
             if (httpResponse.IsSuccessStatusCode)
             {
@@ -91,3 +118,4 @@ namespace CodeMatcherV2Api.BusinessLayer
 
     }
 }
+

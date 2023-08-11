@@ -1,21 +1,15 @@
 ﻿using AutoMapper;
 using CodeMappingEfCore.DatabaseModels;
 using CodeMatcher.Api.V2.BusinessLayer;
-using CodeMatcher.Api.V2.BusinessLayer.Enums;
-using CodeMatcher.Api.V2.Models;
 using CodeMatcher.Api.V2.RepoModelAdapter;
-using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 using CodeMatcherV2Api.ApiRequestModels;
 using CodeMatcherV2Api.ApiResponseModel;
-using CodeMatcherV2Api.BusinessLayer.Enums;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Controllers;
 using CodeMatcherV2Api.EntityFrameworkCore;
-using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Middlewares.SqlHelper;
 using CodeMatcherV2Api.Models;
 using CodeMatcherV2Api.RepoModelAdapter;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -113,7 +107,8 @@ namespace CodeMatcherV2Api.BusinessLayer
             codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType(RequestTypeConst.Triggered, _context);
             codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(trigger.Segment, _context);
             codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType(CodeMappingTypeConst.MonthlyEmbeddings, _context);
-            codeMappingRequestDto.ClientId = "All";
+            codeMappingRequestDto.CreatedBy = user.UserName;
+            codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
             {
                 codeMappingRequestDto.CreatedBy = user.UserName;
@@ -133,7 +128,8 @@ namespace CodeMatcherV2Api.BusinessLayer
             codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType(RequestTypeConst.Triggered, _context);
             codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(trigger.Segment, _context);
             codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType(CodeMappingTypeConst.WeeklyEmbeddings, _context);
-            codeMappingRequestDto.ClientId = "All";
+            codeMappingRequestDto.CreatedBy=user.UserName;
+            codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
             {
                 codeMappingRequestDto.CreatedBy = user.UserName;
