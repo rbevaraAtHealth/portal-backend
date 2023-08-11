@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.BusinessLayer.Enums;
 using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
@@ -13,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 
 namespace CodeMatcherV2Api.BusinessLayer
 {
@@ -49,20 +51,21 @@ namespace CodeMatcherV2Api.BusinessLayer
             {
                 int requestId = SqlHelper.GetRequestId(taskId, _context);
                 int codeMappingId = SqlHelper.GetCodeMappingId(requestId, _context);
+                string codemappingType = SqlHelper.GetLookupTypeName(codeMappingId,_context);
                 CodeGenerationSummaryDto cgSummaryDto = new CodeGenerationSummaryDto();
                 MonthlyEmbeddingsSummaryDto monthlyembedSummaryDto = new MonthlyEmbeddingsSummaryDto();
                 WeeklyEmbeddingsSummaryDto weeklyEmbedSummaryDto = new WeeklyEmbeddingsSummaryDto();
-                switch (codeMappingId)
+                switch (codemappingType)
                 {
-                    case ((int)CodeMappingType.CodeGeneration):
+                    case CodeMappingTypeConst.CodeGeneration:
                         cgSummaryDto = _context.CodeGenerationSummary.FirstOrDefault(x => x.TaskId == taskId);
                         break;
-                    case ((int)CodeMappingType.MonthlyEmbeddings):
+                    case (CodeMappingTypeConst.MonthlyEmbeddings):
                         monthlyembedSummaryDto = _context.MonthlyEmbeddingsSummary.FirstOrDefault(x => x.TaskId == taskId);
                         summaryViewModel.TaskId = monthlyembedSummaryDto.TaskId.ToString();
                         summaryViewModel.RequestId = monthlyembedSummaryDto.RequestId;
                         break;
-                    case ((int)CodeMappingType.WeeklyEmbeddings):
+                    case (CodeMappingTypeConst.WeeklyEmbeddings):
                         weeklyEmbedSummaryDto = _context.WeeklyEmbeddingsSummary.FirstOrDefault(x => x.TaskId == taskId);
                         summaryViewModel.TaskId = weeklyEmbedSummaryDto.TaskId.ToString();
                         summaryViewModel.RequestId = weeklyEmbedSummaryDto.RequestId;
@@ -89,15 +92,15 @@ namespace CodeMatcherV2Api.BusinessLayer
                 model.CodeMappingType = reuestDto.CodeMappingType.Name;
                 model.RunBy = reuestDto.CreatedBy;
 
-                switch (reuestDto.CodeMappingType.Id)
+                switch (reuestDto.CodeMappingType.Name)
                 {
-                    case ((int)CodeMappingType.CodeGeneration):
+                    case (CodeMappingTypeConst.CodeGeneration):
                         model.Summary = _context.CodeGenerationSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
                         break;
-                    case ((int)CodeMappingType.MonthlyEmbeddings):
+                    case (CodeMappingTypeConst.MonthlyEmbeddings):
                         model.Summary = _context.MonthlyEmbeddingsSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
                         break;
-                    case ((int)CodeMappingType.WeeklyEmbeddings):
+                    case (CodeMappingTypeConst.WeeklyEmbeddings):
                         model.Summary = _context.WeeklyEmbeddingsSummary.AsNoTracking().FirstOrDefault(x => x.RequestId == item.RequestId);
                         break;
                     default: break;
@@ -114,7 +117,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             foreach (var item in codeMappings)
             {
                 var reuestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").FirstOrDefault(x => x.Id == item.Id);
-                if (reuestDto.CodeMappingType.Id == (int)CodeMappingType.CodeGeneration)
+                if (reuestDto.CodeMappingType.Name == CodeMappingTypeConst.CodeGeneration)
                 {
                     GenericSummaryViewModel model = new GenericSummaryViewModel();
 
@@ -139,7 +142,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             foreach (var item in codeMappings)
             {
                 var reuestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").FirstOrDefault(x => x.Id == item.Id);
-                if (reuestDto.CodeMappingType.Id == (int)CodeMappingType.MonthlyEmbeddings)
+                if (reuestDto.CodeMappingType.Name == CodeMappingTypeConst.MonthlyEmbeddings)
                 {
                     GenericSummaryViewModel model = new GenericSummaryViewModel();
                     model.TaskId = item.Reference;
@@ -163,7 +166,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             foreach (var item in codeMappings)
             {
                 var reuestDto = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").FirstOrDefault(x => x.Id == item.Id);
-                if (reuestDto.CodeMappingType.Id == (int)CodeMappingType.WeeklyEmbeddings)
+                if (reuestDto.CodeMappingType.Name == CodeMappingTypeConst.WeeklyEmbeddings)
                 {
                     GenericSummaryViewModel model = new GenericSummaryViewModel();
 
@@ -219,16 +222,17 @@ namespace CodeMatcherV2Api.BusinessLayer
         {
             int requestId = SqlHelper.GetRequestId(taskId, _context);
             int frequncyId = SqlHelper.GetCodeMappingId(requestId, _context);
+            string codemappingType = SqlHelper.GetLookupTypeName(frequncyId, _context);
             int summaryId = 0;
-            switch (frequncyId)
+            switch (codemappingType)
             {
-                case ((int)CodeMappingType.CodeGeneration):
+                case (CodeMappingTypeConst.CodeGeneration):
                     summaryId = SaveCgMappingsPythApi(taskId, summary, requestId);
                     break;
-                case ((int)CodeMappingType.MonthlyEmbeddings):
+                case (CodeMappingTypeConst.MonthlyEmbeddings):
                     summaryId = SaveMonthlyEmbedMappingsPythApi(taskId, summary, requestId);
                     break;
-                case ((int)CodeMappingType.WeeklyEmbeddings):
+                case (CodeMappingTypeConst.WeeklyEmbeddings):
                     summaryId = SaveWeeklyEmbedMappingsPythApi(taskId, summary, requestId);
                     break;
                 default: break;
