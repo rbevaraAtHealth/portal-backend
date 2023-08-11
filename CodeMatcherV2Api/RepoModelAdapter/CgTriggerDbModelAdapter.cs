@@ -11,9 +11,9 @@ namespace CodeMatcherV2Api.RepoModelAdapter
         public CodeMappingRequestDto RequestModel_Get(CgTriggeredRunReqModel pyAPIModel, string runType, string codeMappingType, CodeMatcherDbContext context)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
-            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType(runType, context);
-            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(pyAPIModel.Segment, context);
-            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType(codeMappingType, context);
+            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupIdOnName(runType, context);
+            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupIdOnName(pyAPIModel.Segment, context);
+            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupIdOnName(codeMappingType, context);
             codeMappingRequestDto.Threshold = pyAPIModel.Threshold.ToString();
             codeMappingRequestDto.LatestLink = pyAPIModel.LatestLink;
             codeMappingRequestDto.ClientId = pyAPIModel.ClientId;

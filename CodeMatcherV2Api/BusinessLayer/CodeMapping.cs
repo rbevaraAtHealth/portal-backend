@@ -50,7 +50,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             {
                 int requestId = SqlHelper.GetRequestId(taskId, _context);
                 int codeMappingId = SqlHelper.GetCodeMappingId(requestId, _context);
-                string codemappingType = SqlHelper.GetLookupTypeName(codeMappingId,_context);
+                string codemappingType = SqlHelper.GetLookupName(codeMappingId,_context);
                 CodeGenerationSummaryDto cgSummaryDto = new CodeGenerationSummaryDto();
                 MonthlyEmbeddingsSummaryDto monthlyembedSummaryDto = new MonthlyEmbeddingsSummaryDto();
                 WeeklyEmbeddingsSummaryDto weeklyEmbedSummaryDto = new WeeklyEmbeddingsSummaryDto();
@@ -157,7 +157,7 @@ namespace CodeMatcherV2Api.BusinessLayer
         {
             int requestId = SqlHelper.GetRequestId(taskId, _context);
             int frequncyId = SqlHelper.GetCodeMappingId(requestId, _context);
-            string codemappingType = SqlHelper.GetLookupTypeName(frequncyId, _context);
+            string codemappingType = SqlHelper.GetLookupName(frequncyId, _context);
             int summaryId = 0;
             switch (codemappingType)
             {
