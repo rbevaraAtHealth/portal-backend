@@ -200,5 +200,15 @@ namespace CodeMatcherV2Api.BusinessLayer
         {
             throw new NotImplementedException();
         }
+
+        public Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger, LoginModel user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
