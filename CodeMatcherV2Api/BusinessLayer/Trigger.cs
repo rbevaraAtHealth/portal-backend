@@ -183,5 +183,10 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return responseModel;
         }
+
+        public Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger, LoginModel user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
