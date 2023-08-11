@@ -83,8 +83,16 @@ namespace CodeMatcherV2Api.BusinessLayer
         {
             CgTriggeredRunResModel responseViewModel = new CgTriggeredRunResModel();
             CodeMappingResponseDbModelAdapter adapter = new CodeMappingResponseDbModelAdapter();
-            var responseDto = adapter.DbResponseModelGet(httpResponse, requestId);
-            responseDto.CreatedBy = user.UserName;
+            var responseDto = adapter.DbResponseModelGet(httpResponse, requestId); 
+            if (user.UserName != null)
+            {
+                responseDto.CreatedBy = user.UserName;
+            }
+            else
+            {
+                responseDto.CreatedBy = "Scheduler Admin";
+            }
+            //responseDto.CreatedBy = user.UserName;
             SqlHelper.SaveResponseseMessage(responseDto, requestId, _context);
             if (httpResponse.IsSuccessStatusCode)
             {
@@ -99,7 +107,7 @@ namespace CodeMatcherV2Api.BusinessLayer
 
             return responseViewModel;
         }
-        public Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger, LoginModel user)
+        public Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
             codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType(RequestTypeConst.Triggered, _context);
@@ -119,7 +127,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             requestModel.Segment = trigger.Segment;
             return new Tuple<MonthlyEmbedTriggeredRunReqModel, int>(requestModel, requestId);
         }
-        public Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user)
+        public Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
             codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType(RequestTypeConst.Triggered, _context);
@@ -149,7 +157,14 @@ namespace CodeMatcherV2Api.BusinessLayer
                 string httpResult = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 CodeMappingResponseDbModelAdapter adapter = new CodeMappingResponseDbModelAdapter();
                 var responseDto = adapter.DbResponseModelGet(httpResponse, requestId);
-                responseDto.CreatedBy = user.UserName;
+                if (user.UserName != null)
+                {
+                    responseDto.CreatedBy = user.UserName;
+                }
+                else
+                {
+                    responseDto.CreatedBy = "Scheduler Admin";
+                }
                 SqlHelper.SaveResponseseMessage(responseDto, requestId, _context);
                 if (!string.IsNullOrWhiteSpace(httpResult))
                 {

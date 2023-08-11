@@ -31,13 +31,13 @@ namespace CodeMatcher.Api.V2.BusinessLayer
         }
         public async Task<List<SchedulerModel>> GetAllSchedulersAsync()
         {
-            var schedulerRecords = _context.CodeMappingRequests.Include("SegmentType").Include("CodeMappingType").ToList();
+            var schedulerRecords = _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").Where(x => x.RunType.Name.Equals("Scheduled")).ToList();
             List<SchedulerModel> schedulerModels = new List<SchedulerModel>();
 
             foreach (var item in schedulerRecords)
             {
                 SchedulerModel schedulerModel = new SchedulerModel();
-                schedulerModel.ClientId = Convert.ToInt32(item.ClientId);
+                schedulerModel.ClientId = item.ClientId;
                 schedulerModel.Segment = item.SegmentType.Name;
                 schedulerModel.Threshold = item.Threshold;
                 schedulerModel.CronExpression = item.RunSchedule;
@@ -48,7 +48,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
         }
 
 
-        public Tuple<CgScheduledRunReqModel, int> GetMonthlyScheduleJobAsync(CgScheduledModel schedule, LoginModel user)
+        public Tuple<CgScheduledRunReqModel, int> GetMonthlyScheduleJobAsync(CgScheduledModel schedule, LoginModel user, string clientId)
         {
             CodeMappingRequestDto cgDBRequestModel = new CodeMappingRequestDto();
             cgDBRequestModel.RunTypeId = SqlHelper.GetLookupType((int)RequestType.scheduled, _context);
@@ -57,7 +57,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             cgDBRequestModel.Threshold = schedule.Threshold;
             cgDBRequestModel.LatestLink = "32345";
             cgDBRequestModel.RunSchedule = schedule.RunSchedule;
-            cgDBRequestModel.ClientId = "1";
+            cgDBRequestModel.ClientId = clientId;
             cgDBRequestModel.CreatedBy = user.UserName;
             int reuestId = SqlHelper.SaveCodeMappingRequest(cgDBRequestModel, _context);
 
@@ -71,16 +71,16 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             return new Tuple<CgScheduledRunReqModel, int>(requestModel, reuestId);
         }
 
-        public Tuple<CgScheduledRunReqModel, int> GetweeklyJobScheduleAsync(CgScheduledModel schedule, LoginModel user)
+        public Tuple<CgScheduledRunReqModel, int> GetweeklyJobScheduleAsync(CgScheduledModel schedule, LoginModel user, string clientId)
         {
-             CodeMappingRequestDto cgDBRequestModel = new CodeMappingRequestDto();
+            CodeMappingRequestDto cgDBRequestModel = new CodeMappingRequestDto();
             cgDBRequestModel.RunTypeId = SqlHelper.GetLookupType((int)RequestType.scheduled, _context);
             cgDBRequestModel.SegmentTypeId = SqlHelper.GetLookupType(schedule.Segment, _context);
             cgDBRequestModel.CodeMappingId = SqlHelper.GetCodeMappingType(schedule.CodeMapping, _context);
             cgDBRequestModel.Threshold = schedule.Threshold;
             cgDBRequestModel.LatestLink = "32345";
             cgDBRequestModel.RunSchedule = schedule.RunSchedule;
-            cgDBRequestModel.ClientId = "1";
+            cgDBRequestModel.ClientId = clientId;
             cgDBRequestModel.CreatedBy = user.UserName;
             int reuestId = SqlHelper.SaveCodeMappingRequest(cgDBRequestModel, _context);
 
@@ -94,7 +94,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             return new Tuple<CgScheduledRunReqModel, int>(requestModel, reuestId);
         }
 
-        public Tuple<CgScheduledRunReqModel, int> GetCodeGenerationScheduleAsync(CgScheduledModel schedule, LoginModel user)
+        public Tuple<CgScheduledRunReqModel, int> GetCodeGenerationScheduleAsync(CgScheduledModel schedule, LoginModel user, string clientId)
         {
             CodeMappingRequestDto cgDBRequestModel = new CodeMappingRequestDto();
             cgDBRequestModel.RunTypeId = SqlHelper.GetLookupType((int)RequestType.scheduled, _context);
@@ -103,7 +103,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             cgDBRequestModel.Threshold = schedule.Threshold;
             cgDBRequestModel.LatestLink = "32345";
             cgDBRequestModel.RunSchedule = schedule.RunSchedule;
-            cgDBRequestModel.ClientId = "1";
+            cgDBRequestModel.ClientId = clientId;
             cgDBRequestModel.CreatedBy = user.UserName;
             int reuestId = SqlHelper.SaveCodeMappingRequest(cgDBRequestModel, _context);
 
