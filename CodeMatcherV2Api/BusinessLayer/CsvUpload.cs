@@ -37,9 +37,9 @@ namespace CodeMatcherV2Api.BusinessLayer
         public Tuple<CgUploadCsvReqModel, int> CgUploadCsvRequestGet(CgCsvUploadModel csvUpload, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
-            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupType(RequestTypeConst.UploadCsv,_context);
-            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupType(csvUpload.Segment, _context);
-            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupType(CodeMappingTypeConst.CodeGeneration, _context);
+            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupIdOnName(RequestTypeConst.UploadCsv,_context);
+            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupIdOnName(csvUpload.Segment, _context);
+            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupIdOnName(CodeMappingTypeConst.CodeGeneration, _context);
             foreach (var item in csvUpload.Threshold)
             {
                 if (codeMappingRequestDto.Threshold == null)
