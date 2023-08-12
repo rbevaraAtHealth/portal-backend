@@ -95,14 +95,14 @@ namespace CodeMatcherV2Api.BusinessLayer
             
             return viewModels;
         }
-        public List<GenericSummaryViewModel> GetEmbeddingMappingRecords(string codeMappingType)
+        public List<GenericSummaryViewModel> GetWeeklyEmbeddingMappingRecords()
         {
             var viewModels = (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType")
                               join cm in _context.CodeMappings on cr.Id equals cm.RequestId
-                              join cs in _context.CodeGenerationSummary on cr.Id equals cs.RequestId
+                              join cs in _context.WeeklyEmbeddingsSummary on cr.Id equals cs.RequestId
                               into csA
                               from csB in csA.DefaultIfEmpty()
-                              where (cr.CodeMappingType.Name == codeMappingType)
+                              where (cr.CodeMappingType.Name == CodeMappingTypeConst.WeeklyEmbeddings)
                               select new GenericSummaryViewModel
                               {
                                   TaskId = cm.Reference,
@@ -117,7 +117,30 @@ namespace CodeMatcherV2Api.BusinessLayer
 
             return viewModels;
         }
-        
+
+        public List<GenericSummaryViewModel> GetMonthlyEmbeddingMappingRecords()
+        {
+            var viewModels = (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType")
+                              join cm in _context.CodeMappings on cr.Id equals cm.RequestId
+                              join cs in _context.MonthlyEmbeddingsSummary on cr.Id equals cs.RequestId
+                              into csA
+                              from csB in csA.DefaultIfEmpty()
+                              where (cr.CodeMappingType.Name == CodeMappingTypeConst.MonthlyEmbeddings)
+                              select new GenericSummaryViewModel
+                              {
+                                  TaskId = cm.Reference,
+                                  RequestId = cr.Id,
+                                  TimeStamp = cr.CreatedTime,
+                                  Segment = cr.SegmentType.Name,
+                                  RunType = cr.RunType.Name,
+                                  CodeMappingType = cr.CodeMappingType.Name,
+                                  RunBy = cr.CreatedBy,
+                                  Summary = csB
+                              }).ToList();
+
+            return viewModels;
+        }
+
         public int SaveCgMappingsPythApi(string taskId, string summary, int requestId)
 
         {
