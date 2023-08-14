@@ -44,5 +44,35 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [NonAction]
+        [HttpGet("Encrypt/{connStr}")]
+        public IActionResult GetEncryptConn(string connStr)
+        {
+            try
+            {
+                Encrypt _encrypt = new Encrypt();
+                EncDecModel _res = _encrypt.EncryptString(connStr);
+                return Ok(_res.outPut);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [NonAction]
+        [HttpPost("Decrypt")]
+        public IActionResult GetDecryptConn([FromBody] string connStr)
+        {
+            try
+            {
+                Decrypt _encrypt = new Decrypt();
+                EncDecModel _res = _encrypt.DecryptString(connStr);
+                return Ok(_res.outPut);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
