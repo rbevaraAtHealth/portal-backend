@@ -34,13 +34,13 @@ namespace CodeMatcherV2Api.Controllers
         [HttpGet, Route("MonthlyEmbedings/GetEmbeddings")]
         public async Task<IActionResult> GetMonthlyEmbedings()
         {
-            var embeddings = _codeMapping.GetEmbeddingMappingRecords(CodeMappingTypeConst.MonthlyEmbeddings);
+            var embeddings = _codeMapping.GetMonthlyEmbeddingMappingRecords();
             return Ok(embeddings); ;
         }
         [HttpGet, Route("WeeklyEmbeddings/GetEmbeddings")]
         public async Task<IActionResult> GetWeeklyEmbeddings()
         {
-            var embeddings = _codeMapping.GetEmbeddingMappingRecords(CodeMappingTypeConst.WeeklyEmbeddings);
+            var embeddings = _codeMapping.GetWeeklyEmbeddingMappingRecords();
             return Ok(embeddings); ;
         }
         [AllowAnonymous]
