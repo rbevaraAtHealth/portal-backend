@@ -31,14 +31,14 @@ namespace CodeMatcherV2Api.Controllers
         public async Task<IActionResult> Login([FromBody]LoginModel user)
         {
             //Logic for process the user info against the client specific db//
-            //bool isAuth =await ProcessLogin(user);
+            bool isValid =await ProcessLogin(user);
 
             if (user == null)
             {
                 return Ok(user);
             }
 
-            if ((user.UserName.ToLower() == "admin" || user.UserName.ToLower() == "internaluser" )  && user.Password == "Password@123")
+            if (isValid)
             {
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
