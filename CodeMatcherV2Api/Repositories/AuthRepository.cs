@@ -10,6 +10,7 @@ using CodeMatcherApiV2.Common;
 using Microsoft.Extensions.Logging;
 using CodeMatcherApiV2.BusinessLayer.Interfaces;
 using System.Threading.Tasks;
+using CodeMatcher.Api.V2.Middlewares.CommonHelper;
 
 namespace CodeMatcherApiV2.Repositories
 {
@@ -25,7 +26,7 @@ namespace CodeMatcherApiV2.Repositories
         public async Task<bool> ProcessLogin(LoginModel model, string headerValue)
         {
             bool success = false;
-            using (SqlConnection myCon = new SqlConnection(Decrypt(_configuration.GetSection(headerValue).GetSection("source").Value)))
+            using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(headerValue).GetSection("source").Value)))
             {
                 try
                 {
@@ -66,11 +67,6 @@ namespace CodeMatcherApiV2.Repositories
                 return encryptor.encryptToHex(password) == passwordSan;
             }
         }
-        private string Decrypt(string encrytedValue)
-        {
-            Decrypt _decrypt = new Decrypt();
-            EncDecModel _res = _decrypt.DecryptString(encrytedValue);
-            return _res.outPut;
-        }
+       
     }
 }

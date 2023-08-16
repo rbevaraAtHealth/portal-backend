@@ -32,7 +32,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("GetCodeGenerationOverwriteByIdAsync/{id}")]
+        [HttpGet("GetCodeGenerationOverwriteById/{id}")]
         public async Task<IActionResult> GetCodeGenerationOverwriteByIdAsync(int id)
         {
             try

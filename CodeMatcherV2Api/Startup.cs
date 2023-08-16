@@ -5,6 +5,7 @@ using AutoMapper;
 using CodeMatcher.Api.V2;
 using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
+using CodeMatcher.Api.V2.Middlewares.CommonHelper;
 using CodeMatcherApiV2.BusinessLayer.Interfaces;
 using CodeMatcherApiV2.Repositories;
 using CodeMatcherV2Api.BusinessLayer;
@@ -49,7 +50,8 @@ namespace CodeMatcherV2Api
                     .AllowAnyHeader());
             });
             services.AddDbContext<CodeMatcherDbContext>(options =>
-                                        options.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
+                                         options.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
+                                         //options.UseSqlServer(CommonHelper.Decrypt(Configuration.GetConnectionString("DBConnection"))));
             services.AddControllers();
 
             services.AddAuthentication(opt =>
