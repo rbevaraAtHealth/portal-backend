@@ -2,17 +2,15 @@
 using CodeMatcherV2Api.ApiResponseModel;
 using CodeMatcherV2Api.Models;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.BusinessLayer.Interfaces
 {
     public interface ITrigger
     {
-        Task<string> GetCgTriggerJobAsync();
-        Task<string> GetMonthlyTriggerJobAsync();
-        Task<string> GetWeeklyTriggerJobAsync();
+        //Task<string> GetCgTriggerJobAsync();
+        //Task<string> GetMonthlyTriggerJobAsync();
+        //Task<string> GetWeeklyTriggerJobAsync();
         Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger,LoginModel user, string clientId);
         CgTriggeredRunResModel CgAPiResponseSave(HttpResponseMessage response, int RequestId,LoginModel user);
         Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger,LoginModel user, string clientId);

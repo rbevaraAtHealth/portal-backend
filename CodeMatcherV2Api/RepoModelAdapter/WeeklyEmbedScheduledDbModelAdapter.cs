@@ -7,12 +7,17 @@ namespace CodeMatcherV2Api.RepoModelAdapter
 {
     public class WeeklyEmbedScheduledDbModelAdapter : IRepositoryModel<CodeMappingRequestDto, WeeklyEmbedScheduledRunReqModel>//, EmbeddingsResponseDto, WeeklyEmbedScheduledRunResModel>
     {
-        public CodeMappingRequestDto RequestModel_Get(WeeklyEmbedScheduledRunReqModel pyAPIModel, string runType, string codeMappingType, CodeMatcherDbContext context)
+        private readonly SqlHelper _sqlHelper;
+        public WeeklyEmbedScheduledDbModelAdapter(SqlHelper sqlHelper)
+        {
+            _sqlHelper = sqlHelper;
+        }
+        public CodeMappingRequestDto RequestModel_Get(WeeklyEmbedScheduledRunReqModel pyAPIModel, string runType, string codeMappingType)
         {
             CodeMappingRequestDto codeMappingRequest = new CodeMappingRequestDto();
-            codeMappingRequest.RunTypeId = SqlHelper.GetLookupIdOnName(runType, context);
-            codeMappingRequest.SegmentTypeId = SqlHelper.GetLookupIdOnName(pyAPIModel.Segment, context);
-            codeMappingRequest.CodeMappingId=SqlHelper.GetLookupIdOnName(codeMappingType, context);
+            codeMappingRequest.RunTypeId = _sqlHelper.GetLookupIdOnName(runType);
+            codeMappingRequest.SegmentTypeId = _sqlHelper.GetLookupIdOnName(pyAPIModel.Segment);
+            codeMappingRequest.CodeMappingId=_sqlHelper.GetLookupIdOnName(codeMappingType);
             codeMappingRequest.ClientId = "All";
             return codeMappingRequest;
         }

@@ -10,6 +10,7 @@ using CodeMatcherApiV2.Repositories;
 using CodeMatcherV2Api.BusinessLayer;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
+using CodeMatcherV2Api.Middlewares.SqlHelper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -82,7 +83,7 @@ namespace CodeMatcherV2Api
             services.AddTransient<ILookupTypes, LookupTypes>();
             services.AddTransient<IScheduler, Scheduler>();
             services.AddTransient<ICodeGenerationOverwrite, CodeGenerationOverwrite>();
-
+            services.AddTransient<SqlHelper>();
 
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

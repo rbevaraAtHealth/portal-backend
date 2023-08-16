@@ -14,8 +14,6 @@ namespace CodeMatcher.Api.V2.Controllers
     public class SchedulerController : BaseController
     {
         public readonly IScheduler _scheduler;
-        private IHttpClientFactory _httpClientFactory;
-        
 
         public SchedulerController(IScheduler scheduler)
         {

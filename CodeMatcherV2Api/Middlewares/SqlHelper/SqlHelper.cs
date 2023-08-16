@@ -12,73 +12,78 @@ using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 
 namespace CodeMatcherV2Api.Middlewares.SqlHelper
 {
-    public static class SqlHelper
+    public  class SqlHelper
     {
-        public static int SaveCodeMappingRequest(CodeMappingRequestDto cgReqModel, CodeMatcherDbContext context)
+        private readonly CodeMatcherDbContext context;
+        public SqlHelper(CodeMatcherDbContext _context)
+        {
+            context = _context;
+        }
+        public  int SaveCodeMappingRequest(CodeMappingRequestDto cgReqModel)
         {
             context.CodeMappingRequests.Add(cgReqModel);
             context.SaveChanges();
             return (cgReqModel.Id);
         }
-        public static void SaveResponseseMessage(CodeMappingResponseDto responseDto, int requestId, CodeMatcherDbContext context)
+        public  void SaveResponseseMessage(CodeMappingResponseDto responseDto, int requestId)
         {
 
             context.CodeMappingResponses.Add(responseDto);
             context.SaveChanges();
         }
       
-        public static int GetLookupIdOnName(string type, CodeMatcherDbContext context)
+        public  int GetLookupIdOnName(string type)
         {
             var lookup = context.Lookups.FirstOrDefault(x => x.Name == type);
             return lookup.Id;
         }
-        public static string GetLookupName(int id, CodeMatcherDbContext context)
+        public string GetLookupName(int id)
         {
             var lookup = context.Lookups.FirstOrDefault(x => x.Id == id);
             return lookup.Name;
         }
-        public static int SaveCodeMappingData(CodeMappingDto codeMapping,CodeMatcherDbContext context)
+        public int SaveCodeMappingData(CodeMappingDto codeMapping)
         {
             context.CodeMappings.Add(codeMapping);
             context.SaveChanges();
             return (codeMapping.Id);
         }
-        public static int SaveCodeGenerationSummary(CodeGenerationSummaryDto cgSummary,CodeMatcherDbContext context)
+        public int SaveCodeGenerationSummary(CodeGenerationSummaryDto cgSummary)
         {
             context.CodeGenerationSummary.Add(cgSummary);
             context.SaveChanges();
             //context.CodeMappings.
             return cgSummary.Id;
         }
-        public static int SaveMonthlyEmbedSummary(MonthlyEmbeddingsSummaryDto monthlySummary, CodeMatcherDbContext context)
+        public int SaveMonthlyEmbedSummary(MonthlyEmbeddingsSummaryDto monthlySummary)
         {
             context.MonthlyEmbeddingsSummary.Add(monthlySummary);
             context.SaveChanges();
             return monthlySummary.Id;
         }
-        public static int SaveWeeklyEmbedSummary(WeeklyEmbeddingsSummaryDto weeklySummary, CodeMatcherDbContext context)
+        public int SaveWeeklyEmbedSummary(WeeklyEmbeddingsSummaryDto weeklySummary)
         {
             context.WeeklyEmbeddingsSummary.Add(weeklySummary);
             context.SaveChanges();
             return weeklySummary.Id;
         }
-        public static int GetRequestId(string taskId,CodeMatcherDbContext context)
+        public int GetRequestId(string taskId)
         {
             var codemap=context.CodeMappings.FirstOrDefault(x => x.Reference == taskId.ToString());
             return codemap.Id;
         }
-        public static int GetCodeMappingId(int requestId,CodeMatcherDbContext context)
+        public int GetCodeMappingId(int requestId)
         {
            var codeMapping= context.CodeMappingRequests.FirstOrDefault(x => x.Id == requestId);
             return codeMapping.CodeMappingId;
         }
-        public static List<CodeMappingDto> GetCodeMappings(CodeMatcherDbContext context)
+        public  List<CodeMappingDto> GetCodeMappings()
         {
            var codeMappingList= context.CodeMappings.Where(x=>x.Status.Equals("In progress")).ToList();
             return codeMappingList;
            // return context.CodeMappings.AsNoTracking().ToList();
         }
-        public static void UpdateCodeMappingStatus(string taskId,CodeMatcherDbContext context)
+        public void UpdateCodeMappingStatus(string taskId)
         {
             var codeMap = context.CodeMappings.FirstOrDefault(x => x.Reference==taskId.ToString());
             codeMap.Status = "Completed";

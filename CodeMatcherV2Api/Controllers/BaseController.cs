@@ -1,14 +1,12 @@
 ﻿using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using System.Security.Claims;
 
 namespace CodeMatcherV2Api.Controllers
 {
-   
+
     [Authorize]
     public class BaseController : ControllerBase
     {

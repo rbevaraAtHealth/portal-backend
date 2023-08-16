@@ -4,6 +4,6 @@ namespace CodeMatcherV2Api.RepoModelAdapter
 {
     public interface IRepositoryModel<ReqT, ReqU>
     {
-        ReqT RequestModel_Get(ReqU pyAPIModel, string runType, string codeMappingType, CodeMatcherDbContext context);
+        ReqT RequestModel_Get(ReqU pyAPIModel, string runType, string codeMappingType);
     }
 }
