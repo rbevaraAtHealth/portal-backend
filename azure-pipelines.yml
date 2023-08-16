@@ -18,12 +18,12 @@ steps:
     Dockerfile: 'Dockerfile-appfunction-scheduler'
     tags: '1'
 
-- task: AzureFunctionApp@2
-  inputs:
-    connectedServiceNameARM: 'VerityStream-1308-Verity Production(caa88d8e-50da-4a07-9132-54b28d3060c7)'
-    appType: 'functionAppLinux'
-    appName: 
-    deployToSlotOrASE: true
-    slotName: 'production'
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    deploymentMethod: 'auto'
+# - task: AzureFunctionApp@2
+#   inputs:
+#     connectedServiceNameARM: 'VerityStream-1308-Verity Production(caa88d8e-50da-4a07-9132-54b28d3060c7)'
+#     appType: 'functionAppLinux'
+#     appName: 
+#     deployToSlotOrASE: true
+#     slotName: 'production'
+#     package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+#     deploymentMethod: 'auto'
