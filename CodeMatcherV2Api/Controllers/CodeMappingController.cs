@@ -49,7 +49,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                 int summaryId = _codeMapping.SaveSummary(response.TaskId,response.Summary);
+                 int summaryId = _codeMapping.SaveSummary(response.TaskId,response.Summary,GetUserInfo());
 
                 if (summaryId == 0)
                     return Ok("Task Id not found");

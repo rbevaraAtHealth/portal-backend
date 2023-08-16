@@ -14,10 +14,10 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
         List<GenericSummaryViewModel> GetCodeGenerationMappingRecords();
         List<GenericSummaryViewModel> GetWeeklyEmbeddingMappingRecords();
         List<GenericSummaryViewModel> GetMonthlyEmbeddingMappingRecords();
-        int SaveCgMappingsPythApi(string taskId, string summary,int requestId);
-        int SaveMonthlyEmbedMappingsPythApi(string taskId, string summary, int requestId);
-        int SaveWeeklyEmbedMappingsPythApi(string taskId, string summary, int requestId);
-        int SaveSummary(string taskId, string summary);
+        int SaveCgMappingsPythApi(string taskId, string summary,int requestId, LoginModel loginModel);
+        int SaveMonthlyEmbedMappingsPythApi(string taskId, string summary, int requestId, LoginModel loginModel);
+        int SaveWeeklyEmbedMappingsPythApi(string taskId, string summary, int requestId, LoginModel loginModel);
+        int SaveSummary(string taskId, string summary, LoginModel loginModel);
         GenericSummaryViewModel GetMappings(string taskId);        
     }
 }

@@ -21,39 +21,41 @@ namespace CodeMatcherV2Api.BusinessLayer
     {
         private readonly CgTriggerDbModelAdapter _cgTriggerDbModelAdapter;
         private readonly CodeMatcherDbContext _context;
+        private readonly SqlHelper _sqlHelper;
         private readonly IMapper _mapper;
-        public Trigger(CodeMatcherDbContext context, IMapper mapper)
+        public Trigger(CodeMatcherDbContext context, IMapper mapper,SqlHelper sqlHelper)
         {
             BaseController baseController = new BaseController();
             _context = context;
-            _cgTriggerDbModelAdapter = new CgTriggerDbModelAdapter();
+            _cgTriggerDbModelAdapter = new CgTriggerDbModelAdapter(_sqlHelper);
             _mapper = mapper;
             var user = baseController.GetUserInfo();
+            _sqlHelper = sqlHelper;
         }
-        public async Task<string> GetAllTriggerAsync()
-        {
-            return "Job Triggered Successfully";
-        }
-        public async Task<string> GetCgTriggerJobAsync()
-        {
-            return "Code generation job triggered successfully";
-        }
+        //public async Task<string> GetAllTriggerAsync()
+        //{
+        //    return "Job Triggered Successfully";
+        //}
+        //public async Task<string> GetCgTriggerJobAsync()
+        //{
+        //    return "Code generation job triggered successfully";
+        //}
 
-        public async Task<string> GetMonthlyTriggerJobAsync()
-        {
-            return "Monthly job triggered successfully";
-        }
+        //public async Task<string> GetMonthlyTriggerJobAsync()
+        //{
+        //    return "Monthly job triggered successfully";
+        //}
 
-        public async Task<string> GetWeeklyTriggerJobAsync()
-        {
-            return "Weekly job triggered successfully";
-        }
+        //public async Task<string> GetWeeklyTriggerJobAsync()
+        //{
+        //    return "Weekly job triggered successfully";
+        //}
         public Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
-            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupIdOnName(RequestTypeConst.Triggered, _context);
-            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupIdOnName(trigger.Segment, _context);
-            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupIdOnName(CodeMappingTypeConst.CodeGeneration, _context);
+            codeMappingRequestDto.RunTypeId = _sqlHelper.GetLookupIdOnName(RequestTypeConst.Triggered);
+            codeMappingRequestDto.SegmentTypeId = _sqlHelper.GetLookupIdOnName(trigger.Segment);
+            codeMappingRequestDto.CodeMappingId = _sqlHelper.GetLookupIdOnName(CodeMappingTypeConst.CodeGeneration);
             codeMappingRequestDto.Threshold = trigger.Threshold.ToString();
             codeMappingRequestDto.LatestLink = "1";
             codeMappingRequestDto.ClientId = clientId;
@@ -65,7 +67,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             {
                 codeMappingRequestDto.CreatedBy = "Scheduler Admin"; 
             }
-            int reuestId = SqlHelper.SaveCodeMappingRequest(codeMappingRequestDto, _context);
+            int reuestId = _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             CgTriggeredRunReqModel requestModel = new CgTriggeredRunReqModel();
             requestModel.Segment = trigger.Segment;
             requestModel.Threshold = trigger.Threshold;
@@ -87,7 +89,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                 responseDto.CreatedBy = "Scheduler Admin";
             }
             //responseDto.CreatedBy = user.UserName;
-            SqlHelper.SaveResponseseMessage(responseDto, requestId, _context);
+            _sqlHelper.SaveResponseseMessage(responseDto, requestId);
             if (httpResponse.IsSuccessStatusCode)
             {
                 string httpResult = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -95,7 +97,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                 {
                     responseViewModel = JsonConvert.DeserializeObject<CgTriggeredRunResModel>(httpResult);
                     var codeMappingDto = CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
-                    int codeMappingId = SqlHelper.SaveCodeMappingData(codeMappingDto, _context);
+                    int codeMappingId = _sqlHelper.SaveCodeMappingData(codeMappingDto);
                 }
             }
 
@@ -104,9 +106,9 @@ namespace CodeMatcherV2Api.BusinessLayer
         public Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
-            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupIdOnName(RequestTypeConst.Triggered, _context);
-            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupIdOnName(trigger.Segment, _context);
-            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupIdOnName(CodeMappingTypeConst.MonthlyEmbeddings, _context);
+            codeMappingRequestDto.RunTypeId = _sqlHelper.GetLookupIdOnName(RequestTypeConst.Triggered);
+            codeMappingRequestDto.SegmentTypeId = _sqlHelper.GetLookupIdOnName(trigger.Segment);
+            codeMappingRequestDto.CodeMappingId = _sqlHelper.GetLookupIdOnName(CodeMappingTypeConst.MonthlyEmbeddings);
             codeMappingRequestDto.CreatedBy = user.UserName;
             codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
@@ -117,7 +119,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             {
                 codeMappingRequestDto.CreatedBy = "Scheduler Admin";
             }
-            int requestId = SqlHelper.SaveCodeMappingRequest(codeMappingRequestDto, _context);
+            int requestId = _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             MonthlyEmbedTriggeredRunReqModel requestModel = new MonthlyEmbedTriggeredRunReqModel();
             requestModel.Segment = trigger.Segment;
             return new Tuple<MonthlyEmbedTriggeredRunReqModel, int>(requestModel, requestId);
@@ -125,9 +127,9 @@ namespace CodeMatcherV2Api.BusinessLayer
         public Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
-            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupIdOnName(RequestTypeConst.Triggered, _context);
-            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupIdOnName(trigger.Segment, _context);
-            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupIdOnName(CodeMappingTypeConst.WeeklyEmbeddings, _context);
+            codeMappingRequestDto.RunTypeId = _sqlHelper.GetLookupIdOnName(RequestTypeConst.Triggered);
+            codeMappingRequestDto.SegmentTypeId = _sqlHelper.GetLookupIdOnName(trigger.Segment);
+            codeMappingRequestDto.CodeMappingId = _sqlHelper.GetLookupIdOnName(CodeMappingTypeConst.WeeklyEmbeddings);
             codeMappingRequestDto.CreatedBy=user.UserName;
             codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
@@ -138,7 +140,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             {
                 codeMappingRequestDto.CreatedBy = "Scheduler Admin";
             }
-            int requestId = SqlHelper.SaveCodeMappingRequest(codeMappingRequestDto, _context);
+            int requestId = _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             WeeklyEmbedTriggeredRunReqModel requestModel = new WeeklyEmbedTriggeredRunReqModel();
             requestModel.Segment = trigger.Segment;
             requestModel.LatestLink = "6";
@@ -161,12 +163,12 @@ namespace CodeMatcherV2Api.BusinessLayer
                 {
                     responseDto.CreatedBy = "Scheduler Admin";
                 }
-                SqlHelper.SaveResponseseMessage(responseDto, requestId, _context);
+                _sqlHelper.SaveResponseseMessage(responseDto, requestId);
                 if (!string.IsNullOrWhiteSpace(httpResult))
                 {
                     responseModel = JsonConvert.DeserializeObject<MonthlyEmbedTriggeredRunResModel>(httpResult);
                     var codeMappingDto = CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
-                    int codeMappingId = SqlHelper.SaveCodeMappingData(codeMappingDto, _context);
+                    int codeMappingId = _sqlHelper.SaveCodeMappingData(codeMappingDto);
                 }
                 if (responseModel != null)
                 {
@@ -181,7 +183,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             CodeMappingResponseDbModelAdapter adapter = new CodeMappingResponseDbModelAdapter();
             var responseDto = adapter.DbResponseModelGet(httpResponse, requestId);
             responseDto.CreatedBy = user.UserName;
-            SqlHelper.SaveResponseseMessage(responseDto, requestId, _context);
+            _sqlHelper.SaveResponseseMessage(responseDto, requestId);
             if (httpResponse.IsSuccessStatusCode)
             {
                 string httpResult = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -189,26 +191,26 @@ namespace CodeMatcherV2Api.BusinessLayer
                 {
                     responseModel = JsonConvert.DeserializeObject<WeeklyEmbedTriggeredRunResModel>(httpResult);
                     var codeMappingDto = CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
-                    int codeMappingId = SqlHelper.SaveCodeMappingData(codeMappingDto, _context);
+                    int codeMappingId = _sqlHelper.SaveCodeMappingData(codeMappingDto);
                 }
                 return responseModel;
             }
             return responseModel;
         }
 
-        public Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger, LoginModel user)
-        {
-            throw new NotImplementedException();
-        }
+        //public Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger, LoginModel user)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger, LoginModel user)
-        {
-            throw new NotImplementedException();
-        }
+        //public Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger, LoginModel user)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user)
-        {
-            throw new NotImplementedException();
-        }
+        //public Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }
