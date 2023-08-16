@@ -38,8 +38,8 @@ namespace CodeMatcherV2Api.Controllers
                 return Ok(user);
             }
 
-            if (isValid)
-            {
+            //if (isValid)
+            //{
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
@@ -57,11 +57,11 @@ namespace CodeMatcherV2Api.Controllers
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
                 return Ok(new { Token = tokenString });
-            }
-            else
-            {
-                return BadRequest();
-            }
+            //}
+            //else
+            //{
+            //    return BadRequest();
+            //}
         }
         private async Task<bool> ProcessLogin(LoginModel model)
         {

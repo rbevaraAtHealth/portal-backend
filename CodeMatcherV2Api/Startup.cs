@@ -33,7 +33,7 @@ namespace CodeMatcherV2Api
             var builder = new ConfigurationBuilder()
             .SetBasePath(env.ContentRootPath)
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{env.EnvironmentName ?? "Development"}.json", optional: true)
+            .AddJsonFile($"appsettings.{(!string.IsNullOrEmpty(env.EnvironmentName) ? env.EnvironmentName : "Development") }.json", optional: true)
             .AddEnvironmentVariables();
             this.Configuration = builder.Build();
         }

@@ -48,7 +48,7 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
         //[NonAction]
-        [HttpGet("Encrypt")]
+        [HttpPost("Encrypt")]
         public IActionResult GetEncryptConn([FromBody] string connStr)
         {
             try

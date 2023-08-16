@@ -21,7 +21,7 @@ namespace CodeMatcherV2Api.Controllers
         }
 
         [HttpGet,Route("GetLookups")]
-        public IActionResult GetLookups(string lookupType)
+        public async Task<IActionResult> GetLookups(string lookupType)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace CodeMatcherV2Api.Controllers
                 LookupTypeModel lookupTypes = _lookupTypes.GetLookupByNameAsync(lookupType);
                 if(lookupTypes == null)
                     throw new ArgumentNullException("Lookup type not found", nameof(lookupType));
-                var lookups = _lookUp.GetLookupByIdAsync(lookupTypes.LookupTypeId);                
+                var lookups = await _lookUp.GetLookupByIdAsync(lookupTypes.LookupTypeId);                
                 return Ok(lookups);
             }
             catch(Exception ex)
