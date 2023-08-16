@@ -22,4 +22,5 @@ COPY --from=build-env /app/out .
 
 # Define the command to start the app
 ENV VARIABLE='Development'
+ENV ASPNETCORE_ENVIRONMENT=Development
 ENTRYPOINT ["dotnet", "CodeMatcher.Api.V2.dll", "--urls", "http://0.0.0.0:80"]
