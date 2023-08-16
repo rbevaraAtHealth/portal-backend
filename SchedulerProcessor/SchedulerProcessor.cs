@@ -28,11 +28,7 @@ namespace SchedulerProcessor
             _httpClient = httpClientFactory.CreateClient("AzureFunction");
         }
         [FunctionName("Processor")]
-        public async Task SchedulerTimeRun([TimerTrigger("*/1 * * * *",
-           #if DEBUG
-            RunOnStartup =true
-           #endif
-            )]TimerInfo myTimer, ILogger log)
+        public async Task SchedulerTimeRun([TimerTrigger("*/1 * * * *")]TimerInfo myTimer, ILogger log)
         {
             var curExecutionDate = DateTime.Now;
             var nextRunSchedule = myTimer.Schedule.GetNextOccurrence(DateTime.Now);
