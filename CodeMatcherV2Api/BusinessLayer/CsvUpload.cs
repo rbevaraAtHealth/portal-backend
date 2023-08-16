@@ -25,21 +25,21 @@ namespace CodeMatcherV2Api.BusinessLayer
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly CodeMatcherDbContext _context;
-       // private readonly DatabaseHelper _databaseHelper;
-        public CsvUpload(IMapper mapper, IConfiguration configuration, CodeMatcherDbContext context)//, DatabaseHelper databaseHelper)
+        private readonly SqlHelper _sqlHelper;
+        public CsvUpload(IMapper mapper, IConfiguration configuration, CodeMatcherDbContext context, SqlHelper sqlHelper)
         {
             _mapper = mapper;
             _configuration = configuration;
             _context = context;
-            //_databaseHelper = databaseHelper;
+            _sqlHelper = sqlHelper;
         }
 
         public Tuple<CgUploadCsvReqModel, int> CgUploadCsvRequestGet(CgCsvUploadModel csvUpload, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
-            codeMappingRequestDto.RunTypeId = SqlHelper.GetLookupIdOnName(RequestTypeConst.UploadCsv,_context);
-            codeMappingRequestDto.SegmentTypeId = SqlHelper.GetLookupIdOnName(csvUpload.Segment, _context);
-            codeMappingRequestDto.CodeMappingId = SqlHelper.GetLookupIdOnName(CodeMappingTypeConst.CodeGeneration, _context);
+            codeMappingRequestDto.RunTypeId = _sqlHelper.GetLookupIdOnName(RequestTypeConst.UploadCsv);
+            codeMappingRequestDto.SegmentTypeId = _sqlHelper.GetLookupIdOnName(csvUpload.Segment);
+            codeMappingRequestDto.CodeMappingId = _sqlHelper.GetLookupIdOnName(CodeMappingTypeConst.CodeGeneration);
             foreach (var item in csvUpload.Threshold)
             {
                 if (codeMappingRequestDto.Threshold == null)
@@ -50,7 +50,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             codeMappingRequestDto.CsvFilePath = csvUpload.CsvFilePath;
             codeMappingRequestDto.CreatedBy = user.UserName;
             codeMappingRequestDto.ClientId= clientId;
-            int reuestId = SqlHelper.SaveCodeMappingRequest(codeMappingRequestDto,_context);
+            int reuestId = _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             CgUploadCsvReqModel requestModel = new CgUploadCsvReqModel();
             requestModel.CsvInput = csvUpload.CsvFilePath;
             requestModel.Threshold = csvUpload.Threshold;
@@ -66,7 +66,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             responseDto.IsSuccess = (httpResponse.StatusCode == HttpStatusCode.OK) ? true : false;
             responseDto.CreatedBy = user.UserName;
             
-            SqlHelper.SaveResponseseMessage(responseDto,requestId ,_context);
+            _sqlHelper.SaveResponseseMessage(responseDto,requestId);
             CgUploadCsvResModel response = new CgUploadCsvResModel();
             if (httpResponse.IsSuccessStatusCode)
             {
