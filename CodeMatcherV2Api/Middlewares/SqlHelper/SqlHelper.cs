@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
+using CodeMatcher.Api.V2.BusinessLayer;
 
 namespace CodeMatcherV2Api.Middlewares.SqlHelper
 {
@@ -34,7 +35,7 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
       
         public  int GetLookupIdOnName(string type)
         {
-            var lookup = context.Lookups.FirstOrDefault(x => x.Name == type);
+            var lookup = context.Lookups.FirstOrDefault(x => x.Name.ToLower() == type.ToLower());
             return lookup.Id;
         }
         public string GetLookupName(int id)
@@ -52,7 +53,6 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
         {
             context.CodeGenerationSummary.Add(cgSummary);
             context.SaveChanges();
-            //context.CodeMappings.
             return cgSummary.Id;
         }
         public int SaveMonthlyEmbedSummary(MonthlyEmbeddingsSummaryDto monthlySummary)
@@ -69,7 +69,7 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
         }
         public int GetRequestId(string taskId)
         {
-            var codemap=context.CodeMappings.FirstOrDefault(x => x.Reference == taskId.ToString());
+            var codemap=context.CodeMappings.FirstOrDefault(x => x.Reference == taskId);
             return codemap.Id;
         }
         public int GetCodeMappingId(int requestId)
@@ -79,16 +79,14 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
         }
         public  List<CodeMappingDto> GetCodeMappings()
         {
-           var codeMappingList= context.CodeMappings.Where(x=>x.Status.Equals("In progress")).ToList();
+           var codeMappingList= context.CodeMappings.Where(x=>x.Status.ToLower() == Status.InProgress.ToLower()).ToList();
             return codeMappingList;
-           // return context.CodeMappings.AsNoTracking().ToList();
         }
         public void UpdateCodeMappingStatus(string taskId)
         {
-            var codeMap = context.CodeMappings.FirstOrDefault(x => x.Reference==taskId.ToString());
-            codeMap.Status = "Completed";
+            var codeMap = context.CodeMappings.FirstOrDefault(x => x.Reference==taskId);
+            codeMap.Status = Status.Success;
             context.Entry(codeMap).State = EntityState.Modified;
-            //context.CodeMappings.Update(codeMap);
             context.SaveChanges();
             
         }

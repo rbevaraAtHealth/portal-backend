@@ -12,4 +12,9 @@
         public const string Scheduled = "Scheduled";
         public const string UploadCsv = "Upload Csv";
     }
+    public static class Status
+    {
+        public const string Success = "Completed";
+        public const string InProgress = "In Progress";
+    }
 }
