@@ -10,6 +10,10 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+- task: Bash@3
+  inputs:
+    filePath: 'docker system prune -a -f'
+    
 - task: Docker@2
   inputs:
     containerRegistry: 'codeconvacr01-1931'
