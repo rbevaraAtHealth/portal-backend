@@ -24,7 +24,6 @@ steps:
     repository: 'portal-backend'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
-    tags: '1'
 
 
 - task: AzureRmWebAppDeployment@4
