@@ -25,6 +25,16 @@ steps:
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile-experiment'
 
+- task: SnykSecurityScan@1
+  inputs:
+    serviceConnectionEndpoint: 'snyk-token'
+    testType: 'container'
+    dockerImageName: 'codeconvacr01.azurecr.io/portal-backend:$(Build.BuildId)'
+    severityThreshold: 'critical'
+    monitorWhen: 'always'
+    failOnIssues: false
+    projectName: 'Data Services/portal-backend'
+    organization: 'veritydataservice'
 
 - task: AzureRmWebAppDeployment@4
   inputs:
