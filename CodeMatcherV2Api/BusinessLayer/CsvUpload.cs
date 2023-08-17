@@ -34,7 +34,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             _sqlHelper = sqlHelper;
         }
 
-        public Tuple<CgUploadCsvReqModel, int> CgUploadCsvRequestGet(CgCsvUploadModel csvUpload, LoginModel user, string clientId)
+        public async Task<Tuple<CgUploadCsvReqModel, int>> CgUploadCsvRequestGet(CgCsvUploadModel csvUpload, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
             codeMappingRequestDto.RunTypeId = _sqlHelper.GetLookupIdOnName(RequestTypeConst.UploadCsv);
@@ -50,7 +50,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             codeMappingRequestDto.CsvFilePath = csvUpload.CsvFilePath;
             codeMappingRequestDto.CreatedBy = user.UserName;
             codeMappingRequestDto.ClientId= clientId;
-            int reuestId = _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
+            int reuestId = await _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             CgUploadCsvReqModel requestModel = new CgUploadCsvReqModel();
             requestModel.CsvInput = csvUpload.CsvFilePath;
             requestModel.Threshold = csvUpload.Threshold;
@@ -58,7 +58,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             return new Tuple<CgUploadCsvReqModel, int>(requestModel, reuestId);
         }
 
-        public CgUploadCsvResModel CgUploadSaveResponse(HttpResponseMessage httpResponse, int requestId, LoginModel user)
+        public async Task<CgUploadCsvResModel> CgUploadSaveResponse(HttpResponseMessage httpResponse, int requestId, LoginModel user)
         {
             CodeMappingResponseDto responseDto = new CodeMappingResponseDto();
             responseDto.RequestId = requestId;
@@ -66,7 +66,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             responseDto.IsSuccess = (httpResponse.StatusCode == HttpStatusCode.OK) ? true : false;
             responseDto.CreatedBy = user.UserName;
             
-            _sqlHelper.SaveResponseseMessage(responseDto,requestId);
+           await _sqlHelper.SaveResponseseMessage(responseDto,requestId);
             CgUploadCsvResModel response = new CgUploadCsvResModel();
             if (httpResponse.IsSuccessStatusCode)
             {
@@ -83,9 +83,9 @@ namespace CodeMatcherV2Api.BusinessLayer
             {
                 return await WriteFiletoAzFileShare(file);
             }
-            catch (Exception ex)
+            catch 
             {
-                throw;
+                throw ;
             }
         }
 

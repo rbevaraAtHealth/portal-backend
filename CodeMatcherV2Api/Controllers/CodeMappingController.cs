@@ -28,19 +28,20 @@ namespace CodeMatcherV2Api.Controllers
         [HttpGet,Route("CodeGeneration/GetCodeMappings")]
         public async Task<IActionResult> GetCodeGenerationCodeMappings()
         {
-            var cgCodeMappings = _codeMapping.GetCodeGenerationMappingRecords();
+           // var cgCodeMappings =await Task.Run(()=> _codeMapping.GetCodeGenerationMappingRecords());
+            var cgCodeMappings =await _codeMapping.GetCodeGenerationMappingRecords();
             return Ok(cgCodeMappings);
         }
         [HttpGet, Route("MonthlyEmbedings/GetEmbeddings")]
         public async Task<IActionResult> GetMonthlyEmbedings()
         {
-            var embeddings = _codeMapping.GetMonthlyEmbeddingMappingRecords();
+            var embeddings = await _codeMapping.GetMonthlyEmbeddingMappingRecords();
             return Ok(embeddings); ;
         }
         [HttpGet, Route("WeeklyEmbeddings/GetEmbeddings")]
         public async Task<IActionResult> GetWeeklyEmbeddings()
         {
-            var embeddings = _codeMapping.GetWeeklyEmbeddingMappingRecords();
+            var embeddings = await _codeMapping.GetWeeklyEmbeddingMappingRecords();
             return Ok(embeddings); ;
         }
         [AllowAnonymous]
@@ -49,7 +50,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                 int summaryId = _codeMapping.SaveSummary(response.TaskId,response.Summary,GetUserInfo());
+                 int summaryId = await _codeMapping.SaveSummary(response.TaskId,response.Summary,GetUserInfo());
 
                 if (summaryId == 0)
                     return Ok("Task Id not found");

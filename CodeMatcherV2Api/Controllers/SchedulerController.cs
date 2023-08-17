@@ -41,8 +41,8 @@ namespace CodeMatcher.Api.V2.Controllers
             try
             {
                 var user = GetUserInfo();
-                var requestModel = _scheduler.GetCodeGenerationScheduleAsync(schedulerModel,user, getClientId());
-                
+                var requestModel = await _scheduler.GetCodeGenerationScheduleAsync(schedulerModel, user, getClientId());
+
                 return Ok(requestModel);
             }
             catch (Exception ex)
@@ -50,15 +50,15 @@ namespace CodeMatcher.Api.V2.Controllers
                 return BadRequest(ex);
             }
         }
-        
+
         [HttpPost, Route("WeeklySchedulerRun")]
         public async Task<IActionResult> WeeklySchedulerRun([FromBody] CgScheduledModel schedulerModel)
         {
             try
             {
                 var user = GetUserInfo();
-                var requestModel = _scheduler.GetweeklyJobScheduleAsync(schedulerModel,user, getClientId());
-                
+                var requestModel = await _scheduler.GetweeklyJobScheduleAsync(schedulerModel, user, getClientId());
+
                 return Ok(requestModel);
             }
             catch (Exception ex)
@@ -66,16 +66,16 @@ namespace CodeMatcher.Api.V2.Controllers
                 return BadRequest(ex);
             }
         }
-        
-        
+
+
         [HttpPost, Route("MonthlySchedulerRun")]
         public async Task<IActionResult> MonthlySchedulerRun([FromBody] CgScheduledModel schedulerModel)
         {
             try
             {
                 var user = GetUserInfo();
-                var requestModel = _scheduler.GetMonthlyScheduleJobAsync(schedulerModel,user, getClientId());
-                
+                var requestModel = await _scheduler.GetMonthlyScheduleJobAsync(schedulerModel, user, getClientId());
+
                 return Ok(requestModel);
             }
             catch (Exception ex)

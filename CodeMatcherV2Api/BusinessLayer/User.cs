@@ -5,6 +5,7 @@ using CodeMatcherV2Api.EntityFrameworkCore;
 using CodeMatcherV2Api.Middlewares;
 using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,14 +37,14 @@ namespace CodeMatcherV2Api.BusinessLayer
         {
 
             List<UserDto> users = new List<UserDto>();
-            users = _context.UserDetail.ToList(); 
+            users = await _context.UserDetail.ToListAsync(); 
             return  _mapper.Map<IEnumerable<UserModel>>(users);
         }
 
         public async Task<UserModel> GetUserByIdAsync(int id)
         {
             UserDto user= new UserDto();
-            user = _context.UserDetail.FirstOrDefault(f => f.Id == id);
+            user = await _context.UserDetail.FirstOrDefaultAsync(f => f.Id == id);
             return  _mapper.Map<UserModel>(user);
         }
 

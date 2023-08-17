@@ -105,7 +105,7 @@ namespace SchedulerProcessor
                 else
                     log.LogError($"{response.StatusCode} {response.ReasonPhrase}: ");
             }
-            catch (Exception ex)
+            catch 
             {
                 log.LogError($"Error: {response.StatusCode} {response.ReasonPhrase}: ");
             }
