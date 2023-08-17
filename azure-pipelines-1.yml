@@ -15,8 +15,8 @@ steps:
     targetType: 'inline'
     script: |
       # Write your commands here
-      
-      docker system prune -a -f
+      echo ""
+      #docker system prune -a -f
     
 - task: Docker@2
   inputs:
