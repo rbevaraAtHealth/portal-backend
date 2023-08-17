@@ -19,7 +19,7 @@ namespace CodeMatcherV2Api.BusinessLayer
         }
         public LookupTypeModel GetLookupByNameAsync(string lookUpType)
         {
-            var lookup = _context.LookupTypes.FirstOrDefault(x => x.LookupTypeKey == lookUpType);
+            var lookup = _context.LookupTypes.FirstOrDefault(x => x.LookupTypeKey.ToLower() == lookUpType.ToLower().Trim());
            return _mapper.Map<LookupTypeModel>(lookup);
            
         }
