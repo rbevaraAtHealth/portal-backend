@@ -6,6 +6,7 @@ using System;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Middlewares.HttpHelper;
 using System.Net.Http;
+using CodeMatcher.Api.V2.ApiResponseModel;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -15,10 +16,12 @@ namespace CodeMatcherV2Api.Controllers
     {
         private readonly ICsvUpload _Upload;
         private readonly IHttpClientFactory _httpClientFactory;
-        public CsvUploadController(ICsvUpload upload,IHttpClientFactory httpClientFactory)
+        private readonly ResponseViewModel _responseViewModel;
+        public CsvUploadController(ICsvUpload upload, IHttpClientFactory httpClientFactory)
         {
             _Upload = upload;
             _httpClientFactory = httpClientFactory;
+            _responseViewModel = new ResponseViewModel();
         }
 
         [HttpPost("UploadFile")]
@@ -28,11 +31,13 @@ namespace CodeMatcherV2Api.Controllers
             if (CheckIfCsvFile(file))
             {
                 var fileUploader = await _Upload.WriteFile(file);
-                return Ok(fileUploader);
+                _responseViewModel.Model = fileUploader;
+                return Ok(_responseViewModel);
             }
             else
             {
-                return BadRequest(new { message = "Invlaid File Extension" });
+                _responseViewModel.Message = "Invalid File Extension";
+                return BadRequest(_responseViewModel);
 
             }
         }
@@ -42,15 +47,17 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                var requestModel = _Upload.CgUploadCsvRequestGet(upload,GetUserInfo(),getClientId());
+                var requestModel = _Upload.CgUploadCsvRequestGet(upload, GetUserInfo(), getClientId());
                 var url = "code-generation/csv-upload";
-                var response =await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
-                var responseModel = _Upload.CgUploadSaveResponse(response,requestModel.Item2,GetUserInfo());
-                return Ok(responseModel);
+                var response = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
+                var responseModel = _Upload.CgUploadSaveResponse(response, requestModel.Item2, GetUserInfo());
+                _responseViewModel.Model = responseModel;
+                return Ok(_responseViewModel);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
             }
 
         }

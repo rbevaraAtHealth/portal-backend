@@ -1,4 +1,5 @@
-﻿using CodeMatcher.Api.V2.BusinessLayer;
+﻿using CodeMatcher.Api.V2.ApiResponseModel;
+using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.Models;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.EntityFrameworkCore;
@@ -17,31 +18,36 @@ namespace CodeMatcherV2Api.Controllers
         private readonly ICodeMapping _codeMapping;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly CodeMatcherDbContext _context;
+        private readonly ResponseViewModel _responseViewModel;
 
         public CodeMappingController(ICodeMapping codeMapping, IHttpClientFactory httpClientFactory, CodeMatcherDbContext context)
         {
             _codeMapping = codeMapping;
             _httpClientFactory = httpClientFactory;
             _context = context;
+            _responseViewModel = new ResponseViewModel();
         }
       
         [HttpGet,Route("CodeGeneration/GetCodeMappings")]
         public async Task<IActionResult> GetCodeGenerationCodeMappings()
         {
             var cgCodeMappings = _codeMapping.GetCodeGenerationMappingRecords();
-            return Ok(cgCodeMappings);
+            _responseViewModel.Model = cgCodeMappings;
+            return Ok(_responseViewModel);
         }
         [HttpGet, Route("MonthlyEmbedings/GetEmbeddings")]
         public async Task<IActionResult> GetMonthlyEmbedings()
         {
             var embeddings = _codeMapping.GetMonthlyEmbeddingMappingRecords();
-            return Ok(embeddings); ;
+            _responseViewModel.Model = embeddings;
+            return Ok(_responseViewModel);
         }
         [HttpGet, Route("WeeklyEmbeddings/GetEmbeddings")]
         public async Task<IActionResult> GetWeeklyEmbeddings()
         {
             var embeddings = _codeMapping.GetWeeklyEmbeddingMappingRecords();
-            return Ok(embeddings); ;
+            _responseViewModel.Model = embeddings;
+            return Ok(_responseViewModel);
         }
         [AllowAnonymous]
         [HttpPost,Route("UpdateSummary")]
@@ -52,13 +58,20 @@ namespace CodeMatcherV2Api.Controllers
                  int summaryId = _codeMapping.SaveSummary(response.TaskId,response.Summary,GetUserInfo());
 
                 if (summaryId == 0)
-                    return Ok("Task Id not found");
+                {
+                    _responseViewModel.Message = "Task Id not found";
+                    return Ok(_responseViewModel);
+                }
                 else
-                    return Ok("Summary Saved Successfully");
+                {
+                    _responseViewModel.Message = "Summary Saved Successfully";
+                    return Ok(_responseViewModel);
+                }
             }
             catch (Exception ex) 
             {
-                return BadRequest(ex.Message);
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
+﻿using CodeMatcher.Api.V2.ApiResponseModel;
+using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Controllers;
 using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -14,10 +15,12 @@ namespace CodeMatcher.Api.V2.Controllers
     public class SchedulerController : BaseController
     {
         public readonly IScheduler _scheduler;
+        private readonly ResponseViewModel _responseViewModel;
 
         public SchedulerController(IScheduler scheduler)
         {
             _scheduler = scheduler;
+            _responseViewModel = new ResponseViewModel();
         }
 
         [AllowAnonymous]
@@ -27,11 +30,13 @@ namespace CodeMatcher.Api.V2.Controllers
             try
             {
                 var records = await _scheduler.GetAllSchedulersAsync();
-                return Ok(records);
+                _responseViewModel.Model = records;
+                return Ok(_responseViewModel);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
             }
         }
 
@@ -41,46 +46,52 @@ namespace CodeMatcher.Api.V2.Controllers
             try
             {
                 var user = GetUserInfo();
-                var requestModel = _scheduler.GetCodeGenerationScheduleAsync(schedulerModel,user, getClientId());
-                
-                return Ok(requestModel);
+                var requestModel = _scheduler.GetCodeGenerationScheduleAsync(schedulerModel, user, getClientId());
+                _responseViewModel.Model = requestModel;
+
+                return Ok(_responseViewModel);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
             }
         }
-        
+
         [HttpPost, Route("WeeklySchedulerRun")]
         public async Task<IActionResult> WeeklySchedulerRun([FromBody] CgScheduledModel schedulerModel)
         {
             try
             {
                 var user = GetUserInfo();
-                var requestModel = _scheduler.GetweeklyJobScheduleAsync(schedulerModel,user, getClientId());
-                
-                return Ok(requestModel);
+                var requestModel = _scheduler.GetweeklyJobScheduleAsync(schedulerModel, user, getClientId());
+                _responseViewModel.Model = requestModel;
+
+                return Ok(_responseViewModel);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
             }
         }
-        
-        
+
+
         [HttpPost, Route("MonthlySchedulerRun")]
         public async Task<IActionResult> MonthlySchedulerRun([FromBody] CgScheduledModel schedulerModel)
         {
             try
             {
                 var user = GetUserInfo();
-                var requestModel = _scheduler.GetMonthlyScheduleJobAsync(schedulerModel,user, getClientId());
-                
-                return Ok(requestModel);
+                var requestModel = _scheduler.GetMonthlyScheduleJobAsync(schedulerModel, user, getClientId());
+                _responseViewModel.Model = requestModel;
+
+                return Ok(_responseViewModel);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
             }
         }
     }
