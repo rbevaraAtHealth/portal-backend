@@ -18,28 +18,28 @@ namespace CodeMatcherV2Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
-    {   
+    {
         private readonly IConfiguration _configuration;
         private readonly IAuthRepository _authRepository;
-        public AuthController(IConfiguration configuration,IAuthRepository authRepository)
+        public AuthController(IConfiguration configuration, IAuthRepository authRepository)
         {
             _configuration = configuration;
             _authRepository = authRepository;
         }
         [AllowAnonymous]
         [HttpPost, Route("login")]
-        public async Task<IActionResult> Login([FromBody]LoginModel user)
+        public async Task<IActionResult> Login([FromBody] LoginModel user)
         {
             //Logic for process the user info against the client specific db//
-            bool isValid =await ProcessLogin(user);
+            bool isValid = await ProcessLogin(user);
 
             if (user == null)
             {
                 return Ok(user);
             }
 
-            //if (isValid)
-            //{
+            if (isValid)
+            {
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
@@ -57,11 +57,11 @@ namespace CodeMatcherV2Api.Controllers
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
                 return Ok(new { Token = tokenString });
-            //}
-            //else
-            //{
-            //    return BadRequest();
-            //}
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
         private async Task<bool> ProcessLogin(LoginModel model)
         {
