@@ -23,7 +23,7 @@ steps:
     containerRegistry: 'codeconvacr01-1931'
     repository: 'portal-backend'
     command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
+    Dockerfile: '**/Dockerfile-experiment'
 
 
 - task: AzureRmWebAppDeployment@4
