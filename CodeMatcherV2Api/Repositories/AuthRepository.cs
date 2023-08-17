@@ -46,9 +46,10 @@ namespace CodeMatcherApiV2.Repositories
                 }
                 catch (Exception ex)
                 {
-                    //AddEchoErrorLog("Error in ProcessLogin(): " + ex.Message, myCon);
-                    _logger.LogInformation($"Error in ProcessLogin(): {ex.Message}");
+                    
+                    _logger.LogError($"Error in ProcessLogin(): {ex.Message}", ex);
                     myCon.Close();
+                    throw;
                 }
             }
             return success;

@@ -12,56 +12,70 @@ using Microsoft.Extensions.Primitives;
 using CodeMatcherApiV2.BusinessLayer.Interfaces;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using CodeMatcher.Api.V2.ApiResponseModel;
 
 namespace CodeMatcherV2Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
-    {   
+    {
         private readonly IConfiguration _configuration;
         private readonly IAuthRepository _authRepository;
-        public AuthController(IConfiguration configuration,IAuthRepository authRepository)
+        private readonly ResponseViewModel _responseViewModel;
+        public AuthController(IConfiguration configuration, IAuthRepository authRepository)
         {
             _configuration = configuration;
             _authRepository = authRepository;
+            _responseViewModel = new ResponseViewModel();
         }
         [AllowAnonymous]
         [HttpPost, Route("login")]
-        public async Task<IActionResult> Login([FromBody]LoginModel user)
+        public async Task<IActionResult> Login([FromBody] LoginModel user)
         {
-            //Logic for process the user info against the client specific db//
-            bool isValid =await ProcessLogin(user);
-
-            if (user == null)
+            try
             {
-                return Ok(user);
+                //Logic for process the user info against the client specific db//
+                bool isValid = await ProcessLogin(user);
+
+                if (user == null)
+                {
+                    _responseViewModel.ExceptionMessage = "Please enter valid User credentials";
+                    return BadRequest(_responseViewModel);
+                }
+
+                if (isValid)
+                {
+                    var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+                    var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
+                    var authClaims = new List<Claim>();
+
+                    authClaims.Add(new Claim(ClaimTypes.Name, user.UserName));
+                    authClaims.Add(new Claim(ClaimTypes.Role, "admin"));
+
+                    var tokenOptions = new JwtSecurityToken(
+                        issuer: _configuration["JWT:ValidIssuer"],
+                        audience: _configuration["JWT:ValidAudience"],
+                        claims: authClaims,
+                        expires: DateTime.Now.AddHours(3),
+                        signingCredentials: signinCredentials);
+
+                    var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                    _responseViewModel.Model = new { Token = tokenString };
+                    return Ok(_responseViewModel);
+                }
+                else
+                {
+                    _responseViewModel.ExceptionMessage = "Invalid User credentials";
+                    return BadRequest(_responseViewModel);
+                }
             }
-
-            //if (isValid)
-            //{
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-                var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-
-                var authClaims = new List<Claim>();
-
-                authClaims.Add(new Claim(ClaimTypes.Name, user.UserName));
-                authClaims.Add(new Claim(ClaimTypes.Role, "admin"));
-
-                var tokenOptions = new JwtSecurityToken(
-                    issuer: _configuration["JWT:ValidIssuer"],
-                    audience: _configuration["JWT:ValidAudience"],
-                    claims: authClaims,
-                    expires: DateTime.Now.AddHours(3),
-                    signingCredentials: signinCredentials);
-
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                return Ok(new { Token = tokenString });
-            //}
-            //else
-            //{
-            //    return BadRequest();
-            //}
+            catch(Exception ex)
+            {
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
+            }
         }
         private async Task<bool> ProcessLogin(LoginModel model)
         {

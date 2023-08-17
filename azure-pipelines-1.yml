@@ -10,14 +10,31 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Write your commands here
+      echo ""
+      #docker system prune -a -f
+    
 - task: Docker@2
   inputs:
     containerRegistry: 'codeconvacr01-1931'
     repository: 'portal-backend'
     command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
-    tags: '1'
+    Dockerfile: '**/Dockerfile-experiment'
 
+- task: SnykSecurityScan@1
+  inputs:
+    serviceConnectionEndpoint: 'snyk-token'
+    testType: 'container'
+    dockerImageName: 'codeconvacr01.azurecr.io/portal-backend:$(Build.BuildId)'
+    severityThreshold: 'critical'
+    monitorWhen: 'always'
+    failOnIssues: false
+    projectName: 'Data Services/portal-backend'
+    organization: 'veritydataservice'
 
 - task: AzureRmWebAppDeployment@4
   inputs:
@@ -30,4 +47,4 @@ steps:
     SlotName: 'production'
     DockerNamespace: 'codeconvacr01.azurecr.io'
     DockerRepository: 'portal-backend'
-    DockerImageTag: '1'
+    DockerImageTag: '$(Build.BuildId)'
