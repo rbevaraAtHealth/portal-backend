@@ -37,4 +37,4 @@ steps:
     SlotName: 'production'
     DockerNamespace: 'codeconvacr01.azurecr.io'
     DockerRepository: 'portal-backend'
-    DockerImageTag: '1'
+    DockerImageTag: '$(Build.BuildId)'
