@@ -12,7 +12,11 @@ pool:
 steps:
 - task: Bash@3
   inputs:
-    filePath: 'docker system prune -a -f'
+    targetType: 'inline'
+    script: |
+      # Write your commands here
+      
+      docker system prune -a -f
     
 - task: Docker@2
   inputs:
