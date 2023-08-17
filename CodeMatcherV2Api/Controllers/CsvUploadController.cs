@@ -36,7 +36,7 @@ namespace CodeMatcherV2Api.Controllers
             }
             else
             {
-                _responseViewModel.Message = "Invalid File Extension";
+                _responseViewModel.ExceptionMessage = "Invalid File Extension";
                 return BadRequest(_responseViewModel);
 
             }
