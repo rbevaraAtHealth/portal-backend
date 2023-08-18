@@ -17,7 +17,16 @@ steps:
       # Write your commands here
       echo ""
       #docker system prune -a -f
-    
+
+- script: |
+    # Generate version number
+    version=$(echo $(Build.BuildNumber) | cut -d'.' -f1,2)
+    echo "Version: $version"
+
+    # Write version to file
+    echo "$version" > version.txt
+  displayName: 'Generate and Write Version Number'
+  
 - task: Docker@2
   inputs:
     containerRegistry: 'codeconvacr01-1931'
