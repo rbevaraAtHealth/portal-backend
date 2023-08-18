@@ -151,8 +151,15 @@ namespace CodeMatcherV2Api
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwagger();
-            dataContext.Database.EnsureDeleted();
-            dataContext.Database.Migrate();
+            try
+            {
+                dataContext.Database.EnsureDeleted();
+                dataContext.Database.Migrate();
+            }
+            catch(Exception ex)
+            {
+                
+            }
             app.UseSwaggerUI(c =>
             {
                 //TODO: Either use the SwaggerGen generated Swagger contract (generated from C# classes)
