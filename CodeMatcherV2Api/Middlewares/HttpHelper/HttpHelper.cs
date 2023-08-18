@@ -24,14 +24,14 @@ namespace CodeMatcherV2Api.Middlewares.HttpHelper
             var response = await httpClient.PostAsync(url,content);
             return response;
         }
-        public static async Task<string> Put_HttpCliet(string url)
-        {
-            return "";
-        }
-        public static async Task<string> Delete_HttpCliet(string url)
-        {
-            return "";
-        }
+        //public static async Task<string> Put_HttpCliet(string url)
+        //{
+        //    return "";
+        //}
+        //public static async Task<string> Delete_HttpCliet(string url)
+        //{
+        //    return "";
+        //}
        
     }
    

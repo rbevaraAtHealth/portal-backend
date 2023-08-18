@@ -12,7 +12,7 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
     public interface ICsvUpload
     {
         public Task<string> WriteFile(IFormFile file);
-        public Tuple<CgUploadCsvReqModel, int> CgUploadCsvRequestGet(CgCsvUploadModel csvUpload, LoginModel user,string clientId);
-        public CgUploadCsvResModel CgUploadSaveResponse(HttpResponseMessage httpResponse, int requestId, LoginModel user);
+        public Task<Tuple<CgUploadCsvReqModel, int>> CgUploadCsvRequestGet(CgCsvUploadModel csvUpload, LoginModel user,string clientId);
+        public Task<CgUploadCsvResModel> CgUploadSaveResponse(HttpResponseMessage httpResponse, int requestId, LoginModel user);
     }
 }

@@ -47,7 +47,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                var requestModel = _Upload.CgUploadCsvRequestGet(upload, GetUserInfo(), getClientId());
+                var requestModel = await _Upload.CgUploadCsvRequestGet(upload,GetUserInfo(),getClientId());
                 var url = "code-generation/csv-upload";
                 var response = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
                 var responseModel = _Upload.CgUploadSaveResponse(response, requestModel.Item2, GetUserInfo());

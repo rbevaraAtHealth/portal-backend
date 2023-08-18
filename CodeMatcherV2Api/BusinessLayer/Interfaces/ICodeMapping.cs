@@ -10,14 +10,14 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
 {
     public interface ICodeMapping
     {
-        Task<List<CodeMappingModel>> GetCodeMappingsRecordsAsync();
-        List<GenericSummaryViewModel> GetCodeGenerationMappingRecords();
-        List<GenericSummaryViewModel> GetWeeklyEmbeddingMappingRecords();
-        List<GenericSummaryViewModel> GetMonthlyEmbeddingMappingRecords();
-        int SaveCgMappingsPythApi(string taskId, string summary,int requestId, LoginModel loginModel);
-        int SaveMonthlyEmbedMappingsPythApi(string taskId, string summary, int requestId, LoginModel loginModel);
-        int SaveWeeklyEmbedMappingsPythApi(string taskId, string summary, int requestId, LoginModel loginModel);
-        int SaveSummary(string taskId, string summary, LoginModel loginModel);
-        GenericSummaryViewModel GetMappings(string taskId);        
+        // Task<List<CodeMappingModel>> GetCodeMappingsRecordsAsync();
+        Task<List<GenericSummaryViewModel>> GetCodeGenerationMappingRecords();
+        Task<List<GenericSummaryViewModel>> GetWeeklyEmbeddingMappingRecords();
+        Task<List<GenericSummaryViewModel>> GetMonthlyEmbeddingMappingRecords();
+        Task<int> SaveCgMappingsPythApi(string taskId, string summary, int requestId, LoginModel loginModel);
+        Task<int> SaveMonthlyEmbedMappingsPythApi(string taskId, string summary, int requestId, LoginModel loginModel);
+        Task<int> SaveWeeklyEmbedMappingsPythApi(string taskId, string summary, int requestId, LoginModel loginModel);
+        Task<int> SaveSummary(string taskId, string summary, LoginModel loginModel);
+        Task<GenericSummaryViewModel> GetMappings(string taskId);
     }
 }

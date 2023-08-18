@@ -46,7 +46,7 @@ namespace CodeMatcher.Api.V2.Controllers
             try
             {
                 var user = GetUserInfo();
-                var requestModel = _scheduler.GetCodeGenerationScheduleAsync(schedulerModel, user, getClientId());
+                var requestModel = await _scheduler.GetCodeGenerationScheduleAsync(schedulerModel, user, getClientId());
                 _responseViewModel.Model = requestModel;
 
                 return Ok(_responseViewModel);
@@ -64,7 +64,7 @@ namespace CodeMatcher.Api.V2.Controllers
             try
             {
                 var user = GetUserInfo();
-                var requestModel = _scheduler.GetweeklyJobScheduleAsync(schedulerModel, user, getClientId());
+                var requestModel = await _scheduler.GetweeklyJobScheduleAsync(schedulerModel, user, getClientId());
                 _responseViewModel.Model = requestModel;
 
                 return Ok(_responseViewModel);
@@ -83,7 +83,7 @@ namespace CodeMatcher.Api.V2.Controllers
             try
             {
                 var user = GetUserInfo();
-                var requestModel = _scheduler.GetMonthlyScheduleJobAsync(schedulerModel, user, getClientId());
+                var requestModel = await _scheduler.GetMonthlyScheduleJobAsync(schedulerModel, user, getClientId());
                 _responseViewModel.Model = requestModel;
 
                 return Ok(_responseViewModel);

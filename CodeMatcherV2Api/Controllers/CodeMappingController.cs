@@ -27,35 +27,35 @@ namespace CodeMatcherV2Api.Controllers
             _context = context;
             _responseViewModel = new ResponseViewModel();
         }
-      
-        [HttpGet,Route("CodeGeneration/GetCodeMappings")]
+
+        [HttpGet, Route("CodeGeneration/GetCodeMappings")]
         public async Task<IActionResult> GetCodeGenerationCodeMappings()
         {
-            var cgCodeMappings = _codeMapping.GetCodeGenerationMappingRecords();
+            var cgCodeMappings = await _codeMapping.GetCodeGenerationMappingRecords();
             _responseViewModel.Model = cgCodeMappings;
             return Ok(_responseViewModel);
         }
         [HttpGet, Route("MonthlyEmbedings/GetEmbeddings")]
         public async Task<IActionResult> GetMonthlyEmbedings()
         {
-            var embeddings = _codeMapping.GetMonthlyEmbeddingMappingRecords();
+            var embeddings = await _codeMapping.GetMonthlyEmbeddingMappingRecords();
             _responseViewModel.Model = embeddings;
             return Ok(_responseViewModel);
         }
         [HttpGet, Route("WeeklyEmbeddings/GetEmbeddings")]
         public async Task<IActionResult> GetWeeklyEmbeddings()
         {
-            var embeddings = _codeMapping.GetWeeklyEmbeddingMappingRecords();
+            var embeddings = await _codeMapping.GetWeeklyEmbeddingMappingRecords();
             _responseViewModel.Model = embeddings;
             return Ok(_responseViewModel);
         }
         [AllowAnonymous]
-        [HttpPost,Route("UpdateSummary")]
+        [HttpPost, Route("UpdateSummary")]
         public async Task<IActionResult> UpdateSummary([FromBody] CodeMappingSummaryViewModel response)
         {
             try
             {
-                 int summaryId = _codeMapping.SaveSummary(response.TaskId,response.Summary,GetUserInfo());
+                int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary, GetUserInfo());
 
                 if (summaryId == 0)
                 {
@@ -68,7 +68,7 @@ namespace CodeMatcherV2Api.Controllers
                     return Ok(_responseViewModel);
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _responseViewModel.ExceptionMessage = ex.Message;
                 return BadRequest(_responseViewModel);

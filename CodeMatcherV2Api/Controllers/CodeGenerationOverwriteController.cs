@@ -1,5 +1,4 @@
-﻿using CodeMatcher.Api.V2.ApiResponseModel;
-using CodeMatcherApiV2.Common;
+﻿using CodeMatcherApiV2.Common;
 using CodeMatcherV2Api.BusinessLayer;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Models;
@@ -15,11 +14,9 @@ namespace CodeMatcherV2Api.Controllers
     public class CodeGenerationOverwriteController : ControllerBase
     {
         private readonly ICodeGenerationOverwrite _codegenerationoverwrite;
-        private readonly ResponseViewModel _responseViewModel;
         public CodeGenerationOverwriteController(ICodeGenerationOverwrite codegenerationoverwrite)
         {
             _codegenerationoverwrite = codegenerationoverwrite;
-            _responseViewModel = new ResponseViewModel();
         }
 
         [HttpGet("GetAllCodeGenerationOverwrite")]
@@ -28,13 +25,11 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 var data = await _codegenerationoverwrite.GetAllCodeGenerationOverwriteAsync();
-                _responseViewModel.Model = data;
-                return Ok(_responseViewModel);
+                return Ok(data);
             }
             catch (Exception ex)
             {
-                _responseViewModel.ExceptionMessage = ex.Message;
-                return BadRequest(_responseViewModel);
+                return BadRequest(ex.Message);
             }
         }
         [HttpGet("GetCodeGenerationOverwriteById/{id}")]
@@ -43,13 +38,11 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 var data = await _codegenerationoverwrite.GetCodeGenerationOverwriteByIdAsync(id);
-                _responseViewModel.Model = data;
-                return Ok(_responseViewModel);
+                return Ok(data);
             }
             catch (Exception ex)
             {
-                _responseViewModel.ExceptionMessage = ex.Message;
-                return BadRequest(_responseViewModel);
+                return BadRequest(ex.Message);
             }
         }
         
@@ -59,13 +52,11 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 var data = await _codegenerationoverwrite.UpdateCodeGenerationOverwriteAsync(model);
-                _responseViewModel.Model = data;
-                return Ok(_responseViewModel);
+                return Ok(data);
             }
             catch (Exception ex)
             {
-                _responseViewModel.ExceptionMessage = ex.Message;
-                return BadRequest(_responseViewModel);
+                return BadRequest(ex.Message);
             }
         }
         
