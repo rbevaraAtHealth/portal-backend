@@ -33,6 +33,7 @@ namespace CodeMatcherV2Api.BusinessLayer
         public async Task<IEnumerable<LookupModel>> GetLookupsAsync()
         {
             var lookup = await _context.Lookups.ToListAsync();
+            
             if(lookup != null && lookup.Count > 0)
             {
                 return _mapper.Map<List<LookupModel>>(lookup);
@@ -42,6 +43,10 @@ namespace CodeMatcherV2Api.BusinessLayer
                 throw new System.Exception("No lookups found");
             }
             
+        }
+        public string GetDBConnectionString()
+        {
+            return _context.Database.GetConnectionString();
         }
     }
 }

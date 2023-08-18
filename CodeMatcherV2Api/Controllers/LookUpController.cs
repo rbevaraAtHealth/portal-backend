@@ -64,5 +64,20 @@ namespace CodeMatcherV2Api.Controllers
             }
 
         }
+        [HttpGet, Route("GetDBConnectionString")]
+        public IActionResult GetDBConnectionString()
+        {
+            try
+            {
+                _responseViewModel.Message = _lookUp.GetDBConnectionString();
+                return Ok(_responseViewModel);
+            }
+            catch (Exception ex)
+            {
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
+            }
+
+        }
     }
 }
