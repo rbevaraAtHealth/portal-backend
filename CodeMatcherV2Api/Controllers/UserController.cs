@@ -1,4 +1,5 @@
-﻿using CodeMatcherApiV2.Common;
+﻿using CodeMatcher.Api.V2.ApiResponseModel;
+using CodeMatcherApiV2.Common;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -13,9 +14,11 @@ namespace CodeMatcherV2Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUser _User;
+        private readonly ResponseViewModel _responseViewModel;
         public UserController(IUser user)
         {
             _User = user;
+            _responseViewModel = new ResponseViewModel();
         }
 
         [HttpGet("GetAllUsers")]
@@ -24,11 +27,13 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 var users = await _User.GetAllUsersAsync();
-                return Ok(users);
+                _responseViewModel.Model = users;
+                return Ok(_responseViewModel);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
             }
         }
         [HttpGet("GetUserById/{id}")]
@@ -37,11 +42,13 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 var user = await _User.GetUserByIdAsync(id);
-                return Ok(user);
+                _responseViewModel.Model = user;
+                return Ok(_responseViewModel);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
             }
         }
         //[NonAction]
@@ -97,12 +104,14 @@ namespace CodeMatcherV2Api.Controllers
                         output = new Tuple<string, string>(conn, $"Connection failed with exception. {ex}");
                     }
                     outputlist.Add(output);
-                }  
-                return Ok(outputlist);
+                }
+                _responseViewModel.Model = outputlist;
+                return Ok(_responseViewModel);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
             }
         }
     }
