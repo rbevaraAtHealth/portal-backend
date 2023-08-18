@@ -8,7 +8,7 @@ namespace CodeMatcher.EntityFrameworkCore.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var sqlFile = Path.Combine(Environment.CurrentDirectory, @"..\CodeMappingEfCore\Migrations\Scripts\");
+            var sqlFile = Path.Combine(Environment.CurrentDirectory, @"..\Migrations\Scripts\");
 
             foreach (var file in Directory.GetFiles(sqlFile))
             {
