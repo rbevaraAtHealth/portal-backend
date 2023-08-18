@@ -50,7 +50,10 @@ namespace CodeMatcherV2Api
                     .AllowAnyHeader());
             });
             services.AddDbContext<CodeMatcherDbContext>(options =>
-                                         options.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
+                                         options.UseSqlServer(Configuration.GetConnectionString("DBConnection"),sqlServerOptionsAction: sqlOptions =>
+                                         {
+                                             sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10),errorNumbersToAdd: null);
+                                         }));
                                          //options.UseSqlServer(CommonHelper.Decrypt(Configuration.GetConnectionString("DBConnection"))));
             services.AddControllers();
 
@@ -153,7 +156,6 @@ namespace CodeMatcherV2Api
             app.UseSwagger();
             try
             {
-                dataContext.Database.EnsureDeleted();
                 dataContext.Database.Migrate();
             }
             catch(Exception ex)
