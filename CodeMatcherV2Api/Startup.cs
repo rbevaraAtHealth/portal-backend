@@ -137,7 +137,7 @@ namespace CodeMatcherV2Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CodeMatcherDbContext dataContext)
         {
             if (env.IsDevelopment())
             {
@@ -151,6 +151,7 @@ namespace CodeMatcherV2Api
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwagger();
+            dataContext.Database.EnsureCreated();
             app.UseSwaggerUI(c =>
             {
                 //TODO: Either use the SwaggerGen generated Swagger contract (generated from C# classes)
