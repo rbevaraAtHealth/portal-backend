@@ -51,7 +51,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             CodeMappingRequestDto cgDBRequestModel = new CodeMappingRequestDto();
             cgDBRequestModel.RunTypeId = _sqlHelper.GetLookupIdOnName(RequestTypeConst.Scheduled);
             cgDBRequestModel.SegmentTypeId = _sqlHelper.GetLookupIdOnName(schedule.Segment);
-            cgDBRequestModel.CodeMappingId = _sqlHelper.GetLookupIdOnName(schedule.CodeMapping);
+            cgDBRequestModel.CodeMappingId = _sqlHelper.GetLookupIdOnName("Monthly Embedding");
             cgDBRequestModel.Threshold = schedule.Threshold;
             cgDBRequestModel.LatestLink = "32345";
             cgDBRequestModel.RunSchedule = schedule.RunSchedule;
@@ -74,7 +74,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             CodeMappingRequestDto cgDBRequestModel = new CodeMappingRequestDto();
             cgDBRequestModel.RunTypeId = _sqlHelper.GetLookupIdOnName(RequestTypeConst.Scheduled);
             cgDBRequestModel.SegmentTypeId = _sqlHelper.GetLookupIdOnName(schedule.Segment);
-            cgDBRequestModel.CodeMappingId = _sqlHelper.GetLookupIdOnName(schedule.CodeMapping);
+            cgDBRequestModel.CodeMappingId = _sqlHelper.GetLookupIdOnName("Weekly Embedding");
             cgDBRequestModel.Threshold = schedule.Threshold;
             cgDBRequestModel.LatestLink = "32345";
             cgDBRequestModel.RunSchedule = schedule.RunSchedule;
@@ -98,7 +98,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             CodeMappingRequestDto cgDBRequestModel = new CodeMappingRequestDto();
             cgDBRequestModel.RunTypeId = _sqlHelper.GetLookupIdOnName(RequestTypeConst.Scheduled);
             cgDBRequestModel.SegmentTypeId = _sqlHelper.GetLookupIdOnName(schedule.Segment);
-            cgDBRequestModel.CodeMappingId = _sqlHelper.GetLookupIdOnName(schedule.CodeMapping);
+            cgDBRequestModel.CodeMappingId = _sqlHelper.GetLookupIdOnName("Code Generation");
             cgDBRequestModel.Threshold = schedule.Threshold;
             cgDBRequestModel.LatestLink = "32345";
             cgDBRequestModel.RunSchedule = schedule.RunSchedule;
