@@ -21,6 +21,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENV ASPNETCORE_ENVIRONMENT=Development
+COPY version.txt /app/version.txt
 ENTRYPOINT ["dotnet", "CodeMatcher.Api.V2.dll",  "--urls", "http://0.0.0.0:80"]
 
 
