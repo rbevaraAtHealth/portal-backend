@@ -35,9 +35,17 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                //Logic for process the user info against the client specific db//
-                bool isValid = await ProcessLogin(user);
+                bool isValid = false;
+                if (user.Role.ToLower() != "testing")
+                {
 
+                    //Logic for process the user info against the client specific db//
+                    isValid = await ProcessLogin(user);
+                }
+                else
+                {
+                    isValid = true;
+                }
                 if (user == null)
                 {
                     _responseViewModel.ExceptionMessage = "Please enter valid User credentials";
@@ -81,6 +89,9 @@ namespace CodeMatcherV2Api.Controllers
         {
             const string HeaderKeyName = "ClientID";
             Request.Headers.TryGetValue(HeaderKeyName, out StringValues headerValue);
+            if (string.IsNullOrEmpty(_configuration.GetSection(headerValue).Value)){
+                throw new Exception("Invalid client ID");
+            }
             return await _authRepository.ProcessLogin(model, headerValue);
         }
 

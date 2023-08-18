@@ -29,7 +29,7 @@ namespace CodeMatcherApiV2.Repositories
             using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(headerValue).GetSection("source").Value)))
             {
                 try
-                {
+                    {
                     var userName = model.UserName;
                     var password = model.Password;
                     myCon.Close();
