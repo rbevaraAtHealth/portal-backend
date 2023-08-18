@@ -124,34 +124,51 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                var sqlFile = Path.Combine(Environment.CurrentDirectory, @"Resources\Files");
-                _responseViewModel.Message = sqlFile;
-                int i = 0;
-                foreach (var file in Directory.GetFiles(sqlFile))
-                {
-                    if (file.ToLower().Contains("sql"))
-                    {
-                        i++;
-                        string script = System.IO.File.ReadAllText(file);
+                var sqlscript = @"
+                        Delete from [dbo].[LookupTypes]
+                        
+                        SET IDENTITY_INSERT [dbo].[LookupTypes] ON 
+                        
+                        INSERT [dbo].[LookupTypes] ([LookupTypeId], [LookupTypeKey], [LookupTypeDescription]) VALUES (1, N'Segment', N'This defines the type of segment from which data being extracted.')
+                        INSERT [dbo].[LookupTypes] ([LookupTypeId], [LookupTypeKey], [LookupTypeDescription]) VALUES (2, N'RunType', N'This defines the type of run user wanted i.e. Triggered or Scheduled.')
+                        INSERT [dbo].[LookupTypes] ([LookupTypeId], [LookupTypeKey], [LookupTypeDescription]) VALUES (3, N'CodeMappingType', N'This defines the type of code mapping user selected(Ex: CodeGeneration, WeeklyEmbeddings, MonthlyEmbeddings)')
+                        SET IDENTITY_INSERT [dbo].[LookupTypes] OFF
+                        
+                        Delete from [dbo].[Lookups]
+                        
+                        SET IDENTITY_INSERT [dbo].[Lookups] ON 
+                        
+                        INSERT [dbo].[Lookups] ([Id], [LookupTypeId], [Name]) VALUES (1, 1, N'School')
+                        INSERT [dbo].[Lookups] ([Id], [LookupTypeId], [Name]) VALUES (2, 1, N'Hospital')
+                        INSERT [dbo].[Lookups] ([Id], [LookupTypeId], [Name]) VALUES (3, 1, N'Insurance')
+                        INSERT [dbo].[Lookups] ([Id], [LookupTypeId], [Name]) VALUES (4, 1, N'State License')
+                        INSERT [dbo].[Lookups] ([Id], [LookupTypeId], [Name]) VALUES (5, 2, N'Triggered')
+                        INSERT [dbo].[Lookups] ([Id], [LookupTypeId], [Name]) VALUES (6, 2, N'Scheduled')
+                        INSERT [dbo].[Lookups] ([Id], [LookupTypeId], [Name]) VALUES (7, 3, N'Code Generation')
+                        INSERT [dbo].[Lookups] ([Id], [LookupTypeId], [Name]) VALUES (8, 3, N'Weekly Embedding')
+                        INSERT [dbo].[Lookups] ([Id], [LookupTypeId], [Name]) VALUES (9, 3, N'Monthly Embedding')
+                        INSERT [dbo].[Lookups] ([Id], [LookupTypeId], [Name]) VALUES (10, 2, N'Upload Csv')
+                        SET IDENTITY_INSERT [dbo].[Lookups] OFF                       
+                        
+                        ";
 
-                        using (SqlConnection myCon = new SqlConnection(connStr))
-                        {
-                            myCon.Open();
-                            using (var command = new SqlCommand(script, myCon))
-                            {
-                                command.ExecuteNonQuery();
-                            }
-                            myCon.Close();
-                        }
-                        _responseViewModel.RowsAffected = i;
+
+                using (SqlConnection myCon = new SqlConnection(connStr))
+                {
+                    myCon.Open();
+                    using (var command = new SqlCommand(sqlscript, myCon))
+                    {
+                        command.ExecuteNonQuery();
                     }
+                    myCon.Close();
                 }
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _responseViewModel.ExceptionMessage = ex.Message;
             }
-            
+
             return Ok(_responseViewModel);
         }
     }
