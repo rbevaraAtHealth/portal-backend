@@ -1,10 +1,14 @@
 ﻿using CodeMatcher.Api.V2.ApiResponseModel;
 using CodeMatcherApiV2.Common;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.Controllers
@@ -113,6 +117,42 @@ namespace CodeMatcherV2Api.Controllers
                 _responseViewModel.ExceptionMessage = ex.Message;
                 return BadRequest(_responseViewModel);
             }
+        }
+
+        [HttpPost("UpdateBaseData")]
+        public IActionResult UpdateBaseData([FromBody] string connStr)
+        {
+            try
+            {
+                var sqlFile = Path.Combine(Environment.CurrentDirectory, @"Resources\Files");
+                _responseViewModel.Message = sqlFile;
+                int i = 0;
+                foreach (var file in Directory.GetFiles(sqlFile))
+                {
+                    if (file.ToLower().Contains("sql"))
+                    {
+                        i++;
+                        string script = System.IO.File.ReadAllText(file);
+
+                        using (SqlConnection myCon = new SqlConnection(connStr))
+                        {
+                            myCon.Open();
+                            using (var command = new SqlCommand(script, myCon))
+                            {
+                                command.ExecuteNonQuery();
+                            }
+                            myCon.Close();
+                        }
+                        _responseViewModel.RowsAffected = i;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                _responseViewModel.ExceptionMessage = ex.Message;
+            }
+            
+            return Ok(_responseViewModel);
         }
     }
 }
