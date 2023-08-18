@@ -21,7 +21,27 @@ namespace CodeMatcherV2Api.BusinessLayer
         public async Task<IEnumerable<LookupModel>> GetLookupByIdAsync(int lookUpTypeId)
         {
             var lookup = await _context.Lookups.Where(x => x.LookupTypeId == lookUpTypeId).ToListAsync();
-            return _mapper.Map<List<LookupModel>>(lookup);
+            if (lookup != null && lookup.Count > 0)
+            {
+                return _mapper.Map<List<LookupModel>>(lookup);
+            }
+            else
+            {
+                throw new System.Exception("No lookups found");
+            }
+        }
+        public async Task<IEnumerable<LookupModel>> GetLookupsAsync()
+        {
+            var lookup = await _context.Lookups.ToListAsync();
+            if(lookup != null && lookup.Count > 0)
+            {
+                return _mapper.Map<List<LookupModel>>(lookup);
+            }
+            else
+            {
+                throw new System.Exception("No lookups found");
+            }
+            
         }
     }
 }
