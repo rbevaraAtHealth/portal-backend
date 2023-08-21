@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CodeMappingEfCore.DatabaseModels;
+using System.Collections.Generic;
 
 namespace CodeMatcherV2Api.Models
 {
@@ -6,6 +7,7 @@ namespace CodeMatcherV2Api.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
+        public int LookupTypeId { get; set; }
+        public LookupTypeDto LookupType { get; set; }
     }
 }

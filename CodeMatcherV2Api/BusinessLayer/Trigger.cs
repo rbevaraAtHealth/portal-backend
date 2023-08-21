@@ -23,7 +23,8 @@ namespace CodeMatcherV2Api.BusinessLayer
         private readonly CodeMatcherDbContext _context;
         private readonly SqlHelper _sqlHelper;
         private readonly IMapper _mapper;
-        public Trigger(CodeMatcherDbContext context, IMapper mapper, SqlHelper sqlHelper)
+        private readonly ILookUp _lookUp;
+        public Trigger(CodeMatcherDbContext context, IMapper mapper, SqlHelper sqlHelper, ILookUp lookUp)
         {
             BaseController baseController = new BaseController();
             _context = context;
@@ -31,6 +32,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             _mapper = mapper;
             var user = baseController.GetUserInfo();
             _sqlHelper = sqlHelper;
+            _lookUp = lookUp;
         }
         //public async Task<string> GetAllTriggerAsync()
         //{
@@ -53,9 +55,9 @@ namespace CodeMatcherV2Api.BusinessLayer
         public async Task<Tuple<CgTriggeredRunReqModel, int>> CgApiRequestGet(CgTriggerRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
-            codeMappingRequestDto.RunTypeId = _sqlHelper.GetLookupIdOnName(RequestTypeConst.Triggered);
-            codeMappingRequestDto.SegmentTypeId = _sqlHelper.GetLookupIdOnName(trigger.Segment);
-            codeMappingRequestDto.CodeMappingId = _sqlHelper.GetLookupIdOnName(CodeMappingTypeConst.CodeGeneration);
+            codeMappingRequestDto.RunTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.RunType, RequestTypeConst.Triggered)).Id;
+            codeMappingRequestDto.SegmentTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.Segment, trigger.Segment)).Id;
+            codeMappingRequestDto.CodeMappingId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.CodeMapping, CodeMappingTypeConst.CodeGeneration)).Id;
             codeMappingRequestDto.Threshold = trigger.Threshold.ToString();
             codeMappingRequestDto.LatestLink = "1";
             codeMappingRequestDto.ClientId = clientId;
@@ -106,10 +108,9 @@ namespace CodeMatcherV2Api.BusinessLayer
         public async Task<Tuple<MonthlyEmbedTriggeredRunReqModel, int>> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
-            codeMappingRequestDto.RunTypeId = _sqlHelper.GetLookupIdOnName(RequestTypeConst.Triggered);
-            codeMappingRequestDto.SegmentTypeId = _sqlHelper.GetLookupIdOnName(trigger.Segment);
-            codeMappingRequestDto.CodeMappingId = _sqlHelper.GetLookupIdOnName(CodeMappingTypeConst.MonthlyEmbeddings);
-            codeMappingRequestDto.CreatedBy = user.UserName;
+            codeMappingRequestDto.RunTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.RunType, RequestTypeConst.Triggered)).Id;
+            codeMappingRequestDto.SegmentTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.Segment, trigger.Segment)).Id;
+            codeMappingRequestDto.CodeMappingId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.CodeMapping, CodeMappingTypeConst.MonthlyEmbeddings)).Id; codeMappingRequestDto.CreatedBy = user.UserName;
             codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
             {
@@ -127,9 +128,9 @@ namespace CodeMatcherV2Api.BusinessLayer
         public async Task<Tuple<WeeklyEmbedTriggeredRunReqModel, int>> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
-            codeMappingRequestDto.RunTypeId = _sqlHelper.GetLookupIdOnName(RequestTypeConst.Triggered);
-            codeMappingRequestDto.SegmentTypeId = _sqlHelper.GetLookupIdOnName(trigger.Segment);
-            codeMappingRequestDto.CodeMappingId = _sqlHelper.GetLookupIdOnName(CodeMappingTypeConst.WeeklyEmbeddings);
+            codeMappingRequestDto.RunTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.RunType, RequestTypeConst.Triggered)).Id;
+            codeMappingRequestDto.SegmentTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.Segment, trigger.Segment)).Id;
+            codeMappingRequestDto.CodeMappingId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.CodeMapping, CodeMappingTypeConst.WeeklyEmbeddings)).Id;
             codeMappingRequestDto.CreatedBy = user.UserName;
             codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
@@ -182,7 +183,14 @@ namespace CodeMatcherV2Api.BusinessLayer
             WeeklyEmbedTriggeredRunResModel responseModel = new WeeklyEmbedTriggeredRunResModel();
             CodeMappingResponseDbModelAdapter adapter = new CodeMappingResponseDbModelAdapter();
             var responseDto = adapter.DbResponseModelGet(httpResponse, requestId);
-            responseDto.CreatedBy = user.UserName;
+            if (user.UserName != null)
+            {
+                responseDto.CreatedBy = user.UserName;
+            }
+            else
+            {
+                responseDto.CreatedBy = "Scheduler Admin";
+            }
             await _sqlHelper.SaveResponseseMessage(responseDto, requestId);
             if (httpResponse.IsSuccessStatusCode)
             {
@@ -197,20 +205,5 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return responseModel;
         }
-
-        //public Tuple<CgTriggeredRunReqModel, int> CgApiRequestGet(CgTriggerRunModel trigger, LoginModel user)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Tuple<MonthlyEmbedTriggeredRunReqModel, int> MonthlyEmbedApiRequestGet(MonthlyEmbedTriggeredRunModel trigger, LoginModel user)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Tuple<WeeklyEmbedTriggeredRunReqModel, int> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }
