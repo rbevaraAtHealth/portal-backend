@@ -1,4 +1,5 @@
 ﻿using CodeMatcher.Api.V2.ApiResponseModel;
+using CodeMatcher.Api.V2.Common;
 using CodeMatcherApiV2.Common;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -7,8 +8,10 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.Controllers
@@ -170,6 +173,27 @@ namespace CodeMatcherV2Api.Controllers
             }
 
             return Ok(_responseViewModel);
+        }
+        [HttpPost("GetDBSchema")]
+        public FileResult getDBSchema([FromBody] string connStr)
+        {
+            using (SqlConnection myCon = new SqlConnection(connStr))
+            {
+                SqlCommand cmd = new SqlCommand("SELECT TABLE_NAME ,  COLUMN_NAME ,  DATA_TYPE FROM   INFORMATION_SCHEMA.COLUMNS;", myCon);
+                myCon.Open();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dataTable = new DataTable();
+                // this will query your database and return the result to your datatable
+                da.Fill(dataTable);
+                //DataTable t = myCon.GetSchema("Tables");
+                _responseViewModel.Message = dataTable.ToCSV();
+                //using (var command = new SqlCommand(sqlscript, myCon))
+                //{
+                //    command.ExecuteNonQuery();
+                //}
+                myCon.Close();
+            }
+            return File(Encoding.UTF8.GetBytes(_responseViewModel.Message), "text/csv", "tables.csv");
         }
     }
 }
