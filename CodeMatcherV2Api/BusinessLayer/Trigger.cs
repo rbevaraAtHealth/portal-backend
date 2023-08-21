@@ -6,7 +6,6 @@ using CodeMatcherV2Api.ApiRequestModels;
 using CodeMatcherV2Api.ApiResponseModel;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Controllers;
-using CodeMatcherV2Api.EntityFrameworkCore;
 using CodeMatcherV2Api.Middlewares.SqlHelper;
 using CodeMatcherV2Api.Models;
 using CodeMatcherV2Api.RepoModelAdapter;
@@ -19,39 +18,18 @@ namespace CodeMatcherV2Api.BusinessLayer
 {
     public class Trigger : ITrigger
     {
-        private readonly CgTriggerDbModelAdapter _cgTriggerDbModelAdapter;
-        private readonly CodeMatcherDbContext _context;
         private readonly SqlHelper _sqlHelper;
         private readonly IMapper _mapper;
         private readonly ILookUp _lookUp;
-        public Trigger(CodeMatcherDbContext context, IMapper mapper, SqlHelper sqlHelper, ILookUp lookUp)
+        public Trigger(IMapper mapper, SqlHelper sqlHelper, ILookUp lookUp)
         {
             BaseController baseController = new BaseController();
-            _context = context;
-            _cgTriggerDbModelAdapter = new CgTriggerDbModelAdapter(_sqlHelper);
             _mapper = mapper;
             var user = baseController.GetUserInfo();
             _sqlHelper = sqlHelper;
             _lookUp = lookUp;
         }
-        //public async Task<string> GetAllTriggerAsync()
-        //{
-        //    return "Job Triggered Successfully";
-        //}
-        //public async Task<string> GetCgTriggerJobAsync()
-        //{
-        //    return "Code generation job triggered successfully";
-        //}
 
-        //public async Task<string> GetMonthlyTriggerJobAsync()
-        //{
-        //    return "Monthly job triggered successfully";
-        //}
-
-        //public async Task<string> GetWeeklyTriggerJobAsync()
-        //{
-        //    return "Weekly job triggered successfully";
-        //}
         public async Task<Tuple<CgTriggeredRunReqModel, int>> CgApiRequestGet(CgTriggerRunModel trigger, LoginModel user, string clientId)
         {
             CodeMappingRequestDto codeMappingRequestDto = new CodeMappingRequestDto();
@@ -70,11 +48,8 @@ namespace CodeMatcherV2Api.BusinessLayer
                 codeMappingRequestDto.CreatedBy = "Scheduler Admin";
             }
             int reuestId = await _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
-            CgTriggeredRunReqModel requestModel = new CgTriggeredRunReqModel();
+            var requestModel = _mapper.Map<CgTriggeredRunReqModel>(codeMappingRequestDto);
             requestModel.Segment = trigger.Segment;
-            requestModel.Threshold = trigger.Threshold;
-            requestModel.LatestLink = codeMappingRequestDto.LatestLink;
-            requestModel.ClientId = codeMappingRequestDto.ClientId;
             return new Tuple<CgTriggeredRunReqModel, int>(requestModel, reuestId);
         }
         public async Task<CgTriggeredRunResModel> CgAPiResponseSave(HttpResponseMessage httpResponse, int requestId, LoginModel user)
@@ -90,7 +65,6 @@ namespace CodeMatcherV2Api.BusinessLayer
             {
                 responseDto.CreatedBy = "Scheduler Admin";
             }
-            //responseDto.CreatedBy = user.UserName;
             await _sqlHelper.SaveResponseseMessage(responseDto, requestId);
             if (httpResponse.IsSuccessStatusCode)
             {

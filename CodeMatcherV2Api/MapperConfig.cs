@@ -2,6 +2,7 @@
 using CodeMappingEfCore.DatabaseModels;
 using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
+using CodeMatcherV2Api.ApiRequestModels;
 using CodeMatcherV2Api.Models;
 
 namespace CodeMatcherV2Api
@@ -18,6 +19,7 @@ namespace CodeMatcherV2Api
                 config.CreateMap<CodeGenerationSummaryModel, CodeGenerationSummaryDto>().ReverseMap();
                 config.CreateMap<MonthlyEmbeddingsSummaryDto, MonthlyEmbedSummaryModel>().ReverseMap();
                 config.CreateMap<WeeklyEmbeddingsSummaryDto, WeeklyEmbedSummaryModel>().ReverseMap();
+                config.CreateMap<CodeMappingRequestDto, CgTriggeredRunReqModel>().ReverseMap();
             });
             return mapperConfig;
         }
