@@ -11,8 +11,8 @@ namespace CodeMappingEfCore.DatabaseModels
         public int LookupTypeId { get; set; }
 
         [ForeignKey("LookupTypeId")]
-        public LookupTypeDto LookupType { get; set; }
+        public LookupTypeDto LookupType { get; set; } = null!;
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

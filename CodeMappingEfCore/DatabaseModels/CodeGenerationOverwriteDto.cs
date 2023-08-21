@@ -9,13 +9,13 @@ namespace CodeMappingEfCore.DatabaseModels
     {
         [Key]
         public int Id { get; set; }
-        public string ResponseReference { get; set; }
-        public string SerialNumber { get; set; }
-        public string Description { get; set; }
-        public string Link { get; set; }
-        public string Frm { get; set; }
-        public string Too { get; set; }
-        public List<CodeGenerationOverwriteHistoryDto> HistoryData { get; set; }
+        public string ResponseReference { get; set; } = null!;
+        public string SerialNumber { get; set; } = null!;
+        public string Description { get; set; } = null!;
+        public string Link { get; set; } = null!;
+        public string Frm { get; set; } = null!;
+        public string Too { get; set; } = null!;
+        public List<CodeGenerationOverwriteHistoryDto> HistoryData { get; set; } = null!;
 
     }
 }

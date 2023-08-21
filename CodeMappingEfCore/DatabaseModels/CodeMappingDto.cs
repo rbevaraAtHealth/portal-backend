@@ -13,10 +13,10 @@ namespace CodeMappingEfCore.DatabaseModels
         [ForeignKey("RequestId")]
         public CodeMappingRequestDto? Request { get; set; }
 
-        public string Reference { get; set; }
+        public string Reference { get; set; } = null!;
 
-        public string Status { get; set; }
+        public string Status { get; set; } = null!;
 
-        public string Progress { get; set; }
+        public string Progress { get; set; } = null!;
     }
 }

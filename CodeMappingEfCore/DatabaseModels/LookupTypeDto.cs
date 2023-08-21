@@ -6,7 +6,7 @@ namespace CodeMappingEfCore.DatabaseModels
     {
         [Key]
         public int LookupTypeId { get; set; }
-        public string LookupTypeKey { get; set; }
-        public string LookupTypeDescription { get; set; }
+        public string LookupTypeKey { get; set; } = null!;
+        public string LookupTypeDescription { get; set; } = null!;
     }
 }

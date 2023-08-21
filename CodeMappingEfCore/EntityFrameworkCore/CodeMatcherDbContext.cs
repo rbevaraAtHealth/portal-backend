@@ -35,16 +35,16 @@ namespace CodeMatcherV2Api.EntityFrameworkCore
             //    .WithOne().OnDelete(DeleteBehavior.NoAction);
         }
 
-        public DbSet<LookupTypeDto> LookupTypes { get; set; }
-        public DbSet<LookupDto> Lookups { get; set; }
-        public DbSet<CodeMappingRequestDto> CodeMappingRequests { get; set; }
-        public DbSet<CodeMappingResponseDto> CodeMappingResponses { get; set; }
-        public DbSet<CodeMappingDto> CodeMappings { get; set; }
-        public DbSet<CodeGenerationSummaryDto>CodeGenerationSummary { get; set; }
-        public DbSet<MonthlyEmbeddingsSummaryDto>MonthlyEmbeddingsSummary { get; set; }
-        public DbSet<WeeklyEmbeddingsSummaryDto>WeeklyEmbeddingsSummary { get; set; }
-        public DbSet<CodeGenerationOverwriteDto> CodeGenerationOverwrites { get; set; }
-        public DbSet<CodeGenerationOverwriteHistoryDto> CodeGenerationOverwriteHistory { get; set; }
-        public DbSet<UserDto> UserDetail { get; set; }
+        public DbSet<LookupTypeDto> LookupTypes { get; set; } = null!;
+        public DbSet<LookupDto> Lookups { get; set; } = null!;
+        public DbSet<CodeMappingRequestDto> CodeMappingRequests { get; set; } = null!;
+        public DbSet<CodeMappingResponseDto> CodeMappingResponses { get; set; } = null!;
+        public DbSet<CodeMappingDto> CodeMappings { get; set; } = null!;
+        public DbSet<CodeGenerationSummaryDto>CodeGenerationSummary { get; set; } = null!;
+        public DbSet<MonthlyEmbeddingsSummaryDto>MonthlyEmbeddingsSummary { get; set; } = null!;
+        public DbSet<WeeklyEmbeddingsSummaryDto>WeeklyEmbeddingsSummary { get; set; } = null!;
+        public DbSet<CodeGenerationOverwriteDto> CodeGenerationOverwrites { get; set; } = null!;
+        public DbSet<CodeGenerationOverwriteHistoryDto> CodeGenerationOverwriteHistory { get; set; } = null!;
+        public DbSet<UserDto> UserDetail { get; set; } = null!;
     }
 }

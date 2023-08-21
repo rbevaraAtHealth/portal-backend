@@ -9,15 +9,15 @@ namespace CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables
         [Key]
         public int Id { get; set; }
         [Required]
-        public string TaskId { get; set; }
+        public string TaskId { get; set; } = null!;
         [Required]
         public int RequestId { get; set; }
         [ForeignKey("RequestId")]
-        public CodeMappingRequestDto CodeMappingRequest { get; set; }
+        public CodeMappingRequestDto CodeMappingRequest { get; set; } = null!;
         [Required]
         public DateTime Date { get; set; }
         [Required]
-        public string Segment { get; set; }
+        public string Segment { get; set; } = null!;
         [Required]
         public int NoOfBaseRecordsImportedFromDatabase { get; set; }
         [Required]

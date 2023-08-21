@@ -12,8 +12,8 @@ namespace CodeMappingEfCore.DatabaseModels
         public int SegmentTypeId { get; set; }
 
         [ForeignKey("SegmentTypeId")]
-        public LookupDto SegmentType { get; set; }
+        public LookupDto SegmentType { get; set; } = null!;
 
-        public string Threshold { get; set; }
+        public string Threshold { get; set; } = null!;
     }
 }
