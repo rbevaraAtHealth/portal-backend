@@ -15,10 +15,10 @@ namespace CodeMatcherV2Api.RepoModelAdapter
         public CodeMappingRequestDto RequestModel_Get(WeeklyEmbedScheduledRunReqModel pyAPIModel, string runType, string codeMappingType)
         {
             CodeMappingRequestDto codeMappingRequest = new CodeMappingRequestDto();
-            codeMappingRequest.RunTypeId = _sqlHelper.GetLookupIdOnName(runType);
-            codeMappingRequest.SegmentTypeId = _sqlHelper.GetLookupIdOnName(pyAPIModel.Segment);
-            codeMappingRequest.CodeMappingId=_sqlHelper.GetLookupIdOnName(codeMappingType);
-            codeMappingRequest.ClientId = "All";
+            //codeMappingRequest.RunTypeId = _sqlHelper.GetLookupIdOnName(runType);
+            //codeMappingRequest.SegmentTypeId = _sqlHelper.GetLookupIdOnName(pyAPIModel.Segment);
+            //codeMappingRequest.CodeMappingId=_sqlHelper.GetLookupIdOnName(codeMappingType);
+            //codeMappingRequest.ClientId = "All";
             return codeMappingRequest;
         }
     }

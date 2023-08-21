@@ -47,7 +47,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             var codemap = await _context.CodeMappings.FirstOrDefaultAsync(x => x.Reference == taskId.ToString());
             GenericSummaryViewModel summaryViewModel = new GenericSummaryViewModel();
 
-            if (codemap.Status == Status.Success)
+            if (codemap.Status == StatusConst.Success)
             {
                 int requestId = _sqlHelper.GetRequestId(taskId);
                 int codeMappingId = _sqlHelper.GetCodeMappingId(requestId);

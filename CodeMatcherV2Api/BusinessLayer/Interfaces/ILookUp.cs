@@ -6,9 +6,10 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
 {
     public interface ILookUp
     {
-        public Task<IEnumerable<LookupModel>> GetLookupByIdAsync(int lookUpTypeId);
+        //public Task<IEnumerable<LookupModel>> GetLookupByIdAsync(int lookUpTypeId);
         public Task<IEnumerable<LookupModel>> GetLookupsAsync();
         public string GetDBConnectionString();
+        public Task<List<LookupModel>> GetLookupsByName(string key);
 
     }
 }

@@ -89,6 +89,7 @@ namespace CodeMatcherV2Api
             services.AddTransient<IScheduler, Scheduler>();
             services.AddTransient<ICodeGenerationOverwrite, CodeGenerationOverwrite>();
             services.AddTransient<SqlHelper>();
+            services.AddTransient<ICacheService, CacheService>();
 
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
