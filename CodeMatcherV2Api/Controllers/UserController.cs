@@ -127,77 +127,90 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                var sqlscript = @"BEGIN TRY  
+                var sqlscript = @"
+BEGIN TRY  
 
  BEGIN TRANSACTION
 
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_WeeklyEmbeddingsSummary_CodeMappingRequests_RequestId]') AND parent_object_id = OBJECT_ID(N'[dbo].[WeeklyEmbeddingsSummary]'))
+ALTER TABLE [dbo].[WeeklyEmbeddingsSummary] DROP CONSTRAINT [FK_WeeklyEmbeddingsSummary_CodeMappingRequests_RequestId]
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_MonthlyEmbeddingsSummary_CodeMappingRequests_RequestId]') AND parent_object_id = OBJECT_ID(N'[dbo].[MonthlyEmbeddingsSummary]'))
+ALTER TABLE [dbo].[MonthlyEmbeddingsSummary] DROP CONSTRAINT [FK_MonthlyEmbeddingsSummary_CodeMappingRequests_RequestId]
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Lookups_LookupTypes_LookupTypeId]') AND parent_object_id = OBJECT_ID(N'[dbo].[Lookups]'))
+ALTER TABLE [dbo].[Lookups] DROP CONSTRAINT [FK_Lookups_LookupTypes_LookupTypeId]
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_CodeMappings_CodeMappingRequests_RequestId]') AND parent_object_id = OBJECT_ID(N'[dbo].[CodeMappings]'))
+ALTER TABLE [dbo].[CodeMappings] DROP CONSTRAINT [FK_CodeMappings_CodeMappingRequests_RequestId]
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_CodeMappingResponses_CodeMappingRequests_RequestId]') AND parent_object_id = OBJECT_ID(N'[dbo].[CodeMappingResponses]'))
+ALTER TABLE [dbo].[CodeMappingResponses] DROP CONSTRAINT [FK_CodeMappingResponses_CodeMappingRequests_RequestId]
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_CodeMappingRequests_Lookups_SegmentTypeId]') AND parent_object_id = OBJECT_ID(N'[dbo].[CodeMappingRequests]'))
+ALTER TABLE [dbo].[CodeMappingRequests] DROP CONSTRAINT [FK_CodeMappingRequests_Lookups_SegmentTypeId]
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_CodeMappingRequests_Lookups_RunTypeId]') AND parent_object_id = OBJECT_ID(N'[dbo].[CodeMappingRequests]'))
+ALTER TABLE [dbo].[CodeMappingRequests] DROP CONSTRAINT [FK_CodeMappingRequests_Lookups_RunTypeId]
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_CodeMappingRequests_Lookups_CodeMappingId]') AND parent_object_id = OBJECT_ID(N'[dbo].[CodeMappingRequests]'))
+ALTER TABLE [dbo].[CodeMappingRequests] DROP CONSTRAINT [FK_CodeMappingRequests_Lookups_CodeMappingId]
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_CodeGenerationSummary_CodeMappingRequests_RequestId]') AND parent_object_id = OBJECT_ID(N'[dbo].[CodeGenerationSummary]'))
+ALTER TABLE [dbo].[CodeGenerationSummary] DROP CONSTRAINT [FK_CodeGenerationSummary_CodeMappingRequests_RequestId]
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_CodeGenerationOverwriteHistory_CodeGenerationOverwrites_OverWriteID]') AND parent_object_id = OBJECT_ID(N'[dbo].[CodeGenerationOverwriteHistory]'))
+ALTER TABLE [dbo].[CodeGenerationOverwriteHistory] DROP CONSTRAINT [FK_CodeGenerationOverwriteHistory_CodeGenerationOverwrites_OverWriteID]
+
+/****** Object:  Table [dbo].[WeeklyEmbeddingsSummary]    Script Date: 21-08-2023 15:55:57 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[WeeklyEmbeddingsSummary]') AND type in (N'U'))
-ALTER TABLE [dbo].[WeeklyEmbeddingsSummary] DROP CONSTRAINT IF EXISTS [FK_WeeklyEmbeddingsSummary_CodeMappingRequests_RequestId]
+DROP TABLE [dbo].[WeeklyEmbeddingsSummary]
 
+/****** Object:  Table [dbo].[UserDetail]    Script Date: 21-08-2023 15:55:57 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UserDetail]') AND type in (N'U'))
+DROP TABLE [dbo].[UserDetail]
+
+/****** Object:  Table [dbo].[MonthlyEmbeddingsSummary]    Script Date: 21-08-2023 15:55:57 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[MonthlyEmbeddingsSummary]') AND type in (N'U'))
-ALTER TABLE [dbo].[MonthlyEmbeddingsSummary] DROP CONSTRAINT IF EXISTS [FK_MonthlyEmbeddingsSummary_CodeMappingRequests_RequestId]
+DROP TABLE [dbo].[MonthlyEmbeddingsSummary]
 
+/****** Object:  Table [dbo].[LookupTypes]    Script Date: 21-08-2023 15:55:57 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[LookupTypes]') AND type in (N'U'))
+DROP TABLE [dbo].[LookupTypes]
+
+/****** Object:  Table [dbo].[Lookups]    Script Date: 21-08-2023 15:55:57 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Lookups]') AND type in (N'U'))
-ALTER TABLE [dbo].[Lookups] DROP CONSTRAINT IF EXISTS [FK_Lookups_LookupTypes_LookupTypeId]
+DROP TABLE [dbo].[Lookups]
 
+/****** Object:  Table [dbo].[CodeMappings]    Script Date: 21-08-2023 15:55:57 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CodeMappings]') AND type in (N'U'))
-ALTER TABLE [dbo].[CodeMappings] DROP CONSTRAINT IF EXISTS [FK_CodeMappings_CodeMappingRequests_RequestId]
+DROP TABLE [dbo].[CodeMappings]
 
+/****** Object:  Table [dbo].[CodeMappingResponses]    Script Date: 21-08-2023 15:55:57 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CodeMappingResponses]') AND type in (N'U'))
-ALTER TABLE [dbo].[CodeMappingResponses] DROP CONSTRAINT IF EXISTS [FK_CodeMappingResponses_CodeMappingRequests_RequestId]
+DROP TABLE [dbo].[CodeMappingResponses]
 
+/****** Object:  Table [dbo].[CodeMappingRequests]    Script Date: 21-08-2023 15:55:57 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CodeMappingRequests]') AND type in (N'U'))
-ALTER TABLE [dbo].[CodeMappingRequests] DROP CONSTRAINT IF EXISTS [FK_CodeMappingRequests_Lookups_SegmentTypeId]
+DROP TABLE [dbo].[CodeMappingRequests]
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CodeMappingRequests]') AND type in (N'U'))
-ALTER TABLE [dbo].[CodeMappingRequests] DROP CONSTRAINT IF EXISTS [FK_CodeMappingRequests_Lookups_RunTypeId]
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CodeMappingRequests]') AND type in (N'U'))
-ALTER TABLE [dbo].[CodeMappingRequests] DROP CONSTRAINT IF EXISTS [FK_CodeMappingRequests_Lookups_CodeMappingId]
-
+/****** Object:  Table [dbo].[CodeGenerationSummary]    Script Date: 21-08-2023 15:55:57 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CodeGenerationSummary]') AND type in (N'U'))
-ALTER TABLE [dbo].[CodeGenerationSummary] DROP CONSTRAINT IF EXISTS [FK_CodeGenerationSummary_CodeMappingRequests_RequestId]
+DROP TABLE [dbo].[CodeGenerationSummary]
 
+/****** Object:  Table [dbo].[CodeGenerationOverwrites]    Script Date: 21-08-2023 15:55:57 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CodeGenerationOverwrites]') AND type in (N'U'))
+DROP TABLE [dbo].[CodeGenerationOverwrites]
+
+/****** Object:  Table [dbo].[CodeGenerationOverwriteHistory]    Script Date: 21-08-2023 15:55:57 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CodeGenerationOverwriteHistory]') AND type in (N'U'))
-ALTER TABLE [dbo].[CodeGenerationOverwriteHistory] DROP CONSTRAINT IF EXISTS [FK_CodeGenerationOverwriteHistory_CodeGenerationOverwrites_OverWriteID]
+DROP TABLE [dbo].[CodeGenerationOverwriteHistory]
 
-/****** Object:  Table [dbo].[WeeklyEmbeddingsSummary]    Script Date: 21-08-2023 15:19:26 ******/
-DROP TABLE IF EXISTS [dbo].[WeeklyEmbeddingsSummary]
+/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 21-08-2023 15:55:57 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[__EFMigrationsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[__EFMigrationsHistory]
 
-/****** Object:  Table [dbo].[UserDetail]    Script Date: 21-08-2023 15:19:26 ******/
-DROP TABLE IF EXISTS [dbo].[UserDetail]
-
-/****** Object:  Table [dbo].[MonthlyEmbeddingsSummary]    Script Date: 21-08-2023 15:19:26 ******/
-DROP TABLE IF EXISTS [dbo].[MonthlyEmbeddingsSummary]
-
-/****** Object:  Table [dbo].[LookupTypes]    Script Date: 21-08-2023 15:19:26 ******/
-DROP TABLE IF EXISTS [dbo].[LookupTypes]
-
-/****** Object:  Table [dbo].[Lookups]    Script Date: 21-08-2023 15:19:26 ******/
-DROP TABLE IF EXISTS [dbo].[Lookups]
-
-/****** Object:  Table [dbo].[CodeMappings]    Script Date: 21-08-2023 15:19:26 ******/
-DROP TABLE IF EXISTS [dbo].[CodeMappings]
-
-/****** Object:  Table [dbo].[CodeMappingResponses]    Script Date: 21-08-2023 15:19:26 ******/
-DROP TABLE IF EXISTS [dbo].[CodeMappingResponses]
-
-/****** Object:  Table [dbo].[CodeMappingRequests]    Script Date: 21-08-2023 15:19:26 ******/
-DROP TABLE IF EXISTS [dbo].[CodeMappingRequests]
-
-/****** Object:  Table [dbo].[CodeGenerationSummary]    Script Date: 21-08-2023 15:19:26 ******/
-DROP TABLE IF EXISTS [dbo].[CodeGenerationSummary]
-
-/****** Object:  Table [dbo].[CodeGenerationOverwrites]    Script Date: 21-08-2023 15:19:26 ******/
-DROP TABLE IF EXISTS [dbo].[CodeGenerationOverwrites]
-
-/****** Object:  Table [dbo].[CodeGenerationOverwriteHistory]    Script Date: 21-08-2023 15:19:26 ******/
-DROP TABLE IF EXISTS [dbo].[CodeGenerationOverwriteHistory]
-
-/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 21-08-2023 15:19:26 ******/
-DROP TABLE IF EXISTS [dbo].[__EFMigrationsHistory]
-
-/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 21-08-2023 15:19:26 ******/
+/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 21-08-2023 15:55:57 ******/
 SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON
@@ -208,10 +221,10 @@ CREATE TABLE [dbo].[__EFMigrationsHistory](
  CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY CLUSTERED 
 (
 	[MigrationId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
-/****** Object:  Table [dbo].[CodeGenerationOverwriteHistory]    Script Date: 21-08-2023 15:19:26 ******/
+/****** Object:  Table [dbo].[CodeGenerationOverwriteHistory]    Script Date: 21-08-2023 15:55:57 ******/
 SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON
@@ -229,10 +242,10 @@ CREATE TABLE [dbo].[CodeGenerationOverwriteHistory](
  CONSTRAINT [PK_CodeGenerationOverwriteHistory] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-/****** Object:  Table [dbo].[CodeGenerationOverwrites]    Script Date: 21-08-2023 15:19:26 ******/
+/****** Object:  Table [dbo].[CodeGenerationOverwrites]    Script Date: 21-08-2023 15:55:57 ******/
 SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON
@@ -253,10 +266,10 @@ CREATE TABLE [dbo].[CodeGenerationOverwrites](
  CONSTRAINT [PK_CodeGenerationOverwrites] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-/****** Object:  Table [dbo].[CodeGenerationSummary]    Script Date: 21-08-2023 15:19:26 ******/
+/****** Object:  Table [dbo].[CodeGenerationSummary]    Script Date: 21-08-2023 15:55:57 ******/
 SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON
@@ -284,10 +297,10 @@ CREATE TABLE [dbo].[CodeGenerationSummary](
  CONSTRAINT [PK_CodeGenerationSummary] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-/****** Object:  Table [dbo].[CodeMappingRequests]    Script Date: 21-08-2023 15:19:26 ******/
+/****** Object:  Table [dbo].[CodeMappingRequests]    Script Date: 21-08-2023 15:55:57 ******/
 SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON
@@ -310,10 +323,10 @@ CREATE TABLE [dbo].[CodeMappingRequests](
  CONSTRAINT [PK_CodeMappingRequests] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-/****** Object:  Table [dbo].[CodeMappingResponses]    Script Date: 21-08-2023 15:19:26 ******/
+/****** Object:  Table [dbo].[CodeMappingResponses]    Script Date: 21-08-2023 15:55:57 ******/
 SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON
@@ -331,10 +344,10 @@ CREATE TABLE [dbo].[CodeMappingResponses](
  CONSTRAINT [PK_CodeMappingResponses] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-/****** Object:  Table [dbo].[CodeMappings]    Script Date: 21-08-2023 15:19:26 ******/
+/****** Object:  Table [dbo].[CodeMappings]    Script Date: 21-08-2023 15:55:57 ******/
 SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON
@@ -348,10 +361,10 @@ CREATE TABLE [dbo].[CodeMappings](
  CONSTRAINT [PK_CodeMappings] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-/****** Object:  Table [dbo].[Lookups]    Script Date: 21-08-2023 15:19:26 ******/
+/****** Object:  Table [dbo].[Lookups]    Script Date: 21-08-2023 15:55:57 ******/
 SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON
@@ -363,10 +376,10 @@ CREATE TABLE [dbo].[Lookups](
  CONSTRAINT [PK_Lookups] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-/****** Object:  Table [dbo].[LookupTypes]    Script Date: 21-08-2023 15:19:26 ******/
+/****** Object:  Table [dbo].[LookupTypes]    Script Date: 21-08-2023 15:55:57 ******/
 SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON
@@ -378,10 +391,10 @@ CREATE TABLE [dbo].[LookupTypes](
  CONSTRAINT [PK_LookupTypes] PRIMARY KEY CLUSTERED 
 (
 	[LookupTypeId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-/****** Object:  Table [dbo].[MonthlyEmbeddingsSummary]    Script Date: 21-08-2023 15:19:26 ******/
+/****** Object:  Table [dbo].[MonthlyEmbeddingsSummary]    Script Date: 21-08-2023 15:55:57 ******/
 SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON
@@ -402,10 +415,10 @@ CREATE TABLE [dbo].[MonthlyEmbeddingsSummary](
  CONSTRAINT [PK_MonthlyEmbeddingsSummary] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-/****** Object:  Table [dbo].[UserDetail]    Script Date: 21-08-2023 15:19:26 ******/
+/****** Object:  Table [dbo].[UserDetail]    Script Date: 21-08-2023 15:55:57 ******/
 SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON
@@ -427,10 +440,10 @@ CREATE TABLE [dbo].[UserDetail](
  CONSTRAINT [PK_UserDetail] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-/****** Object:  Table [dbo].[WeeklyEmbeddingsSummary]    Script Date: 21-08-2023 15:19:26 ******/
+/****** Object:  Table [dbo].[WeeklyEmbeddingsSummary]    Script Date: 21-08-2023 15:55:57 ******/
 SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON
@@ -455,7 +468,7 @@ CREATE TABLE [dbo].[WeeklyEmbeddingsSummary](
  CONSTRAINT [PK_WeeklyEmbeddingsSummary] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20230810054644_InitialModel', N'6.0.19')
@@ -556,6 +569,7 @@ ON DELETE CASCADE
 
 ALTER TABLE [dbo].[WeeklyEmbeddingsSummary] CHECK CONSTRAINT [FK_WeeklyEmbeddingsSummary_CodeMappingRequests_RequestId]
 
+
 COMMIT TRAN
 
 END TRY  
@@ -575,7 +589,6 @@ BEGIN CATCH
 
     RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);  
 END CATCH
-
 
                         ";
 
