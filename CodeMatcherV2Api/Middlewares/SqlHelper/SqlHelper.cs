@@ -6,15 +6,21 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using CodeMatcher.Api.V2.BusinessLayer;
 using System.Threading.Tasks;
+using AutoMapper;
+using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
+using System;
 
 namespace CodeMatcherV2Api.Middlewares.SqlHelper
 {
     public class SqlHelper
     {
         private readonly CodeMatcherDbContext context;
-        public SqlHelper(CodeMatcherDbContext _context)
+        private readonly ICacheService _cacheService;
+
+        public SqlHelper(CodeMatcherDbContext _context, ICacheService cacheService)
         {
             context = _context;
+            _cacheService = cacheService;
         }
         public async Task<int> SaveCodeMappingRequest(CodeMappingRequestDto cgReqModel)
         {
@@ -29,11 +35,11 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             context.SaveChanges();
         }
 
-        public int GetLookupIdOnName(string type)
-        {
-            var lookup = context.Lookups.FirstOrDefault(x => x.Name.ToLower() == type.ToLower());
-            return lookup.Id;
-        }
+        //public int GetLookupIdOnName(string type)
+        //{
+        //    var lookup = context.Lookups.FirstOrDefault(x => x.Name.ToLower() == type.ToLower());
+        //    return lookup.Id;
+        //}
         public string GetLookupName(int id)
         {
             var lookup = context.Lookups.FirstOrDefault(x => x.Id == id);
@@ -75,16 +81,37 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
         }
         public List<CodeMappingDto> GetCodeMappings()
         {
-            var codeMappingList = context.CodeMappings.Where(x => x.Status.ToLower() == Status.InProgress.ToLower()).ToList();
+            var codeMappingList = context.CodeMappings.Where(x => x.Status.ToLower() == StatusConst.InProgress.ToLower()).ToList();
             return codeMappingList;
         }
         public void UpdateCodeMappingStatus(string taskId)
         {
             var codeMap = context.CodeMappings.FirstOrDefault(x => x.Reference == taskId);
-            codeMap.Status = Status.Success;
+            codeMap.Status = StatusConst.Success;
             context.Entry(codeMap).State = EntityState.Modified;
             context.SaveChanges();
 
         }
+        public async Task<List<LookupDto>> GetLookups(string key)
+        {
+            var cacheData = _cacheService.GetData<List<LookupDto>>(key);
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            var lookups = await context.Lookups.Include("LookupType").Where(x => x.LookupType.LookupTypeKey.ToLower() == key.ToLower()).AsNoTracking().ToListAsync();
+
+            var result = _cacheService.SetData(key, lookups, expirationTime);
+            return lookups;
+        }
+        public async Task<LookupDto> GetLookupbyName(string key, string type)
+        {
+            LookupDto filteredData;
+            var cacheData = await GetLookups(key);
+            filteredData = cacheData.Where(x => x.Name.ToLower() == type.ToLower()).FirstOrDefault();
+            return filteredData;
+        }
+
     }
 }

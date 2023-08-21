@@ -12,9 +12,15 @@
         public const string Scheduled = "Scheduled";
         public const string UploadCsv = "Upload Csv";
     }
-    public static class Status
+    public static class StatusConst
     {
         public const string Success = "Completed";
         public const string InProgress = "In Progress";
+    }
+    public static class LookupTypeConst
+    {
+        public const string RunType = "RunType";
+        public const string CodeMapping = "CodeMappingType";
+        public const string Segment = "Segment";
     }
 }

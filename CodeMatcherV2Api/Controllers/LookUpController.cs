@@ -29,12 +29,7 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 var userInfo = GetUserInfo();
-                if (string.IsNullOrWhiteSpace(lookupType))
-                    throw new ArgumentNullException("Lookup Type cannot be null",nameof(lookupType));
-                LookupTypeModel lookupTypes = _lookupTypes.GetLookupByNameAsync(lookupType);
-                if(lookupTypes == null)
-                    throw new ArgumentNullException("Lookup type not found", nameof(lookupType));
-                var lookups = await _lookUp.GetLookupByIdAsync(lookupTypes.LookupTypeId);
+                var lookups = await _lookUp.GetLookupsByName(lookupType);
                 _responseViewModel.Model = lookups;
                 return Ok(_responseViewModel);
             }
