@@ -1,4 +1,5 @@
-﻿using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
+﻿using CodeMatcher.Api.V2.ApiResponseModel;
+using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 //using Microsoft.Extensions.Caching.Memory;
 //using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -16,7 +17,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
                 T item = (T)_memoryCache.Get(key);
                 return item;
             }
-            catch (Exception e)
+            catch 
             {
                 throw;
             }
@@ -31,7 +32,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
                     _memoryCache.Set(key, value, expirationTime);
                 }
             }
-            catch (Exception e)
+            catch 
             {
                 throw;
             }
@@ -46,9 +47,10 @@ namespace CodeMatcher.Api.V2.BusinessLayer
                     return _memoryCache.Remove(key);
                 }
             }
-            catch (Exception e)
+            catch 
             {
                 throw;
+
             }
             return false;
         }
