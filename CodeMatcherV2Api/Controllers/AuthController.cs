@@ -89,7 +89,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             const string HeaderKeyName = "ClientID";
             Request.Headers.TryGetValue(HeaderKeyName, out StringValues headerValue);
-            if (string.IsNullOrEmpty(_configuration.GetSection(headerValue).Value)){
+            if (!_configuration.GetSection(headerValue).Exists()){
                 throw new Exception("Invalid client ID");
             }
             return await _authRepository.ProcessLogin(model, headerValue);
