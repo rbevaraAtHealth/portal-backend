@@ -95,7 +95,7 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
         public async Task<List<LookupDto>> GetLookups(string key)
         {
             var cacheData = _cacheService.GetData<List<LookupDto>>(key);
-            if (cacheData != null)
+            if (cacheData != null && cacheData.Count!=0)
             {
                 return cacheData;
             }

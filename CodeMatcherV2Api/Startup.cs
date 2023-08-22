@@ -159,7 +159,7 @@ namespace CodeMatcherV2Api
             {
                 dataContext.Database.Migrate();
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 
             }
