@@ -1,4 +1,5 @@
-﻿using CodeMatcher.Api.V2.Models.SummaryModel;
+﻿using CodeMatcher.Api.V2.Models;
+using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 using CodeMatcherV2Api.Models;
 using System;
@@ -19,5 +20,6 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
         Task<int> SaveWeeklyEmbedMappingsPythApi(string taskId, string summary, int requestId, LoginModel loginModel);
         Task<int> SaveSummary(string taskId, string summary, LoginModel loginModel);
         Task<GenericSummaryViewModel> GetMappings(string taskId);
+        Task<List<CodeMappingData>> GetCodeMappingRequestResponse();
     }
 }

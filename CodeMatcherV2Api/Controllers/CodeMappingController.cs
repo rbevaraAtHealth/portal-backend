@@ -74,6 +74,13 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(_responseViewModel);
             }
         }
+        [HttpGet,Route("CodeMappingRequestGetAll")]
+        public async Task<IActionResult> CodeMappingReqResGetAll()
+        {
+            var data=await _codeMapping.GetCodeMappingRequestResponse();
+            _responseViewModel.Model = data;
+            return Ok(_responseViewModel);
+        }
     }
 
 }

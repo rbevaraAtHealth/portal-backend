@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CodeMatcher.Api.V2.BusinessLayer;
+using CodeMatcher.Api.V2.Models;
 using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
@@ -12,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.BusinessLayer
@@ -198,6 +200,22 @@ namespace CodeMatcherV2Api.BusinessLayer
                 default: break;
             }
             return summaryId;
+        }
+        public async Task<List<CodeMappingData>> GetCodeMappingRequestResponse()
+        {
+            var codeMappingdata = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType")
+                                         join cs in _context.CodeMappingResponses on cr.Id equals cs.RequestId into crM from cmR in crM.DefaultIfEmpty()
+                                         join cm in _context.CodeMappings on cr.Id equals cm.RequestId
+                                         into csA
+                                         from csB in csA.DefaultIfEmpty()
+                                         select new CodeMappingData
+                                         {
+                                             CodeMappingRequest = cr,
+                                             CodeMappingResponse = cmR,
+                                             CodeMapping = csB
+
+                                         }).ToListAsync();
+            return codeMappingdata;
         }
     }
 }
