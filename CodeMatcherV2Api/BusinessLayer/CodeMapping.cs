@@ -201,14 +201,14 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return summaryId;
         }
-        public async Task<List<CodeMappingData>> GetCodeMappingRequestResponse()
+        public async Task<List<CodeMappingReqResDataModel>> GetCodeMappingRequestResponse()
         {
             var codeMappingdata = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType")
                                          join cs in _context.CodeMappingResponses on cr.Id equals cs.RequestId into crM from cmR in crM.DefaultIfEmpty()
                                          join cm in _context.CodeMappings on cr.Id equals cm.RequestId
                                          into csA
                                          from csB in csA.DefaultIfEmpty()
-                                         select new CodeMappingData
+                                         select new CodeMappingReqResDataModel
                                          {
                                              CodeMappingRequest = cr,
                                              CodeMappingResponse = cmR,

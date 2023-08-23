@@ -2,7 +2,7 @@
 
 namespace CodeMatcher.Api.V2.Models
 {
-    public class CodeMappingData
+    public class CodeMappingReqResDataModel
     {
         public CodeMappingRequestDto CodeMappingRequest { get; set; }
         public CodeMappingResponseDto CodeMappingResponse { get; set; }
