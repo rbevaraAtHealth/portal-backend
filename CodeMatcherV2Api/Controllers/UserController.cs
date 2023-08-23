@@ -72,7 +72,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [NonAction]
+       // [NonAction]
         [HttpPost("Decrypt")]
         public IActionResult GetDecryptConn([FromBody] string connStr)
         {
