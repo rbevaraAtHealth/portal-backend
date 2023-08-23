@@ -1,9 +1,6 @@
 ﻿using CodeMatcher.Api.V2.ApiResponseModel;
-using CodeMatcherApiV2.Common;
-using CodeMatcherV2Api.BusinessLayer;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;

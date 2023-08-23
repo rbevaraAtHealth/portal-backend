@@ -1,12 +1,9 @@
 ﻿using CodeMatcher.Api.V2.ApiResponseModel;
-using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.Models;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
-using CodeMatcherV2Api.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.Controllers
@@ -16,15 +13,11 @@ namespace CodeMatcherV2Api.Controllers
     public class CodeMappingController : BaseController
     {
         private readonly ICodeMapping _codeMapping;
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly CodeMatcherDbContext _context;
         private readonly ResponseViewModel _responseViewModel;
 
-        public CodeMappingController(ICodeMapping codeMapping, IHttpClientFactory httpClientFactory, CodeMatcherDbContext context)
+        public CodeMappingController(ICodeMapping codeMapping)
         {
             _codeMapping = codeMapping;
-            _httpClientFactory = httpClientFactory;
-            _context = context;
             _responseViewModel = new ResponseViewModel();
         }
 
@@ -79,8 +72,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                var data = await _codeMapping.GetCodeMappingRequestResponse();
-                _responseViewModel.Model = data;
+                _responseViewModel.Model = await _codeMapping.GetCodeMappingRequestResponse();
                 return Ok(_responseViewModel);
             }
             catch (Exception ex)
