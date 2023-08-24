@@ -68,11 +68,12 @@ namespace CodeMatcherV2Api.BusinessLayer
             responseDto.CreatedBy = user.UserName;
             
            await _sqlHelper.SaveResponseseMessage(responseDto,requestId);
-            var codeMappingDto = CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
-            await _sqlHelper.SaveCodeMappingData(codeMappingDto);
+            
             CgUploadCsvResModel response = new CgUploadCsvResModel();
             if (httpResponse.IsSuccessStatusCode)
             {
+                var codeMappingDto = CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
+                await _sqlHelper.SaveCodeMappingData(codeMappingDto);
                 var httpResult = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 if (!string.IsNullOrWhiteSpace(httpResult))
                     response = JsonConvert.DeserializeObject<CgUploadCsvResModel>(httpResult);
