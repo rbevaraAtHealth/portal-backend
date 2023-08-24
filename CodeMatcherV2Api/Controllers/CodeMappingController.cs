@@ -48,7 +48,8 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary, GetUserInfo());
+                //int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary, GetUserInfo());
+                int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary.ToString(), GetUserInfo());
 
                 if (summaryId == 0)
                 {
