@@ -7,6 +7,10 @@ using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Middlewares.HttpHelper;
 using System.Net.Http;
 using CodeMatcher.Api.V2.ApiResponseModel;
+using CodeMatcher.Api.V2.RepoModelAdapter;
+using CodeMatcherV2Api.ApiResponseModel;
+using CodeMatcherV2Api.Middlewares.SqlHelper;
+using Newtonsoft.Json;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -50,7 +54,8 @@ namespace CodeMatcherV2Api.Controllers
                 var requestModel = await _Upload.CgUploadCsvRequestGet(upload,GetUserInfo(),getClientId());
                 var url = "code-generation/csv-upload";
                 var response = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
-                var responseModel = _Upload.CgUploadSaveResponse(response, requestModel.Item2, GetUserInfo());
+                var responseModel = await _Upload.CgUploadSaveResponse(response, requestModel.Item2, GetUserInfo());
+                
                 _responseViewModel.Model = responseModel;
                 return Ok(_responseViewModel);
             }
@@ -59,7 +64,6 @@ namespace CodeMatcherV2Api.Controllers
                 _responseViewModel.ExceptionMessage = ex.Message;
                 return BadRequest(_responseViewModel);
             }
-
         }
         private bool CheckIfCsvFile(IFormFile file)
         {

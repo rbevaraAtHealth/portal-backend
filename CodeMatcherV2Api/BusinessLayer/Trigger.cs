@@ -143,7 +143,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                 {
                     responseModel = JsonConvert.DeserializeObject<MonthlyEmbedTriggeredRunResModel>(httpResult);
                     var codeMappingDto = CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
-                    int codeMappingId = await _sqlHelper.SaveCodeMappingData(codeMappingDto);
+                        int codeMappingId = await _sqlHelper.SaveCodeMappingData(codeMappingDto);
                 }
                 if (responseModel != null)
                 {

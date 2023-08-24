@@ -2,17 +2,12 @@
 using CodeMatcher.Api.V2.Common;
 using CodeMatcherApiV2.Common;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.IO;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 

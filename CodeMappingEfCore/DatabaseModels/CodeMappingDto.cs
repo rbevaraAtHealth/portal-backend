@@ -18,5 +18,6 @@ namespace CodeMappingEfCore.DatabaseModels
         public string Status { get; set; } = null!;
 
         public string Progress { get; set; } = null!;
+
     }
 }

@@ -99,7 +99,8 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             {
                 return cacheData;
             }
-            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            //var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            var expirationTime = DateTimeOffset.Now.AddDays(7.0);
             var lookups = await context.Lookups.Include("LookupType").Where(x => x.LookupType.LookupTypeKey.ToLower() == key.ToLower()).AsNoTracking().ToListAsync();
 
             var result = _cacheService.SetData(key, lookups, expirationTime);

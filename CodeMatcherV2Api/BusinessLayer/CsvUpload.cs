@@ -3,6 +3,7 @@ using Azure;
 using Azure.Storage.Files.Shares;
 using CodeMappingEfCore.DatabaseModels;
 using CodeMatcher.Api.V2.BusinessLayer;
+using CodeMatcher.Api.V2.RepoModelAdapter;
 using CodeMatcherV2Api.ApiRequestModels;
 using CodeMatcherV2Api.ApiResponseModel;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
@@ -67,9 +68,12 @@ namespace CodeMatcherV2Api.BusinessLayer
             responseDto.CreatedBy = user.UserName;
             
            await _sqlHelper.SaveResponseseMessage(responseDto,requestId);
+            
             CgUploadCsvResModel response = new CgUploadCsvResModel();
             if (httpResponse.IsSuccessStatusCode)
             {
+                var codeMappingDto = CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
+                await _sqlHelper.SaveCodeMappingData(codeMappingDto);
                 var httpResult = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 if (!string.IsNullOrWhiteSpace(httpResult))
                     response = JsonConvert.DeserializeObject<CgUploadCsvResModel>(httpResult);

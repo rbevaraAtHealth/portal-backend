@@ -1,10 +1,7 @@
 ﻿using CodeMatcher.Api.V2.ApiResponseModel;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
-using CodeMatcherV2Api.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.Controllers
@@ -14,12 +11,10 @@ namespace CodeMatcherV2Api.Controllers
     public class LookUpController : BaseController
     {
         private readonly ILookUp _lookUp;
-        private readonly ILookupTypes _lookupTypes;
         private readonly ResponseViewModel _responseViewModel;
-        public LookUpController(ILookUp lookUp, ILookupTypes lookupTypes)
+        public LookUpController(ILookUp lookUp)
         {
             _lookUp = lookUp;
-            _lookupTypes = lookupTypes;
             _responseViewModel = new ResponseViewModel();
         }
 

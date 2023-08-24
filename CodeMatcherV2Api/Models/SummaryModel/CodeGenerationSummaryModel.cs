@@ -24,17 +24,17 @@ namespace CodeMatcher.Api.V2.Models.SummaryModel
         [JsonProperty(PropertyName = "No_of_Input_Records")]
         public int NoOfInputRecords { get; set; }
 
-        [JsonProperty(PropertyName = "Number of Noisy Records")]
+        [JsonProperty(PropertyName = "Number_of_Noisy_Records")]
         public int NoOfNoiseRecords { get; set; }
 
-        [JsonProperty(PropertyName = "Number of Processed Records")]
+        [JsonProperty(PropertyName = "Number_of_Processed_Records")]
 
         public int NoOfProcessedRecords { get; set; }
 
-        [JsonProperty(PropertyName = "Number of Records for which code generated")]
+        [JsonProperty(PropertyName = "Number_of_Records_for_which_code_generated")]
         public int NoOfRecordsForWhichCodeGenerated { get; set; }
 
-        [JsonProperty(PropertyName = "Number of Records for which code not generated")]
+        [JsonProperty(PropertyName = "Number_of_Records_for_which_code_not_generated")]
         public int NoOfRecordsForWhichCodeNotGenerated { get; set; }
 
         [JsonProperty(PropertyName = "Start_Link")]

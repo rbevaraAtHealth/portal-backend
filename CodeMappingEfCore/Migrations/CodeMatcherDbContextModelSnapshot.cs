@@ -238,7 +238,6 @@ namespace CodeMatcher.EntityFrameworkCore.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ResponseMessage")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -541,7 +540,7 @@ namespace CodeMatcher.EntityFrameworkCore.Migrations
             modelBuilder.Entity("CodeMappingEfCore.DatabaseModels.CodeGenerationOverwriteHistoryDto", b =>
                 {
                     b.HasOne("CodeMappingEfCore.DatabaseModels.CodeGenerationOverwriteDto", "CodeGenerationOverwrite")
-                        .WithMany()
+                        .WithMany("HistoryData")
                         .HasForeignKey("OverWriteID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -640,6 +639,11 @@ namespace CodeMatcher.EntityFrameworkCore.Migrations
                         .IsRequired();
 
                     b.Navigation("CodeMappingRequest");
+                });
+
+            modelBuilder.Entity("CodeMappingEfCore.DatabaseModels.CodeGenerationOverwriteDto", b =>
+                {
+                    b.Navigation("HistoryData");
                 });
 #pragma warning restore 612, 618
         }

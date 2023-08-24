@@ -9,5 +9,7 @@ namespace CodeMatcher.Api.V2.ApiResponseModel
         public string Message { get; set; }
         [JsonProperty(PropertyName = "reference")]
         public string Reference { get; set; }
+
+        public string CsvOutputDirectoryPath { get; set; }
     }
 }
