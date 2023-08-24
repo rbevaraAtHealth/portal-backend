@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CodeMappingEfCore.DatabaseModels;
 using CodeMatcher.Api.V2.BusinessLayer;
+using CodeMatcher.Api.V2.BusinessLayer.Dictionary;
 using CodeMatcher.Api.V2.RepoModelAdapter;
 using CodeMatcherV2Api.ApiRequestModels;
 using CodeMatcherV2Api.ApiResponseModel;
@@ -9,8 +10,10 @@ using CodeMatcherV2Api.Controllers;
 using CodeMatcherV2Api.Middlewares.SqlHelper;
 using CodeMatcherV2Api.Models;
 using CodeMatcherV2Api.RepoModelAdapter;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -38,18 +41,20 @@ namespace CodeMatcherV2Api.BusinessLayer
             codeMappingRequestDto.CodeMappingId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.CodeMapping, CodeMappingTypeConst.CodeGeneration)).Id;
             codeMappingRequestDto.Threshold = trigger.Threshold.ToString();
             codeMappingRequestDto.LatestLink = "1";
-            codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
             {
+                codeMappingRequestDto.ClientId = clientId;
                 codeMappingRequestDto.CreatedBy = user.UserName;
             }
             else
             {
+                codeMappingRequestDto.ClientId = "No Client";
                 codeMappingRequestDto.CreatedBy = "Scheduler Admin";
             }
             int reuestId = await _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             var requestModel = _mapper.Map<CgTriggeredRunReqModel>(codeMappingRequestDto);
-            requestModel.Segment = trigger.Segment;
+            //requestModel.Segment = trigger.Segment;
+            requestModel.Segment = SegmentDictionary.GetSegmentValueByKey(trigger.Segment);
             return new Tuple<CgTriggeredRunReqModel, int>(requestModel, reuestId);
         }
         public async Task<CgTriggeredRunResModel> CgAPiResponseSave(HttpResponseMessage httpResponse, int requestId, LoginModel user)
@@ -85,18 +90,19 @@ namespace CodeMatcherV2Api.BusinessLayer
             codeMappingRequestDto.RunTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.RunType, RequestTypeConst.Triggered)).Id;
             codeMappingRequestDto.SegmentTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.Segment, trigger.Segment)).Id;
             codeMappingRequestDto.CodeMappingId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.CodeMapping, CodeMappingTypeConst.MonthlyEmbeddings)).Id; codeMappingRequestDto.CreatedBy = user.UserName;
-            codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
             {
+                codeMappingRequestDto.ClientId = clientId;
                 codeMappingRequestDto.CreatedBy = user.UserName;
             }
             else
             {
+                codeMappingRequestDto.ClientId = "No Client";
                 codeMappingRequestDto.CreatedBy = "Scheduler Admin";
             }
             int requestId = await _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             MonthlyEmbedTriggeredRunReqModel requestModel = new MonthlyEmbedTriggeredRunReqModel();
-            requestModel.Segment = trigger.Segment;
+            requestModel.Segment = SegmentDictionary.GetSegmentValueByKey(trigger.Segment);
             return new Tuple<MonthlyEmbedTriggeredRunReqModel, int>(requestModel, requestId);
         }
         public async Task<Tuple<WeeklyEmbedTriggeredRunReqModel, int>> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user, string clientId)
@@ -106,18 +112,19 @@ namespace CodeMatcherV2Api.BusinessLayer
             codeMappingRequestDto.SegmentTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.Segment, trigger.Segment)).Id;
             codeMappingRequestDto.CodeMappingId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.CodeMapping, CodeMappingTypeConst.WeeklyEmbeddings)).Id;
             codeMappingRequestDto.CreatedBy = user.UserName;
-            codeMappingRequestDto.ClientId = clientId;
             if (user.UserName != null)
             {
+                codeMappingRequestDto.ClientId = clientId;
                 codeMappingRequestDto.CreatedBy = user.UserName;
             }
             else
             {
+                codeMappingRequestDto.ClientId = "No Client";
                 codeMappingRequestDto.CreatedBy = "Scheduler Admin";
             }
             int requestId = await _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             WeeklyEmbedTriggeredRunReqModel requestModel = new WeeklyEmbedTriggeredRunReqModel();
-            requestModel.Segment = trigger.Segment;
+            requestModel.Segment = SegmentDictionary.GetSegmentValueByKey(trigger.Segment);
             requestModel.LatestLink = "6";
 
             return new Tuple<WeeklyEmbedTriggeredRunReqModel, int>(requestModel, requestId);

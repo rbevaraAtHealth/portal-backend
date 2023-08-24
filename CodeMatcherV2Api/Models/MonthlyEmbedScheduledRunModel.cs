@@ -2,6 +2,7 @@
 {
     public class MonthlyEmbedScheduledRunModel
     {
-        public string segment { get; set; }
+        public string Segment { get; set; }
+        public string RunSchedule { get; set; }
     }
 }
