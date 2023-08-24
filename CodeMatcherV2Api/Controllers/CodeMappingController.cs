@@ -24,21 +24,21 @@ namespace CodeMatcherV2Api.Controllers
         [HttpGet, Route("CodeGeneration/GetCodeMappings")]
         public async Task<IActionResult> GetCodeGenerationCodeMappings()
         {
-            var cgCodeMappings = await _codeMapping.GetCodeGenerationMappingRecords();
+            var cgCodeMappings = await _codeMapping.GetCodeGenerationMappingRecords(getClientId());
             _responseViewModel.Model = cgCodeMappings;
             return Ok(_responseViewModel);
         }
         [HttpGet, Route("MonthlyEmbedings/GetEmbeddings")]
         public async Task<IActionResult> GetMonthlyEmbedings()
         {
-            var embeddings = await _codeMapping.GetMonthlyEmbeddingMappingRecords();
+            var embeddings = await _codeMapping.GetMonthlyEmbeddingMappingRecords(getClientId());
             _responseViewModel.Model = embeddings;
             return Ok(_responseViewModel);
         }
         [HttpGet, Route("WeeklyEmbeddings/GetEmbeddings")]
         public async Task<IActionResult> GetWeeklyEmbeddings()
         {
-            var embeddings = await _codeMapping.GetWeeklyEmbeddingMappingRecords();
+            var embeddings = await _codeMapping.GetWeeklyEmbeddingMappingRecords(getClientId());
             _responseViewModel.Model = embeddings;
             return Ok(_responseViewModel);
         }

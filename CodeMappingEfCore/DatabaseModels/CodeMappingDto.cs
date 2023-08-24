@@ -19,6 +19,5 @@ namespace CodeMappingEfCore.DatabaseModels
 
         public string Progress { get; set; } = null!;
 
-        public string? CsvOutputDirectoryPath { get; set; }
     }
 }

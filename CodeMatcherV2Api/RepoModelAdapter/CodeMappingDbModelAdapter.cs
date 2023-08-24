@@ -18,7 +18,6 @@ namespace CodeMatcher.Api.V2.RepoModelAdapter
                 codeMapping.Reference = apiResponse.Reference;
                 codeMapping.Status = "In progress";
                 codeMapping.Progress = string.Empty;
-                codeMapping.CsvOutputDirectoryPath = apiResponse.CsvOutputDirectoryPath;
             }
             return codeMapping;
         }
