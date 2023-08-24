@@ -61,6 +61,16 @@ namespace CodeMatcherV2Api.Controllers
             }
 
         }
+        [HttpGet("DownloadFile")]
+        public async Task<IActionResult> DownloadFile([FromQuery] string tokenId)
+        {
+            var isDownloaded = await _Upload.DownloadFile(tokenId);
+            if(isDownloaded)
+            {
+                return Ok("Files downloaded successfully");
+            }
+            return NoContent();
+        }
         private bool CheckIfCsvFile(IFormFile file)
         {
             var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];

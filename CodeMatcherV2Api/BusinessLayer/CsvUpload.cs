@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Azure;
 using Azure.Storage.Files.Shares;
+using Azure.Storage.Files.Shares.Models;
 using CodeMappingEfCore.DatabaseModels;
 using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcherV2Api.ApiRequestModels;
@@ -13,9 +14,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.BusinessLayer
@@ -77,6 +81,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             return response;
 
         }
+
         public async Task<string> WriteFile(IFormFile file)
         {
             try
@@ -115,6 +120,66 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return $"{outputDirName}{inputdirName}/{fileName}";
         }
+
+        public async Task<bool> DownloadFile(string dirName)
+        {
+            try
+            {
+                string connectionString = _configuration["AzureFileStorage:ConnectionString"];
+                string shareName = _configuration["AzureFileStorage:ShareName"];
+                ShareClient share = new(connectionString, shareName);
+                
+                ShareDirectoryClient directory = share.GetDirectoryClient(dirName);
+                var directories = directory.GetFilesAndDirectories();
+                if(directories==null || directories.Count() == 0) // if no directories or files then, returning false
+                {
+                    return false;
+                }
+
+                // Check path and remove if added already and added newly
+                var filesPath = Environment.CurrentDirectory + @$"\{dirName}";
+                if (System.IO.Directory.Exists(filesPath))
+                {
+                    Directory.Delete(filesPath, true);
+                }
+                if (!System.IO.Directory.Exists(filesPath))
+                {
+                    Directory.CreateDirectory(filesPath);
+                }
+                // set the sub directories 
+                foreach(var dir in directories)
+                {
+                    if (dir.IsDirectory)
+                    {
+                        directory = directory.GetSubdirectoryClient(dir.Name);
+                    }
+                }
+
+                //Get the files from overall
+                var files = directory.GetFilesAndDirectories();
+                foreach (var file in files) 
+                {
+                    if (!file.IsDirectory)
+                    {
+                        var fileName = file.Name;
+                        var filePath = Path.Combine(filesPath, fileName);
+                        ShareFileClient fileclient = directory.GetFileClient(fileName);
+                        ShareFileDownloadInfo downloadInfo = fileclient.Download();
+                        using (FileStream stream = File.OpenWrite(filePath))
+                        {
+                            await downloadInfo.Content.CopyToAsync(stream);
+                        }
+                    }
+                }
+                return true;
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+        }
+
+        
 
     }
 }
