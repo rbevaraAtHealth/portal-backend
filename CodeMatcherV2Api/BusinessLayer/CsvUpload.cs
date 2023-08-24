@@ -19,6 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -130,8 +131,11 @@ namespace CodeMatcherV2Api.BusinessLayer
                 ShareClient share = new(connectionString, shareName);
                 
                 ShareDirectoryClient directory = share.GetDirectoryClient(dirName);
-                var directories = directory.GetFilesAndDirectories();
-                if(directories==null || directories.Count() == 0) // if no directories or files then, returning false
+
+                //Get the files from overall
+                var files = directory.GetFilesAndDirectories();
+
+                if (files == null || files.Count() == 0) // if no files then, returning false
                 {
                     return false;
                 }
@@ -146,17 +150,8 @@ namespace CodeMatcherV2Api.BusinessLayer
                 {
                     Directory.CreateDirectory(filesPath);
                 }
-                // set the sub directories 
-                foreach(var dir in directories)
-                {
-                    if (dir.IsDirectory)
-                    {
-                        directory = directory.GetSubdirectoryClient(dir.Name);
-                    }
-                }
 
-                //Get the files from overall
-                var files = directory.GetFilesAndDirectories();
+                //Loop over the overall files and directories
                 foreach (var file in files) 
                 {
                     if (!file.IsDirectory)
@@ -169,6 +164,10 @@ namespace CodeMatcherV2Api.BusinessLayer
                         {
                             await downloadInfo.Content.CopyToAsync(stream);
                         }
+                    }
+                    if (file.IsDirectory)
+                    {
+                       await DownloadFile(Path.Combine(dirName, file.Name));
                     }
                 }
                 return true;
