@@ -4,6 +4,7 @@ using CodeMatcherV2Api.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodeMatcher.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(CodeMatcherDbContext))]
-    partial class CodeMatcherDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230825054603_cgSummaryupdateforCsvUploadSummary")]
+    partial class cgSummaryupdateforCsvUploadSummary
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

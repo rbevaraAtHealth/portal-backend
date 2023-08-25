@@ -17,6 +17,8 @@ namespace CodeMatcher.Api.V2.Models.SummaryModel
         public int NoofMatches { get; set; }
         public string RunBy { get; set; }
         public string RunType { get; set; }
+        public string Status { get; set; }
         public object Summary { get; set; }
+
     }
 }

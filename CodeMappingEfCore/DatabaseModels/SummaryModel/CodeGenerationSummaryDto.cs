@@ -25,7 +25,7 @@ namespace CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables
         [Required]
         public int NoOfInputRecords { get; set; }
         [Required]
-        public int NoOfNoiseRecords { get;}
+        public int NoOfNoiseRecords { get; set; }
         [Required]
         public int NoOfProcessedRecords { get; set; }
         [Required]
@@ -37,5 +37,6 @@ namespace CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables
         [Required]
         public string LatestLink { get; set; } = null!;
 
+        public string? UploadCsvOutputDirPath { get; set; } 
     }
 }

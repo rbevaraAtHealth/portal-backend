@@ -4,6 +4,8 @@ using Azure.Storage.Files.Shares;
 using Azure.Storage.Files.Shares.Models;
 using CodeMappingEfCore.DatabaseModels;
 using CodeMatcher.Api.V2.BusinessLayer;
+using CodeMatcher.Api.V2.BusinessLayer.Dictionary;
+using CodeMatcher.Api.V2.RepoModelAdapter;
 using CodeMatcher.Api.V2.Models.JsonResultModels;
 using CodeMatcherV2Api.ApiRequestModels;
 using CodeMatcherV2Api.ApiResponseModel;
@@ -64,7 +66,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             CgUploadCsvReqModel requestModel = new CgUploadCsvReqModel();
             requestModel.CsvInput = csvUpload.CsvFilePath;
             requestModel.Threshold = csvUpload.Threshold;
-            requestModel.Segment = csvUpload.Segment;
+            requestModel.Segment = SegmentDictionary.GetSegmentValueByKey(csvUpload.Segment);
             return new Tuple<CgUploadCsvReqModel, int>(requestModel, reuestId);
         }
 
@@ -80,6 +82,8 @@ namespace CodeMatcherV2Api.BusinessLayer
             CgUploadCsvResModel response = new CgUploadCsvResModel();
             if (httpResponse.IsSuccessStatusCode)
             {
+                var codeMappingDto = CodeMappingDbModelAdapter.GetCodeMappingModel(responseDto);
+                await _sqlHelper.SaveCodeMappingData(codeMappingDto);
                 var httpResult = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 if (!string.IsNullOrWhiteSpace(httpResult))
                     response = JsonConvert.DeserializeObject<CgUploadCsvResModel>(httpResult);

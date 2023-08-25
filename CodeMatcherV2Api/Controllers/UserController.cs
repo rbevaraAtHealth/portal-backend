@@ -2,17 +2,12 @@
 using CodeMatcher.Api.V2.Common;
 using CodeMatcherApiV2.Common;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.IO;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -77,7 +72,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-       // [NonAction]
+        // [NonAction]
         [HttpPost("Decrypt")]
         public IActionResult GetDecryptConn([FromBody] string connStr)
         {
@@ -125,12 +120,41 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(_responseViewModel);
             }
         }
-        [NonAction]
+        //[NonAction]
         [HttpPost("UpdateBaseData")]
         public IActionResult UpdateBaseData([FromBody] string connStr)
         {
             try
             {
+                var sqlscript = @"  BEGIN TRANSACTION
+                                    SET QUOTED_IDENTIFIER ON
+                                    SET ARITHABORT ON
+                                    SET NUMERIC_ROUNDABORT OFF
+                                    SET CONCAT_NULL_YIELDS_NULL ON
+                                    SET ANSI_NULLS ON
+                                    SET ANSI_PADDING ON
+                                    SET ANSI_WARNINGS ON
+                                    COMMIT
+                                    BEGIN TRANSACTION
+                                    
+                                    ALTER TABLE dbo.CodeGenerationSummary ADD
+	                                    UploadCsvOutputDirPath nvarchar(MAX) NULL
+                                    
+                                    ALTER TABLE dbo.CodeGenerationSummary SET (LOCK_ESCALATION = TABLE)
+                                    
+                                    COMMIT";
+
+
+                using (SqlConnection myCon = new SqlConnection(connStr))
+                {
+                    myCon.Open();
+                    using (var command = new SqlCommand(sqlscript, myCon))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    myCon.Close();
+                }
+
             }
             catch (Exception ex)
             {

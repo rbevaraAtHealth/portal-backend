@@ -4,6 +4,9 @@ using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 using CodeMatcherV2Api.ApiRequestModels;
 using CodeMatcherV2Api.Models;
+using System.Globalization;
+using System;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CodeMatcherV2Api
 {
@@ -16,9 +19,15 @@ namespace CodeMatcherV2Api
                 config.CreateMap<UserModel, UserDto>().ReverseMap();
                 config.CreateMap<LookupModel, LookupDto>().ReverseMap();
                 config.CreateMap<LookupTypeDto, LookupTypeModel>().ReverseMap();
-                config.CreateMap<CodeGenerationSummaryModel, CodeGenerationSummaryDto>().ReverseMap();
-                config.CreateMap<MonthlyEmbeddingsSummaryDto, MonthlyEmbedSummaryModel>().ReverseMap();
-                config.CreateMap<WeeklyEmbeddingsSummaryDto, WeeklyEmbedSummaryModel>().ReverseMap();
+                config.CreateMap<CodeGenerationSummaryModel, CodeGenerationSummaryDto>()
+                 .ForMember(x => x.Date, y => y.MapFrom(z => DateTime.ParseExact(z.Date, "dd/MM/yyyy hh:mm:ss", CultureInfo.CurrentCulture)))
+                 .ReverseMap();
+                config.CreateMap<MonthlyEmbedSummaryModel, MonthlyEmbeddingsSummaryDto>()
+                .ForMember(x => x.Date, y => y.MapFrom(z => DateTime.ParseExact(z.Date, "dd/MM/yyyy hh:mm:ss", CultureInfo.CurrentCulture)))
+                 .ReverseMap();
+                config.CreateMap< WeeklyEmbedSummaryModel, WeeklyEmbeddingsSummaryDto>()
+                .ForMember(x => x.Date, y => y.MapFrom(z => DateTime.ParseExact(z.Date, "dd/MM/yyyy hh:mm:ss", CultureInfo.CurrentCulture)))
+                 .ReverseMap();
                 config.CreateMap<CodeMappingRequestDto, CgTriggeredRunReqModel>().ReverseMap();
             });
             return mapperConfig;

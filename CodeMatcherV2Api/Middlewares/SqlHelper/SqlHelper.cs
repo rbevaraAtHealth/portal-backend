@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 using System;
+using CodeMatcher.Api.V2.Models;
 
 namespace CodeMatcherV2Api.Middlewares.SqlHelper
 {
@@ -72,7 +73,8 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
         public int GetRequestId(string taskId)
         {
             var codemap = context.CodeMappings.FirstOrDefault(x => x.Reference == taskId);
-            return codemap.Id;
+            //return codemap.Id;
+            return codemap.RequestId;
         }
         public int GetCodeMappingId(int requestId)
         {
@@ -99,7 +101,8 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             {
                 return cacheData;
             }
-            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            //var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            var expirationTime = DateTimeOffset.Now.AddDays(7.0);
             var lookups = await context.Lookups.Include("LookupType").Where(x => x.LookupType.LookupTypeKey.ToLower() == key.ToLower()).AsNoTracking().ToListAsync();
 
             var result = _cacheService.SetData(key, lookups, expirationTime);
@@ -113,5 +116,21 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             return filteredData;
         }
 
+        public async Task<CodeMappingDto> UpdateTaskStatus(string taskId, CodeMappingDto updateStatus)
+        {
+            var requestId = context.CodeMappings.FirstOrDefault(x => x.Reference == taskId);
+            if (requestId != null)
+            {
+                requestId.Reference = taskId;
+                requestId.Status = updateStatus.Status;
+                requestId.Progress = updateStatus.Progress;
+                context.Update(requestId);
+                await context.SaveChangesAsync();
+            }
+            
+            //return requestId.Id;
+            return requestId;
+
+        }
     }
 }
