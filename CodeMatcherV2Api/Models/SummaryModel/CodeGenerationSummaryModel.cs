@@ -15,8 +15,8 @@ namespace CodeMatcher.Api.V2.Models.SummaryModel
 
         [JsonPropertyName("Date")]
         public string Date { get; set; }
-        public string Segment { get; set; }
-        public string Threshold { get; set; }
+        public string Segment { get; set; } 
+        public string Threshold { get; set; } 
 
         [JsonProperty(PropertyName = "No_of_BaseRecords")]
         public int NoOfBaseRecords { get; set; }
@@ -38,11 +38,15 @@ namespace CodeMatcher.Api.V2.Models.SummaryModel
         public int NoOfRecordsForWhichCodeNotGenerated { get; set; }
 
         [JsonProperty(PropertyName = "Start_Link")]
-        public string StartLink { get; set; }
+        public string StartLink { get; set; } = string.Empty;
 
         [JsonProperty(PropertyName = "Latest_Link")]
-        public string LatestLink { get; set; }
+        public string LatestLink { get; set; } = string.Empty;
+
         [JsonProperty(PropertyName = "Client_Id")]
-        public string ClientId { get; set; }
+        public string ClientId { get; set; } = string.Empty;
+
+        [JsonProperty(PropertyName = "Output_Dir_Path")]
+        public string UploadCsvOutputDirPath { get; set; } = string.Empty;
     }
 }
