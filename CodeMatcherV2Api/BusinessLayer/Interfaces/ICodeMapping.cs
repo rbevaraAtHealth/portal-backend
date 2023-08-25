@@ -1,4 +1,5 @@
-﻿using CodeMatcher.Api.V2.Models;
+﻿using CodeMappingEfCore.DatabaseModels;
+using CodeMatcher.Api.V2.Models;
 using CodeMatcher.Api.V2.Models.SummaryModel;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 using CodeMatcherV2Api.Models;
@@ -21,5 +22,7 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
         Task<int> SaveSummary(string taskId, string summary, LoginModel loginModel);
         Task<GenericSummaryViewModel> GetMappings(string taskId);
         Task<List<CodeMappingReqResDataModel>> GetCodeMappingRequestResponse();
+        Task<CodeMappingDto> UpdateTaskStatus(CodeMappingUpdateStatus codeMappingUpdate, LoginModel loginModel);
+        
     }
 }
