@@ -120,12 +120,25 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(_responseViewModel);
             }
         }
-        [NonAction]
+        //[NonAction]
         [HttpPost("UpdateBaseData")]
         public IActionResult UpdateBaseData([FromBody] string connStr)
         {
             try
             {
+                var sqlscript = @"";
+
+
+                using (SqlConnection myCon = new SqlConnection(connStr))
+                {
+                    myCon.Open();
+                    using (var command = new SqlCommand(sqlscript, myCon))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    myCon.Close();
+                }
+
             }
             catch (Exception ex)
             {
