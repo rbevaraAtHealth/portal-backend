@@ -72,7 +72,8 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
         public int GetRequestId(string taskId)
         {
             var codemap = context.CodeMappings.FirstOrDefault(x => x.Reference == taskId);
-            return codemap.Id;
+            //return codemap.Id;
+            return codemap.RequestId;
         }
         public int GetCodeMappingId(int requestId)
         {
