@@ -126,7 +126,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                var sqlscript = @"BEGIN TRANSACTION
+                var sqlscript = @"  BEGIN TRANSACTION
                                     SET QUOTED_IDENTIFIER ON
                                     SET ARITHABORT ON
                                     SET NUMERIC_ROUNDABORT OFF
@@ -136,12 +136,12 @@ namespace CodeMatcherV2Api.Controllers
                                     SET ANSI_WARNINGS ON
                                     COMMIT
                                     BEGIN TRANSACTION
-                                    GO
+                                    
                                     ALTER TABLE dbo.CodeGenerationSummary ADD
 	                                    UploadCsvOutputDirPath nvarchar(MAX) NULL
-                                    GO
+                                    
                                     ALTER TABLE dbo.CodeGenerationSummary SET (LOCK_ESCALATION = TABLE)
-                                    GO
+                                    
                                     COMMIT";
 
 
