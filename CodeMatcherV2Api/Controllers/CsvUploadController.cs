@@ -7,6 +7,7 @@ using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Middlewares.HttpHelper;
 using System.Net.Http;
 using CodeMatcher.Api.V2.ApiResponseModel;
+using System.Linq;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -62,12 +63,13 @@ namespace CodeMatcherV2Api.Controllers
 
         }
         [HttpGet("DownloadFile")]
-        public async Task<IActionResult> DownloadFile([FromQuery] string tokenId)
+        public async Task<IActionResult> DownloadFile([FromQuery] string dirName)
         {
-            var isDownloaded = await _Upload.DownloadFile(tokenId);
-            if(isDownloaded)
+            var filesInfo = await _Upload.DownloadFile(dirName);
+            byte[] zipBytesArr= await _Upload.FilesToZip(filesInfo.shareFiles,filesInfo.fileNames);
+            if (zipBytesArr!=null)
             {
-                return Ok("Files downloaded successfully");
+                return new FileContentResult(zipBytesArr.ToArray(), "application/zip") { FileDownloadName = @$"{dirName}.zip" };
             }
             return NoContent();
         }
