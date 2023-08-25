@@ -82,6 +82,33 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(_responseViewModel);
             }
         }
+
+        [AllowAnonymous]
+        [HttpPost, Route("UpdateTaskStatus")]
+        public async Task<IActionResult> UpdateTaskStatus([FromBody] CodeMappingUpdateStatus response)
+        {
+            try
+            {
+                var taskId = await _codeMapping.UpdateTaskStatus(response, GetUserInfo());
+                if(taskId != null)
+                {
+                    _responseViewModel.Model = taskId;
+                    _responseViewModel.Message = response.Message;
+                   
+                    return Ok(_responseViewModel);
+                }
+                else
+                {
+                    _responseViewModel.Message = "Task Id not found";
+                    return Ok(_responseViewModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
+            }
+        }
     }
 
 }

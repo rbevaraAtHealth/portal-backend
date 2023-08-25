@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CodeMappingEfCore.DatabaseModels;
 using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.Models;
 using CodeMatcher.Api.V2.Models.SummaryModel;
@@ -84,7 +85,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                                     join cs in _context.CodeGenerationSummary on cr.Id equals cs.RequestId
                                     into csA
                                     from csB in csA.DefaultIfEmpty()
-                                    where (cr.CodeMappingType.Name == CodeMappingTypeConst.CodeGeneration && cr.RunType.Name != RequestTypeConst.Scheduled && cr.ClientId==clientId)
+                                    where (cr.CodeMappingType.Name == CodeMappingTypeConst.CodeGeneration && cr.RunType.Name != RequestTypeConst.Scheduled && cr.ClientId == clientId)
                                     select new GenericSummaryViewModel
                                     {
                                         TaskId = cm.Reference,
@@ -94,7 +95,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                                         RunType = cr.RunType.Name,
                                         CodeMappingType = cr.CodeMappingType.Name,
                                         RunBy = cr.CreatedBy,
-                                        Status= cm.Status,
+                                        Status = cm.Status,
                                         Summary = csB
                                     }).ToListAsync();
 
@@ -107,7 +108,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                                     join cs in _context.WeeklyEmbeddingsSummary on cr.Id equals cs.RequestId
                                     into csA
                                     from csB in csA.DefaultIfEmpty()
-                                    where (cr.CodeMappingType.Name == CodeMappingTypeConst.WeeklyEmbeddings && cr.ClientId==clientId)
+                                    where (cr.CodeMappingType.Name == CodeMappingTypeConst.WeeklyEmbeddings && cr.ClientId == clientId)
                                     select new GenericSummaryViewModel
                                     {
                                         TaskId = cm.Reference,
@@ -131,7 +132,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                                     join cs in _context.MonthlyEmbeddingsSummary on cr.Id equals cs.RequestId
                                     into csA
                                     from csB in csA.DefaultIfEmpty()
-                                    where (cr.CodeMappingType.Name == CodeMappingTypeConst.MonthlyEmbeddings && cr.ClientId==clientId)
+                                    where (cr.CodeMappingType.Name == CodeMappingTypeConst.MonthlyEmbeddings && cr.ClientId == clientId)
                                     select new GenericSummaryViewModel
                                     {
                                         TaskId = cm.Reference,
@@ -156,7 +157,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             var cgSummaryDto = _mapper.Map<CodeGenerationSummaryDto>(cgSummary);
             cgSummaryDto.RequestId = requestId;
             cgSummaryDto.CreatedBy = loginModel.UserName;
-            int summaryid =await _sqlHelper.SaveCodeGenerationSummary(cgSummaryDto);
+            int summaryid = await _sqlHelper.SaveCodeGenerationSummary(cgSummaryDto);
             _sqlHelper.UpdateCodeMappingStatus(taskId);
             return summaryid;
         }
@@ -207,7 +208,8 @@ namespace CodeMatcherV2Api.BusinessLayer
         public async Task<List<CodeMappingReqResDataModel>> GetCodeMappingRequestResponse()
         {
             var codeMappingdata = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType")
-                                         join cs in _context.CodeMappingResponses on cr.Id equals cs.RequestId into crM from cmR in crM.DefaultIfEmpty()
+                                         join cs in _context.CodeMappingResponses on cr.Id equals cs.RequestId into crM
+                                         from cmR in crM.DefaultIfEmpty()
                                          join cm in _context.CodeMappings on cr.Id equals cm.RequestId
                                          into csA
                                          from csB in csA.DefaultIfEmpty()
@@ -220,5 +222,19 @@ namespace CodeMatcherV2Api.BusinessLayer
                                          }).ToListAsync();
             return codeMappingdata;
         }
+
+        public async Task<CodeMappingDto> UpdateTaskStatus(CodeMappingUpdateStatus codeMappingUpdate, LoginModel loginModel)
+        {
+            CodeMappingDto data = new CodeMappingDto();
+            data.Reference = codeMappingUpdate.TaskId;
+            data.Status = codeMappingUpdate.Status;
+            data.Progress = codeMappingUpdate.Progress;
+
+            var details = await _sqlHelper.UpdateTaskStatus(codeMappingUpdate.TaskId, data);
+  
+            return details;
+
+        }
+
     }
 }
