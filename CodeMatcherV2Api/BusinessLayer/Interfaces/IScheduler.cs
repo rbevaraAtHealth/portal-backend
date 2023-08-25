@@ -12,8 +12,9 @@ namespace CodeMatcher.Api.V2.BusinessLayer.Interfaces
     public interface IScheduler
     {
         Task<List<SchedulerModel>> GetAllSchedulersAsync();
-        Task<Tuple<CgScheduledRunReqModel, int>> GetMonthlyScheduleJobAsync(CgScheduledModel schedule, LoginModel user, string clientId);
-        Task<Tuple<CgScheduledRunReqModel, int>> GetweeklyJobScheduleAsync(CgScheduledModel schedule, LoginModel user,string clientId);
+        Task<SchedulerModel> GetAllSchedulersByIdAsync(int schedulerId);
+        Task<Tuple<CgScheduledRunReqModel, int>> GetMonthlyScheduleJobAsync(MonthlyEmbedScheduledRunModel schedule, LoginModel user, string clientId);
+        Task<Tuple<CgScheduledRunReqModel, int>> GetweeklyJobScheduleAsync(WeeklyEmbedScheduledRunModel schedule, LoginModel user,string clientId);
         Task<Tuple<CgScheduledRunReqModel, int>> GetCodeGenerationScheduleAsync(CgScheduledModel schedule, LoginModel user,string clientId);
 
     }

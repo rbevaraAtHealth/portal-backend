@@ -26,8 +26,12 @@ namespace CodeMatcherV2Api.Controllers
         internal string getClientId()
         {
             const string HeaderKeyName = "ClientID";
-            Request.Headers.TryGetValue(HeaderKeyName, out StringValues headerValue);
-            return headerValue;
+            if(Request != null && Request.Headers.Count > 0)
+            {
+                Request.Headers.TryGetValue(HeaderKeyName, out StringValues headerValue);
+                return headerValue;
+            }
+            return "No Client";
         }
     }
 }

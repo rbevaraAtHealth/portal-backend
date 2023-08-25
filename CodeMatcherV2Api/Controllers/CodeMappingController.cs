@@ -1,12 +1,9 @@
 ﻿using CodeMatcher.Api.V2.ApiResponseModel;
-using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.Models;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
-using CodeMatcherV2Api.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.Controllers
@@ -16,36 +13,32 @@ namespace CodeMatcherV2Api.Controllers
     public class CodeMappingController : BaseController
     {
         private readonly ICodeMapping _codeMapping;
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly CodeMatcherDbContext _context;
         private readonly ResponseViewModel _responseViewModel;
 
-        public CodeMappingController(ICodeMapping codeMapping, IHttpClientFactory httpClientFactory, CodeMatcherDbContext context)
+        public CodeMappingController(ICodeMapping codeMapping)
         {
             _codeMapping = codeMapping;
-            _httpClientFactory = httpClientFactory;
-            _context = context;
             _responseViewModel = new ResponseViewModel();
         }
 
         [HttpGet, Route("CodeGeneration/GetCodeMappings")]
         public async Task<IActionResult> GetCodeGenerationCodeMappings()
         {
-            var cgCodeMappings = await _codeMapping.GetCodeGenerationMappingRecords();
+            var cgCodeMappings = await _codeMapping.GetCodeGenerationMappingRecords(getClientId());
             _responseViewModel.Model = cgCodeMappings;
             return Ok(_responseViewModel);
         }
         [HttpGet, Route("MonthlyEmbedings/GetEmbeddings")]
         public async Task<IActionResult> GetMonthlyEmbedings()
         {
-            var embeddings = await _codeMapping.GetMonthlyEmbeddingMappingRecords();
+            var embeddings = await _codeMapping.GetMonthlyEmbeddingMappingRecords(getClientId());
             _responseViewModel.Model = embeddings;
             return Ok(_responseViewModel);
         }
         [HttpGet, Route("WeeklyEmbeddings/GetEmbeddings")]
         public async Task<IActionResult> GetWeeklyEmbeddings()
         {
-            var embeddings = await _codeMapping.GetWeeklyEmbeddingMappingRecords();
+            var embeddings = await _codeMapping.GetWeeklyEmbeddingMappingRecords(getClientId());
             _responseViewModel.Model = embeddings;
             return Ok(_responseViewModel);
         }
@@ -55,7 +48,8 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary, GetUserInfo());
+                //int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary, GetUserInfo());
+                int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary.ToString(), GetUserInfo());
 
                 if (summaryId == 0)
                 {
@@ -67,6 +61,20 @@ namespace CodeMatcherV2Api.Controllers
                     _responseViewModel.Message = "Summary Saved Successfully";
                     return Ok(_responseViewModel);
                 }
+            }
+            catch (Exception ex)
+            {
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
+            }
+        }
+        [HttpGet, Route("CodeMappingRequestGetAll")]
+        public async Task<IActionResult> CodeMappingReqResGetAll()
+        {
+            try
+            {
+                _responseViewModel.Model = await _codeMapping.GetCodeMappingRequestResponse();
+                return Ok(_responseViewModel);
             }
             catch (Exception ex)
             {
