@@ -1,6 +1,7 @@
 ﻿using CodeMatcher.Api.V2.ApiResponseModel;
 using CodeMatcher.Api.V2.Models;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -49,7 +50,8 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 //int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary, GetUserInfo());
-                int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary.ToString(), GetUserInfo());
+                //int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary.ToString(), GetUserInfo());
+                int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary.ToString(), new LoginModel { UserName="admin"});
 
                 if (summaryId == 0)
                 {
