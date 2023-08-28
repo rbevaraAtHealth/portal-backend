@@ -54,18 +54,42 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
         }
         public async Task<int> SaveCodeGenerationSummary(CodeGenerationSummaryDto cgSummary)
         {
-            context.CodeGenerationSummary.Add(cgSummary);
+            var cgdto = await context.CodeGenerationSummary.FirstOrDefaultAsync(x => x.TaskId == cgSummary.TaskId);
+            if (cgdto != null)
+            {
+                cgdto = cgSummary;
+                context.CodeGenerationSummary.Update(cgdto);
+                await context.SaveChangesAsync();
+                return cgdto.Id;
+            }
+                context.CodeGenerationSummary.Add(cgSummary);
             await context.SaveChangesAsync();
             return cgSummary.Id;
         }
         public async Task<int> SaveMonthlyEmbedSummary(MonthlyEmbeddingsSummaryDto monthlySummary)
         {
+            var embeddto=await context.MonthlyEmbeddingsSummary.FirstOrDefaultAsync(x => x.TaskId==monthlySummary.TaskId);
+            if (embeddto != null)
+            {
+                embeddto = monthlySummary; 
+                context.MonthlyEmbeddingsSummary.Update(embeddto);
+                await context.SaveChangesAsync();
+                return embeddto.Id;
+            }
             context.MonthlyEmbeddingsSummary.Add(monthlySummary);
             await context.SaveChangesAsync();
             return monthlySummary.Id;
         }
         public async Task<int> SaveWeeklyEmbedSummary(WeeklyEmbeddingsSummaryDto weeklySummary)
         {
+            var embeddto = await context.WeeklyEmbeddingsSummary.FirstOrDefaultAsync(x => x.TaskId == weeklySummary.TaskId);
+            if (embeddto != null)
+            {
+                embeddto = weeklySummary;
+                context.Update(embeddto);
+                await context.SaveChangesAsync();
+                return embeddto.Id;
+            }
             context.WeeklyEmbeddingsSummary.Add(weeklySummary);
             await context.SaveChangesAsync();
             return weeklySummary.Id;
@@ -97,7 +121,7 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
         public async Task<List<LookupDto>> GetLookups(string key)
         {
             var cacheData = _cacheService.GetData<List<LookupDto>>(key);
-            if (cacheData != null && cacheData.Count!=0)
+            if (cacheData != null && cacheData.Count != 0)
             {
                 return cacheData;
             }
