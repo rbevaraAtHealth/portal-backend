@@ -12,6 +12,7 @@ using CodeMatcherV2Api.ApiResponseModel;
 using CodeMatcherV2Api.Middlewares.SqlHelper;
 using Newtonsoft.Json;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -22,11 +23,13 @@ namespace CodeMatcherV2Api.Controllers
         private readonly ICsvUpload _Upload;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ResponseViewModel _responseViewModel;
-        public CsvUploadController(ICsvUpload upload, IHttpClientFactory httpClientFactory)
+        private readonly IConfiguration _configuration;
+        public CsvUploadController(ICsvUpload upload, IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _Upload = upload;
             _httpClientFactory = httpClientFactory;
             _responseViewModel = new ResponseViewModel();
+            _configuration = configuration;
         }
 
         [HttpPost("UploadFile")]
@@ -67,13 +70,31 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
         [HttpGet("DownloadFile")]
-        public async Task<IActionResult> DownloadFile([FromQuery] string dirName)
+        public async Task<IActionResult> DownloadFile([FromQuery] string taskId)
         {
-            var filesInfo = await _Upload.DownloadFile(dirName);
+            var data = await _Upload.GetCsvOutputPath(taskId);
+            if (data == null)
+            {
+                _responseViewModel.ExceptionMessage = "Task id is not found";
+                return BadRequest(_responseViewModel);
+            }
+            else if (data!=null && string.IsNullOrEmpty(data.UploadCsvOutputDirPath))
+            {
+                _responseViewModel.ExceptionMessage = @$"Output path is not found for taskId - {taskId}";
+                return BadRequest(_responseViewModel);
+            }
+            string dirName = data.UploadCsvOutputDirPath.Replace(_configuration["AzureFileStorage:OutputDirPath"], string.Empty);
+            string rootDirectory = dirName, zipFileName=dirName;
+            if (dirName.Contains("/"))
+            {
+                zipFileName = dirName.Split('/').Last();
+                rootDirectory = dirName.Split('/').First();
+            }
+            var filesInfo = await _Upload.DownloadFile(rootDirectory);
             byte[] zipBytesArr= await _Upload.FilesToZip(filesInfo.shareFiles,filesInfo.fileNames);
             if (zipBytesArr!=null)
             {
-                return new FileContentResult(zipBytesArr.ToArray(), "application/zip") { FileDownloadName = @$"{dirName}.zip" };
+                return new FileContentResult(zipBytesArr.ToArray(), "application/zip") { FileDownloadName = @$"{zipFileName}.zip" };
             }
             return NoContent();
         }
