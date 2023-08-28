@@ -11,6 +11,7 @@ using CodeMatcher.Api.V2.RepoModelAdapter;
 using CodeMatcherV2Api.ApiResponseModel;
 using CodeMatcherV2Api.Middlewares.SqlHelper;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -64,6 +65,17 @@ namespace CodeMatcherV2Api.Controllers
                 _responseViewModel.ExceptionMessage = ex.Message;
                 return BadRequest(_responseViewModel);
             }
+        }
+        [HttpGet("DownloadFile")]
+        public async Task<IActionResult> DownloadFile([FromQuery] string dirName)
+        {
+            var filesInfo = await _Upload.DownloadFile(dirName);
+            byte[] zipBytesArr= await _Upload.FilesToZip(filesInfo.shareFiles,filesInfo.fileNames);
+            if (zipBytesArr!=null)
+            {
+                return new FileContentResult(zipBytesArr.ToArray(), "application/zip") { FileDownloadName = @$"{dirName}.zip" };
+            }
+            return NoContent();
         }
         private bool CheckIfCsvFile(IFormFile file)
         {

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 using System;
+using CodeMatcher.Api.V2.Models;
 
 namespace CodeMatcherV2Api.Middlewares.SqlHelper
 {
@@ -139,5 +140,21 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             return filteredData;
         }
 
+        public async Task<CodeMappingDto> UpdateTaskStatus(string taskId, CodeMappingDto updateStatus)
+        {
+            var requestId = context.CodeMappings.FirstOrDefault(x => x.Reference == taskId);
+            if (requestId != null)
+            {
+                requestId.Reference = taskId;
+                requestId.Status = updateStatus.Status;
+                requestId.Progress = updateStatus.Progress;
+                context.Update(requestId);
+                await context.SaveChangesAsync();
+            }
+            
+            //return requestId.Id;
+            return requestId;
+
+        }
     }
 }
