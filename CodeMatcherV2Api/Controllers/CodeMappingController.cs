@@ -49,8 +49,6 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                //int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary, GetUserInfo());
-                //int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary.ToString(), GetUserInfo());
                 int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary.ToString(), new LoginModel { UserName="admin"});
 
                 if (summaryId == 0)
