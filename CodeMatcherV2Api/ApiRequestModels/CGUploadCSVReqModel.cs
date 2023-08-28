@@ -7,7 +7,7 @@ namespace CodeMatcherV2Api.ApiRequestModels
 {
     public class CgUploadCsvReqModel
     {
-        [JsonProperty(PropertyName = "csv_input")]
+        [JsonProperty(PropertyName = "csv_location")]
         public string CsvInput { get; set; }
         [JsonProperty(PropertyName = "segment")]
         public string Segment { get; set; }

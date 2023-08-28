@@ -8,10 +8,10 @@ namespace CodeMatcher.Api.V2.BusinessLayer.Dictionary
         public static Dictionary<string, string> SegmentsMappings()
         {
             Dictionary<string, string> segment = new Dictionary<string, string>();
-            segment.Add("School", "School");
-            segment.Add("Hospital", "Hospital");
-            segment.Add("Insurance", "Insur");
-            segment.Add("State License", "Statelic");
+            segment.Add("school", "School");
+            segment.Add("hospital", "Hospital");
+            segment.Add("insurance", "Insur");
+            segment.Add("state license", "Statelic");
             return segment;
         }
 
@@ -19,7 +19,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer.Dictionary
         {
             Dictionary<string, string> segmentMappings = SegmentsMappings();
 
-            if (segmentMappings.TryGetValue(key, out string value))
+            if (segmentMappings.TryGetValue(key.ToLower(), out string value))
             {
                 return value;
             }
