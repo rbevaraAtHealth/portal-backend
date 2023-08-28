@@ -1,6 +1,7 @@
 ﻿using CodeMatcher.Api.V2.ApiResponseModel;
 using CodeMatcher.Api.V2.Models;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -48,8 +49,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             try
             {
-                //int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary, GetUserInfo());
-                int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary.ToString(), GetUserInfo());
+                int summaryId = await _codeMapping.SaveSummary(response.TaskId, response.Summary.ToString(), new LoginModel { UserName="admin"});
 
                 if (summaryId == 0)
                 {
@@ -75,6 +75,33 @@ namespace CodeMatcherV2Api.Controllers
             {
                 _responseViewModel.Model = await _codeMapping.GetCodeMappingRequestResponse();
                 return Ok(_responseViewModel);
+            }
+            catch (Exception ex)
+            {
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost, Route("UpdateTaskStatus")]
+        public async Task<IActionResult> UpdateTaskStatus([FromBody] CodeMappingUpdateStatus response)
+        {
+            try
+            {
+                var taskId = await _codeMapping.UpdateTaskStatus(response, GetUserInfo());
+                if(taskId != null)
+                {
+                    _responseViewModel.Model = taskId;
+                    _responseViewModel.Message = response.Message;
+                   
+                    return Ok(_responseViewModel);
+                }
+                else
+                {
+                    _responseViewModel.Message = "Task Id not found";
+                    return Ok(_responseViewModel);
+                }
             }
             catch (Exception ex)
             {
