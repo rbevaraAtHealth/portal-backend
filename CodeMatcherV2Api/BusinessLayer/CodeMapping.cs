@@ -94,6 +94,9 @@ namespace CodeMatcherV2Api.BusinessLayer
                                         Segment = cr.SegmentType.Name,
                                         RunType = cr.RunType.Name,
                                         CodeMappingType = cr.CodeMappingType.Name,
+                                        Threshold = csB.Threshold,
+                                        NoofMatches = csB.NoOfRecordsForWhichCodeGenerated,
+                                        NoOfRecords= csB.NoOfProcessedRecords,
                                         RunBy = cr.CreatedBy,
                                         Status = cm.Status,
                                         Summary = csB
@@ -117,6 +120,8 @@ namespace CodeMatcherV2Api.BusinessLayer
                                         Segment = cr.SegmentType.Name,
                                         RunType = cr.RunType.Name,
                                         CodeMappingType = cr.CodeMappingType.Name,
+                                        NoofMatches = csB.NoOfRecordsEmbeddingsCreated,
+                                        NoOfRecords = csB.NoOfRecordsAfterRun,
                                         Status = cm.Status,
                                         RunBy = cr.CreatedBy,
                                         Summary = csB
@@ -141,6 +146,8 @@ namespace CodeMatcherV2Api.BusinessLayer
                                         Segment = cr.SegmentType.Name,
                                         RunType = cr.RunType.Name,
                                         CodeMappingType = cr.CodeMappingType.Name,
+                                        NoofMatches = csB.NoOfRecordsEmbeddingCreated,
+                                        NoOfRecords = csB.NoOfRecordsImportedFromDatabase,
                                         Status = cm.Status,
                                         RunBy = cr.CreatedBy,
                                         Summary = csB
