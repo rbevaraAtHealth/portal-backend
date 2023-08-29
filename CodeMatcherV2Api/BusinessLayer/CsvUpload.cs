@@ -27,6 +27,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 
 namespace CodeMatcherV2Api.BusinessLayer
 {
@@ -208,12 +210,6 @@ namespace CodeMatcherV2Api.BusinessLayer
                         }
                     }
                     archiveFile = archiveStream.ToArray();
-                    //using var fw = File.OpenWrite(@"C:\Users\JJ Raj\Pictures\outCSV.zip");
-
-                    //using var memZip = new MemoryStream(archiveFile);
-                    //memZip.CopyTo(fw);
-
-                    //fw.Close();
                     return archiveFile;
                 }
             }
@@ -231,7 +227,11 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             return bytes;
         }
-
+        public async Task<CodeGenerationSummaryDto> GetCsvOutputPath(string taskId)
+        {
+            var path =await _context.CodeGenerationSummary.FirstOrDefaultAsync(_context => _context.TaskId == taskId);
+            return path;
+        }
     }
 }
 
