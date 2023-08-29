@@ -70,15 +70,15 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             cgDBRequestModel.RunSchedule = schedule.RunSchedule;
             cgDBRequestModel.ClientId = clientId;
             cgDBRequestModel.CreatedBy = user.UserName;
-            int reuestId = await _sqlHelper.SaveCodeMappingRequest(cgDBRequestModel);
-
+            //int requestId = await _sqlHelper.SaveCodeMappingRequest(cgDBRequestModel);
+            int requestId = await _sqlHelper.UpdateCodeGenerationRequest(cgDBRequestModel);
             CgScheduledRunReqModel requestModel = new CgScheduledRunReqModel();
             requestModel.Segment = schedule.Segment;
             requestModel.RunSchedule = schedule.RunSchedule;
             requestModel.LatestLink = cgDBRequestModel.LatestLink;
             requestModel.ClientId = cgDBRequestModel.ClientId;
 
-            return new Tuple<CgScheduledRunReqModel, int>(requestModel, reuestId);
+            return new Tuple<CgScheduledRunReqModel, int>(requestModel, requestId);
         }
 
         public async Task<Tuple<CgScheduledRunReqModel, int>> GetweeklyJobScheduleAsync(WeeklyEmbedScheduledRunModel schedule, LoginModel user, string clientId)
@@ -91,8 +91,8 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             cgDBRequestModel.RunSchedule = schedule.RunSchedule;
             cgDBRequestModel.ClientId = clientId;
             cgDBRequestModel.CreatedBy = user.UserName;
-            int reuestId = await _sqlHelper.SaveCodeMappingRequest(cgDBRequestModel);
-
+            //int reuestId = await _sqlHelper.SaveCodeMappingRequest(cgDBRequestModel);
+            int requestId = await _sqlHelper.UpdateCodeGenerationRequest(cgDBRequestModel);
             CgScheduledRunReqModel requestModel = new CgScheduledRunReqModel();
             requestModel.Segment = schedule.Segment;
             requestModel.RunSchedule = schedule.RunSchedule;
@@ -100,7 +100,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             requestModel.ClientId = cgDBRequestModel.ClientId;
 
 
-            return new Tuple<CgScheduledRunReqModel, int>(requestModel, reuestId);
+            return new Tuple<CgScheduledRunReqModel, int>(requestModel, requestId);
         }
 
         public async Task<Tuple<CgScheduledRunReqModel, int>> GetCodeGenerationScheduleAsync(CgScheduledModel schedule, LoginModel user, string clientId)
@@ -114,7 +114,9 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             cgDBRequestModel.RunSchedule = schedule.RunSchedule;
             cgDBRequestModel.ClientId = clientId;
             cgDBRequestModel.CreatedBy = user.UserName;
-            int reuestId = await _sqlHelper.SaveCodeMappingRequest(cgDBRequestModel);
+            //var details = _sqlHelper.GetScheduledDetails(cgDBRequestModel);
+            int requestId = await _sqlHelper.UpdateCodeGenerationRequest(cgDBRequestModel);
+            //int requestId = await _sqlHelper.SaveCodeMappingRequest(cgDBRequestModel);
 
             CgScheduledRunReqModel requestModel = new CgScheduledRunReqModel();
             requestModel.Segment = schedule.Segment;
@@ -123,7 +125,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             requestModel.LatestLink = cgDBRequestModel.LatestLink;
             requestModel.ClientId = cgDBRequestModel.ClientId;
 
-            return new Tuple<CgScheduledRunReqModel, int>(requestModel, reuestId);
+            return new Tuple<CgScheduledRunReqModel, int>(requestModel, requestId);
 
         }
     }
