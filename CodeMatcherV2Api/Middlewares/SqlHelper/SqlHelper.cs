@@ -35,7 +35,7 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             await context.CodeMappingResponses.AddAsync(responseDto);
             context.SaveChanges();
         }
-
+        
         //public int GetLookupIdOnName(string type)
         //{
         //    var lookup = context.Lookups.FirstOrDefault(x => x.Name.ToLower() == type.ToLower());
@@ -62,16 +62,16 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
                 await context.SaveChangesAsync();
                 return cgdto.Id;
             }
-                context.CodeGenerationSummary.Add(cgSummary);
+            context.CodeGenerationSummary.Add(cgSummary);
             await context.SaveChangesAsync();
             return cgSummary.Id;
         }
         public async Task<int> SaveMonthlyEmbedSummary(MonthlyEmbeddingsSummaryDto monthlySummary)
         {
-            var embeddto=await context.MonthlyEmbeddingsSummary.FirstOrDefaultAsync(x => x.TaskId==monthlySummary.TaskId);
+            var embeddto = await context.MonthlyEmbeddingsSummary.FirstOrDefaultAsync(x => x.TaskId == monthlySummary.TaskId);
             if (embeddto != null)
             {
-                embeddto = monthlySummary; 
+                embeddto = monthlySummary;
                 context.MonthlyEmbeddingsSummary.Update(embeddto);
                 await context.SaveChangesAsync();
                 return embeddto.Id;
@@ -151,10 +151,36 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
                 context.Update(requestId);
                 await context.SaveChangesAsync();
             }
-            
+
             //return requestId.Id;
             return requestId;
 
+        }
+
+        public async Task<int> UpdateCodeGenerationRequest(CodeMappingRequestDto cgReqModel)
+        {
+            var details = await context.CodeMappingRequests.FirstOrDefaultAsync(x => x.SegmentTypeId.Equals(cgReqModel.SegmentTypeId) && x.CodeMappingId.Equals(cgReqModel.CodeMappingId));
+
+            //var cgdto = await context.CodeGenerationSummary.FirstOrDefaultAsync(x => x.TaskId == cgSummary.TaskId);
+            if (details != null)
+            {
+                //details = cgReqModel;
+                details.RunSchedule= cgReqModel.RunSchedule;
+                details.Threshold = cgReqModel.Threshold;
+                details.LatestLink = cgReqModel.LatestLink;
+                details.CreatedBy= cgReqModel.CreatedBy;
+                details.CreatedTime= cgReqModel.CreatedTime;
+                details.ClientId= cgReqModel.ClientId;
+                context.CodeMappingRequests.Update(details);
+                await context.SaveChangesAsync();
+                return details.Id;
+            }
+            else
+            {
+                context.CodeMappingRequests.Add(cgReqModel);
+                await context.SaveChangesAsync();
+                return cgReqModel.Id;
+            }
         }
     }
 }
