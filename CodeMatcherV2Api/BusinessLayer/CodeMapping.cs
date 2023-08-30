@@ -120,8 +120,8 @@ namespace CodeMatcherV2Api.BusinessLayer
                                         Segment = cr.SegmentType.Name,
                                         RunType = cr.RunType.Name,
                                         CodeMappingType = cr.CodeMappingType.Name,
-                                        NoofMatches = csB.NoOfRecordsEmbeddingsCreated,
-                                        NoOfRecords = csB.NoOfRecordsAfterRun,
+                                        NoofMatches = csB.NoOfRecordsAfterRun,
+                                        NoOfRecords = csB.NoOfBaseRecordsBeforeRun,
                                         Status = cm.Status,
                                         RunBy = cr.CreatedBy,
                                         Summary = csB
