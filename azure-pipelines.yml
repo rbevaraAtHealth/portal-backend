@@ -26,7 +26,7 @@ steps:
     deployToSlotOrASE: true
     resourceGroupName: 'codeconv-rg01'
     slotName: 'production'
-    package: '$(System.DefaultWorkingDirectory)/SchedulerProcessor/*'
+    package: '$(System.DefaultWorkingDirectory)/SchedulerProcessor/'
     runtimeStack: 'DOTNET|6.0'
     deploymentMethod: 'auto'
 
