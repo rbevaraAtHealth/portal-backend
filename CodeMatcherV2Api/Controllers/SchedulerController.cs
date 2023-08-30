@@ -56,7 +56,7 @@ namespace CodeMatcher.Api.V2.Controllers
                 var user = GetUserInfo();
                 var requestModel = await _scheduler.GetCodeGenerationScheduleAsync(schedulerModel, user, getClientId());
                 _responseViewModel.Model = requestModel;
-
+                _responseViewModel.Message = "Scheduler created or updated successfully";
                 return Ok(_responseViewModel);
             }
             catch (Exception ex)
@@ -74,7 +74,7 @@ namespace CodeMatcher.Api.V2.Controllers
                 var user = GetUserInfo();
                 var requestModel = await _scheduler.GetweeklyJobScheduleAsync(schedulerModel, user, getClientId());
                 _responseViewModel.Model = requestModel;
-
+                _responseViewModel.Message = "Scheduler created or updated successfully";
                 return Ok(_responseViewModel);
             }
             catch (Exception ex)
@@ -93,7 +93,7 @@ namespace CodeMatcher.Api.V2.Controllers
                 var user = GetUserInfo();
                 var requestModel = await _scheduler.GetMonthlyScheduleJobAsync(schedulerModel, user, getClientId());
                 _responseViewModel.Model = requestModel;
-
+                _responseViewModel.Message = "Scheduler created or updated successfully";
                 return Ok(_responseViewModel);
             }
             catch (Exception ex)

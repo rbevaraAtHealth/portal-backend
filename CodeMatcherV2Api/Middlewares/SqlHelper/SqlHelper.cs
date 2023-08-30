@@ -159,7 +159,8 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
 
         public async Task<int> UpdateCodeGenerationRequest(CodeMappingRequestDto cgReqModel)
         {
-            var details = await context.CodeMappingRequests.FirstOrDefaultAsync(x => x.SegmentTypeId.Equals(cgReqModel.SegmentTypeId) && x.CodeMappingId.Equals(cgReqModel.CodeMappingId));
+            var details = await context.CodeMappingRequests.FirstOrDefaultAsync(x => x.SegmentTypeId.Equals(cgReqModel.SegmentTypeId) 
+                                && x.CodeMappingId.Equals(cgReqModel.CodeMappingId) && x.RunTypeId == x.RunTypeId);
 
             //var cgdto = await context.CodeGenerationSummary.FirstOrDefaultAsync(x => x.TaskId == cgSummary.TaskId);
             if (details != null)
