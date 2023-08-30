@@ -66,12 +66,12 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             cgDBRequestModel.RunTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.RunType, RequestTypeConst.Scheduled)).Id;
             cgDBRequestModel.SegmentTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.Segment, schedule.Segment)).Id;
             cgDBRequestModel.CodeMappingId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.CodeMapping, CodeMappingTypeConst.MonthlyEmbeddings)).Id;
-            cgDBRequestModel.LatestLink = "32345";
+            cgDBRequestModel.LatestLink = "1";
             cgDBRequestModel.RunSchedule = schedule.RunSchedule;
             cgDBRequestModel.ClientId = clientId;
             cgDBRequestModel.CreatedBy = user.UserName;
             //int requestId = await _sqlHelper.SaveCodeMappingRequest(cgDBRequestModel);
-            int requestId = await _sqlHelper.UpdateCodeGenerationRequest(cgDBRequestModel);
+            int requestId = await _sqlHelper.UpdateCodeGenerationRequest(cgDBRequestModel, false);
             CgScheduledRunReqModel requestModel = new CgScheduledRunReqModel();
             requestModel.Segment = schedule.Segment;
             requestModel.RunSchedule = schedule.RunSchedule;
@@ -87,12 +87,12 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             cgDBRequestModel.RunTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.RunType, RequestTypeConst.Scheduled)).Id;
             cgDBRequestModel.SegmentTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.Segment, schedule.Segment)).Id;
             cgDBRequestModel.CodeMappingId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.CodeMapping, CodeMappingTypeConst.WeeklyEmbeddings)).Id;
-            cgDBRequestModel.LatestLink = "32345";
+            cgDBRequestModel.LatestLink = "1";
             cgDBRequestModel.RunSchedule = schedule.RunSchedule;
             cgDBRequestModel.ClientId = clientId;
             cgDBRequestModel.CreatedBy = user.UserName;
             //int reuestId = await _sqlHelper.SaveCodeMappingRequest(cgDBRequestModel);
-            int requestId = await _sqlHelper.UpdateCodeGenerationRequest(cgDBRequestModel);
+            int requestId = await _sqlHelper.UpdateCodeGenerationRequest(cgDBRequestModel, false);
             CgScheduledRunReqModel requestModel = new CgScheduledRunReqModel();
             requestModel.Segment = schedule.Segment;
             requestModel.RunSchedule = schedule.RunSchedule;
@@ -110,12 +110,12 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             cgDBRequestModel.SegmentTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.Segment, schedule.Segment)).Id;
             cgDBRequestModel.CodeMappingId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.CodeMapping, CodeMappingTypeConst.CodeGeneration)).Id;
             cgDBRequestModel.Threshold = schedule.Threshold;
-            cgDBRequestModel.LatestLink = "32345";
+            cgDBRequestModel.LatestLink = "1";
             cgDBRequestModel.RunSchedule = schedule.RunSchedule;
             cgDBRequestModel.ClientId = clientId;
             cgDBRequestModel.CreatedBy = user.UserName;
             //var details = _sqlHelper.GetScheduledDetails(cgDBRequestModel);
-            int requestId = await _sqlHelper.UpdateCodeGenerationRequest(cgDBRequestModel);
+            int requestId = await _sqlHelper.UpdateCodeGenerationRequest(cgDBRequestModel, true);
             //int requestId = await _sqlHelper.SaveCodeMappingRequest(cgDBRequestModel);
 
             CgScheduledRunReqModel requestModel = new CgScheduledRunReqModel();

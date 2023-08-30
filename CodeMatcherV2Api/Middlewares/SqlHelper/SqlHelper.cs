@@ -157,28 +157,36 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
 
         }
 
-        public async Task<int> UpdateCodeGenerationRequest(CodeMappingRequestDto cgReqModel)
+        public async Task<int> UpdateCodeGenerationRequest(CodeMappingRequestDto cgReqModel, bool checkClientId)
         {
-            var details = await context.CodeMappingRequests.FirstOrDefaultAsync(x => x.SegmentTypeId.Equals(cgReqModel.SegmentTypeId) 
-                                && x.CodeMappingId.Equals(cgReqModel.CodeMappingId) && x.RunTypeId == x.RunTypeId);
+            var details = new CodeMappingRequestDto();
+            if (checkClientId)
+                details = await context.CodeMappingRequests.FirstOrDefaultAsync(x => x.SegmentTypeId.Equals(cgReqModel.SegmentTypeId)
+                                    && x.CodeMappingId.Equals(cgReqModel.CodeMappingId) && x.RunTypeId == cgReqModel.RunTypeId
+                                    && x.ClientId == cgReqModel.ClientId);
+            else
+                details = await context.CodeMappingRequests.FirstOrDefaultAsync(x => x.SegmentTypeId.Equals(cgReqModel.SegmentTypeId)
+                                    && x.CodeMappingId.Equals(cgReqModel.CodeMappingId) && x.RunTypeId == cgReqModel.RunTypeId);
 
             //var cgdto = await context.CodeGenerationSummary.FirstOrDefaultAsync(x => x.TaskId == cgSummary.TaskId);
             if (details != null)
             {
                 //details = cgReqModel;
-                details.RunSchedule= cgReqModel.RunSchedule;
+                details.RunSchedule = cgReqModel.RunSchedule;
                 details.Threshold = cgReqModel.Threshold;
                 details.LatestLink = cgReqModel.LatestLink;
-                details.CreatedBy= cgReqModel.CreatedBy;
-                details.CreatedTime= cgReqModel.CreatedTime;
-                details.ClientId= cgReqModel.ClientId;
+                details.CreatedBy = cgReqModel.CreatedBy;
+                details.CreatedTime = cgReqModel.CreatedTime;
+                details.ClientId = cgReqModel.ClientId;
                 context.CodeMappingRequests.Update(details);
+                context.Entry(details).State = EntityState.Modified;
                 await context.SaveChangesAsync();
                 return details.Id;
             }
             else
             {
                 context.CodeMappingRequests.Add(cgReqModel);
+                context.Entry(cgReqModel).State = EntityState.Added;
                 await context.SaveChangesAsync();
                 return cgReqModel.Id;
             }
