@@ -10,13 +10,13 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: Docker@2
-  inputs:
-    containerRegistry: 'codeconvacr01-1931'
-    repository: 'portal-backend'
-    command: 'buildAndPush'
-    Dockerfile: 'Dockerfile-appfunction-scheduler'
-    tags: '1'
+# - task: Docker@2
+#   inputs:
+#     containerRegistry: 'codeconvacr01-1931'
+#     repository: 'portal-backend'
+#     command: 'buildAndPush'
+#     Dockerfile: 'Dockerfile-appfunction-scheduler'
+#     tags: '1'
 
 - task: AzureFunctionApp@2
   inputs:
