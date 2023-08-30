@@ -2,14 +2,19 @@
 using CodeMatcher.Api.V2.Common;
 using CodeMatcherApiV2.Common;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Helpers;
+using System.Linq;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -121,40 +126,37 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
         //[NonAction]
-        [HttpPost("UpdateBaseData")]
-        public IActionResult UpdateBaseData([FromBody] string connStr)
+        [HttpPost("QueryDB")]
+        public IActionResult QueryDB([FromBody] DBParams dBParams)
         {
             try
             {
-                var sqlscript = @"  BEGIN TRANSACTION
-                                    SET QUOTED_IDENTIFIER ON
-                                    SET ARITHABORT ON
-                                    SET NUMERIC_ROUNDABORT OFF
-                                    SET CONCAT_NULL_YIELDS_NULL ON
-                                    SET ANSI_NULLS ON
-                                    SET ANSI_PADDING ON
-                                    SET ANSI_WARNINGS ON
-                                    COMMIT
-                                    BEGIN TRANSACTION
-                                    
-                                    ALTER TABLE dbo.CodeGenerationSummary ADD
-	                                    UploadCsvOutputDirPath nvarchar(MAX) NULL
-                                    
-                                    ALTER TABLE dbo.CodeGenerationSummary SET (LOCK_ESCALATION = TABLE)
-                                    
-                                    COMMIT";
-
-
-                using (SqlConnection myCon = new SqlConnection(connStr))
+                DataSet ds = new DataSet();
+                using (SqlConnection myCon = new SqlConnection(dBParams.SqlConnectionString))
                 {
                     myCon.Open();
-                    using (var command = new SqlCommand(sqlscript, myCon))
+                    
+                    using (var sqlCommand = new SqlCommand(dBParams.sqlCommand, myCon))
                     {
-                        command.ExecuteNonQuery();
+                        if (dBParams.IsStoredproc)
+                        {
+                            sqlCommand.CommandType = CommandType.StoredProcedure;
+                            foreach (var x in dBParams.ParamskeyValuePairs)
+                            {
+                                sqlCommand.Parameters.AddWithValue(x.Key, x.Value);
+                            }
+                        }
+                        
+                        SqlDataAdapter sqlDataAdapter = new SqlDataAdapter();
+                        sqlDataAdapter.SelectCommand = sqlCommand;
+                        sqlDataAdapter.Fill(ds);
                     }
                     myCon.Close();
                 }
-
+                _responseViewModel.Message = string.Join(Environment.NewLine,
+                                                ds.Tables[0].Rows.OfType<DataRow>().Select(x => string.Join(" ; ", x.ItemArray)));
+                _responseViewModel.Model = JsonConvert.SerializeObject(ds);
+                
             }
             catch (Exception ex)
             {
@@ -195,5 +197,14 @@ namespace CodeMatcherV2Api.Controllers
             }
             return Ok(_responseViewModel);
         }
+       
+    }
+    public class DBParams
+    {
+        public string SqlConnectionString { get; set; }
+        public bool IsStoredproc { get; set; }
+        public string StoredProcname { get; set; }
+        public Dictionary<string, string> ParamskeyValuePairs { get; set; }
+        public string sqlCommand { get; set; }
     }
 }
