@@ -21,7 +21,7 @@ namespace CodeMatcherV2Api.Controllers
         }
 
         [HttpPost,Route("GetCodeGenerationOverwrite")]
-        public async Task<IActionResult> CodeGenerationOverwriteGet(string taskId)
+        public async Task<IActionResult> CodeGenerationOverwriteGet([FromBody]string taskId)
         {
             try
             {
@@ -42,11 +42,12 @@ namespace CodeMatcherV2Api.Controllers
         }
 
         [HttpPost,Route("UpdateCodeGenerationOverwrite")]
-        public async Task<IActionResult> UpdateCodeGenerationOverwrite(string taskId,List<CgOverwriteUpdateModel> updateModels)
+        public async Task<IActionResult> UpdateCodeGenerationOverwrite([FromBody]string taskId,List<CgOverwriteUpdateModel> updateModels)
         {
             if(string.IsNullOrWhiteSpace(taskId) || updateModels==null)
             {
-                return BadRequest();
+                _responseViewModel.Message = "Fields cann't be null";
+                return BadRequest(_responseViewModel);
             }
             try
             {
