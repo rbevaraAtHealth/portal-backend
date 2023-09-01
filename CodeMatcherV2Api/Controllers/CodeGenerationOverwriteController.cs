@@ -20,7 +20,7 @@ namespace CodeMatcherV2Api.Controllers
             _responseViewModel = new ResponseViewModel();
         }
 
-        [HttpGet,Route("GetCodeGenerationOverwrite")]
+        [HttpPost,Route("GetCodeGenerationOverwrite")]
         public async Task<IActionResult> CodeGenerationOverwriteGet(string taskId)
         {
             try
