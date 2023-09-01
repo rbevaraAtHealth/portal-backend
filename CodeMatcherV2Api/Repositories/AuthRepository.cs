@@ -1,16 +1,15 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using System.Data;
-using System;
-using CodeMatcherV2Api.Models;
-using System.Security.Cryptography;
-using HLSCryptoNet;
-using System.Web.Helpers;
-using CodeMatcherApiV2.Common;
-using Microsoft.Extensions.Logging;
-using CodeMatcherApiV2.BusinessLayer.Interfaces;
-using System.Threading.Tasks;
+﻿using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.Middlewares.CommonHelper;
+using CodeMatcherApiV2.BusinessLayer.Interfaces;
+using CodeMatcherV2Api.Models;
+using HLSCryptoNet;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Data;
+using System.Threading.Tasks;
+using System.Web.Helpers;
 
 namespace CodeMatcherApiV2.Repositories
 {
@@ -18,18 +17,62 @@ namespace CodeMatcherApiV2.Repositories
     {
         IConfiguration _configuration;
         private readonly ILogger<AuthRepository> _logger;
-        public AuthRepository(IConfiguration configuration, ILogger<AuthRepository> logger) 
+        public AuthRepository(IConfiguration configuration, ILogger<AuthRepository> logger)
         {
             _configuration = configuration;
             _logger = logger;
         }
-        public async Task<bool> ProcessLogin(LoginModel model, string headerValue)
+        public async Task<Tuple<bool, LoginModel>> ProcessLogin(LoginModel model, string headerValue)
         {
+            //bool success = false;
+            //using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(headerValue).GetSection("source").Value)))
+            //{
+            //    try
+            //    {
+            //        var userName = model.UserName;
+            //        var password = model.Password;
+            //        myCon.Close();
+            //        using var command = new SqlCommand("[dbo].[GetPassword]", myCon);
+            //        command.CommandType = CommandType.StoredProcedure;
+            //        command.Parameters.AddWithValue("@initials", userName);
+            //        myCon.Open();
+            //        var reader = await command.ExecuteReaderAsync();
+            //        while (reader.Read())
+            //        {
+
+            //            success = VerifyPassword(password, reader["password"].ToString().Trim());
+            //            if (success)
+            //            {
+            //                if (model.Role == "admin")
+            //                {
+            //                    model.Role = UserTyepConst.Admin;
+            //                }
+            //                else
+            //                {
+            //                    model.Role = UserTyepConst.User;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                success = false;
+            //            }
+            //        }
+            //        myCon.Close();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        _logger.LogError($"Error in ProcessLogin(): {ex.Message}", ex);
+            //        myCon.Close();
+            //        throw;
+            //    }
+            //}
+
+
             bool success = false;
             using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(headerValue).GetSection("source").Value)))
             {
                 try
-                    {
+                {
                     var userName = model.UserName;
                     var password = model.Password;
                     myCon.Close();
@@ -42,17 +85,48 @@ namespace CodeMatcherApiV2.Repositories
                     {
                         success = VerifyPassword(password, reader["password"].ToString().Trim());
                     }
+                    if (success)
+                    {
+                        try
+                        {
+
+                            SqlCommand cmd = new SqlCommand("Select DataConvAdmin from sysLogin where initials = " + userName + "", myCon);
+                            SqlDataAdapter da = new SqlDataAdapter(cmd);
+                            DataTable dataTable = new DataTable();
+                            // this will query your database and return the result to your datatable
+                            da.Fill(dataTable);
+                            if (dataTable != null && dataTable.Rows.Count > 0)
+                            {
+                                string isAdmin = dataTable.Rows[0]["DataConvAdmin"].ToString().Trim();
+                                //if true
+                                //user.role = admin\
+                                if(isAdmin == "admin")
+                                {
+                                    model.Role = UserTyepConst.Admin;
+                                }
+                                else
+                                {
+                                    model.Role = UserTyepConst.User;
+                                }
+
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError($"Error in sysLogin database: {ex.Message}",ex);
+                        }
+                    }
                     myCon.Close();
                 }
                 catch (Exception ex)
                 {
-                    
+
                     _logger.LogError($"Error in ProcessLogin(): {ex.Message}", ex);
                     myCon.Close();
                     throw;
                 }
             }
-            return success;
+            return new Tuple<bool, LoginModel>(success, model);
         }
         private bool VerifyPassword(string password, string passwordSan)
         {
@@ -68,6 +142,6 @@ namespace CodeMatcherApiV2.Repositories
                 return encryptor.encryptToHex(password) == passwordSan;
             }
         }
-       
+
     }
 }

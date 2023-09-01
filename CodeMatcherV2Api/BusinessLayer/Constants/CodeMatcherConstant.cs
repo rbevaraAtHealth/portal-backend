@@ -23,4 +23,9 @@
         public const string CodeMapping = "CodeMappingType";
         public const string Segment = "Segment";
     }
+    public static class UserTyepConst
+    {
+        public const string Admin = "admin";
+        public const string User = "internal user";
+    }
 }
