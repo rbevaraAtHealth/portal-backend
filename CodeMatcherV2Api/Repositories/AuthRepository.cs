@@ -97,7 +97,7 @@ namespace CodeMatcherApiV2.Repositories
                             da.Fill(dataTable);
                             if (dataTable != null && dataTable.Rows.Count > 0)
                             {
-                                bool isAdmin = Convert.ToBoolean(dataTable.Rows[0]["DataConvAdmin"]);
+                                bool isAdmin = Convert.ToBoolean(dataTable.Rows[0]["DataConvAdmin"].ToString());
                                 //if true
                                 //user.role = admin\
                                 if(isAdmin)
