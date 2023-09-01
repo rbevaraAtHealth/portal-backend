@@ -1,15 +1,16 @@
 ﻿using CodeMatcher.Api.V2.ApiResponseModel;
+using CodeMatcher.Api.V2.Models;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
-using CodeMatcherV2Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CodeGenerationOverwriteController : ControllerBase
+    public class CodeGenerationOverwriteController : BaseController
     {
         private readonly ICodeGenerationOverwrite _codegenerationoverwrite;
         private readonly ResponseViewModel _responseViewModel;
@@ -19,29 +20,19 @@ namespace CodeMatcherV2Api.Controllers
             _responseViewModel = new ResponseViewModel();
         }
 
-        [HttpGet("GetAllCodeGenerationOverwrite")]
-        public async Task<IActionResult> GetAllCodeGenerationOverwrite()
+        [HttpGet,Route("GetCodeGenerationOverwrite")]
+        public async Task<IActionResult> CodeGenerationOverwriteGet(string taskId)
         {
             try
             {
-                var data = await _codegenerationoverwrite.GetAllCodeGenerationOverwriteAsync();
-                _responseViewModel.Model = data;
-                return Ok(_responseViewModel);
-            }
-            catch (Exception ex)
-            {
-                _responseViewModel.ExceptionMessage = ex.Message;
+                if (taskId != null)
+                {
+                    var data = await _codegenerationoverwrite.CodeGenerationOverwritegetAsync(taskId, GetUserInfo(), getClientId());
+                    _responseViewModel.Model = data;
+                    return Ok(_responseViewModel);
+                }
+                _responseViewModel.ExceptionMessage = "TaskId cann't be null";
                 return BadRequest(_responseViewModel);
-            }
-        }
-        [HttpGet("GetCodeGenerationOverwriteById/{id}")]
-        public async Task<IActionResult> GetCodeGenerationOverwriteByIdAsync(int id)
-        {
-            try
-            {
-                var data = await _codegenerationoverwrite.GetCodeGenerationOverwriteByIdAsync(id);
-                _responseViewModel.Model = data;
-                return Ok(_responseViewModel);
             }
             catch (Exception ex)
             {
@@ -50,21 +41,29 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
 
-        [HttpPut, Route("UpdateCodeGenerationOverwrite")]
-        public async Task<IActionResult> UpdateCodeGenerationOverwrite([FromBody] CodeGenerationOverwriteModel model)
+        [HttpPost,Route("UpdateCodeGenerationOverwrite")]
+        public async Task<IActionResult> UpdateCodeGenerationOverwrite(string taskId,List<CgOverwriteUpdateModel> updateModels)
         {
+            if(string.IsNullOrWhiteSpace(taskId) || updateModels==null)
+            {
+                return BadRequest();
+            }
             try
             {
-                var data = await _codegenerationoverwrite.UpdateCodeGenerationOverwriteAsync(model);
-                _responseViewModel.Model = data;
-                return Ok(_responseViewModel);
+              var result= await _codegenerationoverwrite.UpdateCGSourceDB(updateModels, getClientId());
+                if (result)
+                {
+                    var saveHistory = _codegenerationoverwrite.UpdateCGDestinationDB(taskId, updateModels, getClientId());
+                }
+                _responseViewModel.Model = result;
+                    return Ok(_responseViewModel);
             }
             catch (Exception ex)
             {
-                _responseViewModel.ExceptionMessage = ex.Message;
-                return BadRequest(ex.Message);
+                _responseViewModel.ExceptionMessage=ex.Message;
+                return BadRequest(_responseViewModel);
             }
         }
-
+        
     }
 }
