@@ -40,7 +40,10 @@ namespace CodeMatcherV2Api.Controllers
                 {
 
                     //Logic for process the user info against the client specific db//
-                    isValid = await ProcessLogin(user);
+                    //isValid = await ProcessLogin(user);
+                    var result = await ProcessLogin(user);
+                    isValid = result.Item1;
+                    user = result.Item2;
                 }
                 else
                 {
@@ -54,13 +57,14 @@ namespace CodeMatcherV2Api.Controllers
 
                 if (isValid)
                 {
+
                     var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
                     var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
                     var authClaims = new List<Claim>();
 
                     authClaims.Add(new Claim(ClaimTypes.Name, user.UserName));
-                    authClaims.Add(new Claim(ClaimTypes.Role, "admin"));
+                    authClaims.Add(new Claim(ClaimTypes.Role, user.Role));
 
                     var tokenOptions = new JwtSecurityToken(
                         issuer: _configuration["JWT:ValidIssuer"],
@@ -70,6 +74,7 @@ namespace CodeMatcherV2Api.Controllers
                         signingCredentials: signinCredentials);
 
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                    _responseViewModel.Message = user.Role;
                     _responseViewModel.Model = new { Token = tokenString };
                     return Ok(_responseViewModel);
                 }
@@ -79,17 +84,18 @@ namespace CodeMatcherV2Api.Controllers
                     return BadRequest(_responseViewModel);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _responseViewModel.ExceptionMessage = ex.Message;
                 return BadRequest(_responseViewModel);
             }
         }
-        private async Task<bool> ProcessLogin(LoginModel model)
+        private async Task<Tuple<bool, LoginModel>> ProcessLogin(LoginModel model)
         {
             const string HeaderKeyName = "ClientID";
             Request.Headers.TryGetValue(HeaderKeyName, out StringValues headerValue);
-            if (!_configuration.GetSection(headerValue).Exists()){
+            if (!_configuration.GetSection(headerValue).Exists())
+            {
                 throw new Exception("Invalid client ID");
             }
             return await _authRepository.ProcessLogin(model, headerValue);
