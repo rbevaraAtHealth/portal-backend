@@ -42,7 +42,7 @@ namespace CodeMatcherV2Api.Controllers
         }
 
         [HttpPost,Route("UpdateCodeGenerationOverwrite")]
-        public async Task<IActionResult> UpdateCodeGenerationOverwrite([FromBody]string taskId,List<CgOverwriteUpdateModel> updateModels)
+        public async Task<IActionResult> UpdateCodeGenerationOverwrite([FromBody]List<CgOverwriteUpdateModel> updateModels, string taskId)
         {
             if(string.IsNullOrWhiteSpace(taskId) || updateModels==null)
             {

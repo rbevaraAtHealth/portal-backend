@@ -24,50 +24,6 @@ namespace CodeMatcherApiV2.Repositories
         }
         public async Task<Tuple<bool, LoginModel>> ProcessLogin(LoginModel model, string headerValue)
         {
-            //bool success = false;
-            //using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(headerValue).GetSection("source").Value)))
-            //{
-            //    try
-            //    {
-            //        var userName = model.UserName;
-            //        var password = model.Password;
-            //        myCon.Close();
-            //        using var command = new SqlCommand("[dbo].[GetPassword]", myCon);
-            //        command.CommandType = CommandType.StoredProcedure;
-            //        command.Parameters.AddWithValue("@initials", userName);
-            //        myCon.Open();
-            //        var reader = await command.ExecuteReaderAsync();
-            //        while (reader.Read())
-            //        {
-
-            //            success = VerifyPassword(password, reader["password"].ToString().Trim());
-            //            if (success)
-            //            {
-            //                if (model.Role == "admin")
-            //                {
-            //                    model.Role = UserTyepConst.Admin;
-            //                }
-            //                else
-            //                {
-            //                    model.Role = UserTyepConst.User;
-            //                }
-            //            }
-            //            else
-            //            {
-            //                success = false;
-            //            }
-            //        }
-            //        myCon.Close();
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        _logger.LogError($"Error in ProcessLogin(): {ex.Message}", ex);
-            //        myCon.Close();
-            //        throw;
-            //    }
-            //}
-
-
             bool success = false;
             using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(headerValue).GetSection("source").Value)))
             {
@@ -90,7 +46,7 @@ namespace CodeMatcherApiV2.Repositories
                         try
                         {
 
-                            SqlCommand cmd = new SqlCommand("Select DataConvAdmin from sysLogin where initials = " + userName + "", myCon);
+                            SqlCommand cmd = new SqlCommand("Select DataConvAdmin from sysLogin where initials = '" + userName + "'", myCon);
                             SqlDataAdapter da = new SqlDataAdapter(cmd);
                             DataTable dataTable = new DataTable();
                             // this will query your database and return the result to your datatable
