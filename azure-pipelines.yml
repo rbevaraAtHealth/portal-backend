@@ -30,3 +30,26 @@ steps:
     runtimeStack: 'DOTNET|6.0'
     deploymentMethod: 'auto'
 
+- task: AzureFunctionApp@2
+  inputs:
+    connectedServiceNameARM: 'codeconv-rg01_serviceconnection'
+    appType: 'functionAppLinux'
+    appName: 'codeconv-func01'
+    deployToSlotOrASE: true
+    resourceGroupName: 'codeconv-rg01'
+    slotName: 'production'
+    package: '$(System.DefaultWorkingDirectory)/SchedulerProcessor/'
+    runtimeStack: 'DOTNET|6.0'
+    deploymentMethod: 'auto'
+
+- task: AzureFunctionApp@2
+  inputs:
+    connectedServiceNameARM: 'codeconv-rg01_serviceconnection'
+    appType: 'functionAppLinux'
+    appName: 'codeconv-priv-func02'
+    deployToSlotOrASE: true
+    resourceGroupName: 'codeconv-rg01'
+    slotName: 'production'
+    package: '$(System.DefaultWorkingDirectory)/SchedulerProcessor/'
+    runtimeStack: 'DOTNET|6.0'
+    deploymentMethod: 'auto'
