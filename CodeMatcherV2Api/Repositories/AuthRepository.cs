@@ -40,38 +40,39 @@ namespace CodeMatcherApiV2.Repositories
                     while (reader.Read())
                     {
                         success = VerifyPassword(password, reader["password"].ToString().Trim());
-                    }
-                    if (success)
-                    {
-                        try
+                        if (success)
                         {
-
-                            SqlCommand cmd = new SqlCommand("Select DataConvAdmin from sysLogin where initials = '" + userName + "'", myCon);
-                            SqlDataAdapter da = new SqlDataAdapter(cmd);
-                            DataTable dataTable = new DataTable();
-                            // this will query your database and return the result to your datatable
-                            da.Fill(dataTable);
-                            if (dataTable != null && dataTable.Rows.Count > 0)
+                            try
                             {
-                                bool isAdmin = Convert.ToBoolean(dataTable.Rows[0]["DataConvAdmin"].ToString());
-                                //if true
-                                //user.role = admin\
-                                if(isAdmin)
-                                {
-                                    model.Role = UserTyepConst.Admin;
-                                }
-                                else
-                                {
-                                    model.Role = UserTyepConst.User;
-                                }
 
+                                SqlCommand cmd = new SqlCommand("Select DataConvAdmin from sysLogin where initials = '" + userName + "'", myCon);
+                                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                                DataTable dataTable = new DataTable();
+                                // this will query your database and return the result to your datatable
+                                da.Fill(dataTable);
+                                if (dataTable != null && dataTable.Rows.Count > 0)
+                                {
+                                    bool isAdmin = Convert.ToBoolean(dataTable.Rows[0]["DataConvAdmin"].ToString());
+                                    //if true
+                                    //user.role = admin\
+                                    if (isAdmin)
+                                    {
+                                        model.Role = UserTyepConst.Admin;
+                                    }
+                                    else
+                                    {
+                                        model.Role = UserTyepConst.User;
+                                    }
+
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogError($"Error in sysLogin database: {ex.Message}", ex);
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            _logger.LogError($"Error in sysLogin database: {ex.Message}",ex);
-                        }
                     }
+
                     myCon.Close();
                 }
                 catch (Exception ex)
