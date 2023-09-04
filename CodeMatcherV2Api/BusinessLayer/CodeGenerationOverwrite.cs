@@ -97,7 +97,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             catch (Exception ex)
             {
                 _logger.LogError($"Error in GetDatafromSourceDB Method: {ex.Message}", ex);
-                throw ;
+                throw;
             }
             return ds;
         }
@@ -105,16 +105,17 @@ namespace CodeMatcherV2Api.BusinessLayer
         public async Task<bool> UpdateCGSourceDB(List<CgOverwriteUpdateModel> updateModels, string clientId)
         {
             bool isSaved = false;
+
+            string query = "";
+            foreach (var item in updateModels)
+            {
+                query = query + "update map_fiel set too = '" + item.NewToo + "' where link = '" + item.Link + "';";
+            }
             using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(clientId).GetSection("source").Value)))
             {
                 try
                 {
                     myCon.Open();
-                    string query = "";
-                    foreach (var item in updateModels)
-                    {
-                        query = query + "update map_fiel set too = " + item.NewToo + " where link = " + item.Link + ";";
-                    }
                     SqlCommand sqlCommand = new SqlCommand(query, myCon);
                     sqlCommand.CommandType = CommandType.Text;
                     await sqlCommand.ExecuteNonQueryAsync();
@@ -155,7 +156,8 @@ namespace CodeMatcherV2Api.BusinessLayer
                 }
                 catch
                 {
-                    return isSaved = false;
+                    return isSaved ;
+                   
                 }
             }
         }
