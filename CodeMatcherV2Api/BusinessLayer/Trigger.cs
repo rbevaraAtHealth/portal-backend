@@ -11,6 +11,7 @@ using CodeMatcherV2Api.Middlewares.SqlHelper;
 using CodeMatcherV2Api.Models;
 using CodeMatcherV2Api.RepoModelAdapter;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -24,13 +25,15 @@ namespace CodeMatcherV2Api.BusinessLayer
         private readonly SqlHelper _sqlHelper;
         private readonly IMapper _mapper;
         private readonly ILookUp _lookUp;
-        public Trigger(IMapper mapper, SqlHelper sqlHelper, ILookUp lookUp)
+        private readonly IConfiguration _configuration;
+        public Trigger(IMapper mapper, SqlHelper sqlHelper, ILookUp lookUp, IConfiguration configuration)
         {
             BaseController baseController = new BaseController();
             _mapper = mapper;
             var user = baseController.GetUserInfo();
             _sqlHelper = sqlHelper;
             _lookUp = lookUp;
+            _configuration = configuration;
         }
 
         public async Task<Tuple<CgTriggeredRunReqModel, int>> CgApiRequestGet(CgTriggerRunModel trigger, LoginModel user, string clientId)
@@ -53,6 +56,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             }
             int reuestId = await _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             var requestModel = _mapper.Map<CgTriggeredRunReqModel>(codeMappingRequestDto);
+            requestModel.ConnectionString = _configuration.GetSection(codeMappingRequestDto.ClientId).GetSection("source").Value;
             //requestModel.Segment = trigger.Segment;
             requestModel.Segment = SegmentDictionary.GetSegmentValueByKey(trigger.Segment);
             return new Tuple<CgTriggeredRunReqModel, int>(requestModel, reuestId);
