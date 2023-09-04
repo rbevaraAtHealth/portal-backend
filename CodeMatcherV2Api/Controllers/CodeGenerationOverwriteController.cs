@@ -21,7 +21,7 @@ namespace CodeMatcherV2Api.Controllers
             _responseViewModel = new ResponseViewModel();
         }
 
-        [HttpGet,Route("GetCodeGenerationOverwrite")]
+        [HttpGet, Route("GetCodeGenerationOverwrite")]
         public async Task<IActionResult> CodeGenerationOverwriteGet(string taskId)
         {
             try
@@ -42,30 +42,36 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
 
-        [HttpPost,Route("UpdateCodeGenerationOverwrite")]
-        public async Task<IActionResult> UpdateCodeGenerationOverwrite([FromBody]List<CgOverwriteUpdateModel> updateModels, string taskId)
+        [HttpPost, Route("UpdateCodeGenerationOverwrite")]
+        public async Task<IActionResult> UpdateCodeGenerationOverwrite([FromBody] List<CgOverwriteUpdateModel> updateModels, string taskId)
         {
-            if(string.IsNullOrWhiteSpace(taskId) || updateModels==null)
+            if (string.IsNullOrWhiteSpace(taskId) || updateModels == null)
             {
                 _responseViewModel.Message = "Fields cann't be null";
                 return BadRequest(_responseViewModel);
             }
             try
             {
-              var result= await _codegenerationoverwrite.UpdateCGSourceDB(updateModels, getClientId());
+                var result = await _codegenerationoverwrite.UpdateCGSourceDB(updateModels, getClientId());
+
                 if (result)
                 {
-                    var saveHistory = _codegenerationoverwrite.UpdateCGDestinationDB(taskId, updateModels, getClientId());
+                    _responseViewModel.Message = "Record updated in source database";
+
+                    var saveHistory = await _codegenerationoverwrite.UpdateCGDestinationDB(taskId, updateModels, getClientId());
+                    if (saveHistory)
+                        _responseViewModel.Message = "Record updated into source and inserted into destination sucessfully";
+                    else
+                        _responseViewModel.Message = "Record updated into source but something went wrong while saving to destination";
                 }
-                _responseViewModel.Model = result;
-                    return Ok(_responseViewModel);
+                return Ok(_responseViewModel);
             }
             catch (Exception ex)
             {
-                _responseViewModel.ExceptionMessage=ex.Message;
+                _responseViewModel.ExceptionMessage = ex.Message;
                 return BadRequest(_responseViewModel);
             }
         }
-        
+
     }
 }
