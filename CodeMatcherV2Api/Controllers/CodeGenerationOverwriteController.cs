@@ -2,6 +2,7 @@
 using CodeMatcher.Api.V2.Models;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace CodeMatcherV2Api.Controllers
                 if (taskId != null)
                 {
                     var data = await _codegenerationoverwrite.CodeGenerationOverwritegetAsync(taskId, GetUserInfo(), getClientId());
-                    _responseViewModel.Model = data;
+                    _responseViewModel.Model = JsonConvert.SerializeObject(data);
                     return Ok(_responseViewModel);
                 }
                 _responseViewModel.ExceptionMessage = "TaskId cann't be null";

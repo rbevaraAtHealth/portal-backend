@@ -10,6 +10,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Data;
 using CodeMatcher.Api.V2.Models;
+using System;
+using CodeMatcherApiV2.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace CodeMatcherV2Api.BusinessLayer
 {
@@ -18,26 +21,35 @@ namespace CodeMatcherV2Api.BusinessLayer
         private readonly IMapper _mapper;
         private CodeMatcherDbContext _context;
         private IConfiguration _configuration;
-        public CodeGenerationOverwrite(IMapper mapper, CodeMatcherDbContext context, IConfiguration configuration)
+        private readonly ILogger<CodeGenerationOverwrite> _logger;
+        public CodeGenerationOverwrite(IMapper mapper, CodeMatcherDbContext context, IConfiguration configuration, ILogger<CodeGenerationOverwrite> logger)
         {
             _mapper = mapper;
             _context = context;
             _configuration = configuration;
+            _logger = logger;
         }
         public async Task<DataSet> CodeGenerationOverwritegetAsync(string taskId, LoginModel userModel, string clientId)
         {
-            var request = await _context.CodeMappings.Include("Request").FirstOrDefaultAsync(x => x.Reference == taskId);
-            if (request != null)
+            try
             {
-                var summary = await _context.CodeGenerationSummary.FirstOrDefaultAsync(x => x.TaskId == request.Reference);
-                // var segment = await _context.Lookups.FirstOrDefaultAsync(x => x.Id == request.Request.SegmentTypeId);
-
-                string query = GetDBQueryforSegment(summary.Segment, summary.StartLink, summary.LatestLink);
-                if (query != string.Empty)
+                var request = await _context.CodeMappings.Include("Request").FirstOrDefaultAsync(x => x.Reference == taskId);
+                if (request != null)
                 {
-                    var data = GetDatafromSourceDB(clientId, query);
-                    return data;
+                    var summary = await _context.CodeGenerationSummary.FirstOrDefaultAsync(x => x.TaskId == request.Reference);
+                    // var segment = await _context.Lookups.FirstOrDefaultAsync(x => x.Id == request.Request.SegmentTypeId);
+
+                    string query = GetDBQueryforSegment(summary.Segment, summary.StartLink, summary.LatestLink);
+                    if (query != string.Empty)
+                    {
+                        var data = GetDatafromSourceDB(clientId, query);
+                        return data;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CodeGenerationOverwritegetAsync Method: {ex.Message}", ex);
             }
             return null;
         }
@@ -65,15 +77,22 @@ namespace CodeMatcherV2Api.BusinessLayer
         private DataSet GetDatafromSourceDB(string headerValue, string query)
         {
             DataSet ds = new DataSet();
-            using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(headerValue).GetSection("source").Value)))
+            try
             {
-                SqlCommand sqlCommand = new SqlCommand(query, myCon);
-                sqlCommand.CommandType = CommandType.Text;
-                myCon.Open();
-                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter();
-                sqlDataAdapter.SelectCommand = sqlCommand;
-                sqlDataAdapter.Fill(ds);
-                myCon.Close();
+                using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(headerValue).GetSection("source").Value)))
+                {
+                    SqlCommand sqlCommand = new SqlCommand(query, myCon);
+                    sqlCommand.CommandType = CommandType.Text;
+                    myCon.Open();
+                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter();
+                    sqlDataAdapter.SelectCommand = sqlCommand;
+                    sqlDataAdapter.Fill(ds);
+                    myCon.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in GetDatafromSourceDB Method: {ex.Message}", ex);
             }
             return ds;
         }
@@ -110,7 +129,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             var request = await _context.CodeMappings.Include("Request").FirstOrDefaultAsync(x => x.Reference == taskId);
             if (request == null)
             {
-               return isSaved = false;
+                return isSaved = false;
             }
             var summary = await _context.CodeGenerationSummary.FirstOrDefaultAsync(x => x.TaskId == request.Reference);
             string query = "";
