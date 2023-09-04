@@ -13,6 +13,7 @@ namespace CodeMatcherV2Api.ApiRequestModels
         public string LatestLink { get; set; }
         [JsonProperty(PropertyName = "client_Id")]
         public string ClientId { get; set; }
+        public string ConnectionString { get; set; }
 
     }
 }
