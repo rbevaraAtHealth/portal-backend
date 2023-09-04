@@ -109,12 +109,12 @@ namespace CodeMatcherV2Api.BusinessLayer
             {
                 try
                 {
+                    myCon.Open();
                     string query = "";
                     foreach (var item in updateModels)
                     {
                         query = query + "update map_fiel set too = " + item.NewToo + " where link = " + item.Link + ";";
                     }
-                    myCon.Open();
                     SqlCommand sqlCommand = new SqlCommand(query, myCon);
                     sqlCommand.CommandType = CommandType.Text;
                     await sqlCommand.ExecuteNonQueryAsync();
