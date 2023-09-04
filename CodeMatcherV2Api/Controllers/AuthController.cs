@@ -37,19 +37,19 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
                 bool isValid = false;
-                if (user.Role.ToLower() != "testing")
-                {
+                //if (user.Role.ToLower() != "testing")
+                //{
 
-                    //Logic for process the user info against the client specific db//
-                    //isValid = await ProcessLogin(user);
-                    var result = await ProcessLogin(user);
-                    isValid = result.Item1;
-                    user = result.Item2;
-                }
-                else
-                {
-                    isValid = true;
-                }
+                //Logic for process the user info against the client specific db//
+                //isValid = await ProcessLogin(user);
+                var result = await ProcessLogin(user);
+                isValid = result.Item1;
+                user = result.Item2;
+                //}
+                //else
+                //{
+                //    isValid = true;
+                //}
                 if (user == null)
                 {
                     _responseViewModel.ExceptionMessage = "Please enter valid User credentials";
@@ -75,7 +75,7 @@ namespace CodeMatcherV2Api.Controllers
                         signingCredentials: signinCredentials);
 
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                   _responseViewModel.Message = user.Role;
+                    _responseViewModel.Message = user.Role;
                     _responseViewModel.Model = new { Token = tokenString };
                     return Ok(_responseViewModel);
                 }
