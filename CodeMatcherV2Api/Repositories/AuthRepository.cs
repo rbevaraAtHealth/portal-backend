@@ -40,36 +40,32 @@ namespace CodeMatcherApiV2.Repositories
                     while (reader.Read())
                     {
                         success = VerifyPassword(password, reader["password"].ToString().Trim());
-                        if (success)
+                    }
+                    if (success)
+                    {
+                        try
                         {
-                            try
+                            SqlCommand cmd = new SqlCommand("Select DataConvAdmin from sysLogin where initials = '" + userName + "'", myCon);
+                            SqlDataAdapter da = new SqlDataAdapter(cmd);
+                            DataTable dataTable = new DataTable();
+                            // this will query your database and return the result to your datatable
+                            da.Fill(dataTable);
+                            if (dataTable != null && dataTable.Rows.Count > 0)
                             {
-
-                                SqlCommand cmd = new SqlCommand("Select DataConvAdmin from sysLogin where initials = '" + userName + "'", myCon);
-                                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                                DataTable dataTable = new DataTable();
-                                // this will query your database and return the result to your datatable
-                                da.Fill(dataTable);
-                                if (dataTable != null && dataTable.Rows.Count > 0)
+                                bool isAdmin = Convert.ToBoolean(dataTable.Rows[0]["DataConvAdmin"].ToString());
+                                if (isAdmin)
                                 {
-                                    bool isAdmin = Convert.ToBoolean(dataTable.Rows[0]["DataConvAdmin"].ToString());
-                                    //if true
-                                    //user.role = admin\
-                                    if (isAdmin)
-                                    {
-                                        model.Role = UserTyepConst.Admin;
-                                    }
-                                    else
-                                    {
-                                        model.Role = UserTyepConst.User;
-                                    }
-
+                                    model.Role = UserTyepConst.Admin;
+                                }
+                                else
+                                {
+                                    model.Role = UserTyepConst.User;
                                 }
                             }
-                            catch (Exception ex)
-                            {
-                                _logger.LogError($"Error in sysLogin database: {ex.Message}", ex);
-                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError($"Error in sysLogin database: {model.Role}", ex);
                         }
                     }
 

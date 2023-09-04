@@ -13,6 +13,7 @@ using CodeMatcherApiV2.BusinessLayer.Interfaces;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using CodeMatcher.Api.V2.ApiResponseModel;
+using CodeMatcher.Api.V2.BusinessLayer;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -74,7 +75,7 @@ namespace CodeMatcherV2Api.Controllers
                         signingCredentials: signinCredentials);
 
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                    _responseViewModel.Message = user.Role;
+                   _responseViewModel.Message = user.Role;
                     _responseViewModel.Model = new { Token = tokenString };
                     return Ok(_responseViewModel);
                 }
