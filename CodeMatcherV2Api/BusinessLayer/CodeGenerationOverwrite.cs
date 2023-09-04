@@ -13,6 +13,7 @@ using CodeMatcher.Api.V2.Models;
 using System;
 using CodeMatcherApiV2.Repositories;
 using Microsoft.Extensions.Logging;
+using System.Drawing;
 
 namespace CodeMatcherV2Api.BusinessLayer
 {
@@ -82,13 +83,15 @@ namespace CodeMatcherV2Api.BusinessLayer
             {
                 using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(headerValue).GetSection("source").Value)))
                 {
+                    myCon.Open();
                     SqlCommand sqlCommand = new SqlCommand(query, myCon);
                     sqlCommand.CommandType = CommandType.Text;
-                    myCon.Open();
+
                     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter();
                     sqlDataAdapter.SelectCommand = sqlCommand;
                     sqlDataAdapter.Fill(ds);
                     myCon.Close();
+
                 }
             }
             catch (Exception ex)
