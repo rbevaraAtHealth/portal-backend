@@ -52,7 +52,7 @@ namespace CodeMatcherApiV2.Repositories
                             da.Fill(dataTable);
                             if (dataTable != null && dataTable.Rows.Count > 0)
                             {
-                                bool isAdmin = Convert.ToBoolean(dataTable.Rows[0]["DataConvAdmin"].ToString());
+                                bool isAdmin = Convert.ToBoolean(dataTable.Rows[0]["DataConvAdmin"]);
                                 if (isAdmin)
                                 {
                                     model.Role = UserTyepConst.Admin;
@@ -65,6 +65,7 @@ namespace CodeMatcherApiV2.Repositories
                         }
                         catch (Exception ex)
                         {
+                            model.Role = ex.Message;
                             _logger.LogError($"Error in sysLogin database: {model.Role}", ex);
                         }
                     }
