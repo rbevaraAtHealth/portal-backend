@@ -50,6 +50,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             catch (Exception ex)
             {
                 _logger.LogError($"CodeGenerationOverwritegetAsync Method: {ex.Message}", ex);
+                throw;
             }
             return null;
         }
@@ -93,6 +94,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             catch (Exception ex)
             {
                 _logger.LogError($"Error in GetDatafromSourceDB Method: {ex.Message}", ex);
+                throw ;
             }
             return ds;
         }
