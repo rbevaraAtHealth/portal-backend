@@ -168,16 +168,16 @@ namespace CodeMatcherV2Api.BusinessLayer
             switch (segmentlower)
             {
                 case ("hospital"):
-                    query = "insert into CodeMatcherOverrideHospital (frm,too,newtoo,ClientID,Added_Date,link) VALUES ('" + updateModel.From + "','" + updateModel.OldToo + "','" + updateModel.NewToo + "','" + clientId + "',getdate(),'"+updateModel.Link+"')";
+                    query = "insert into CodeMatcherOverrideHospital (frm,too,newtoo,ClientID,Added_Date) VALUES ('" + updateModel.From + "','" + updateModel.OldToo + "','" + updateModel.NewToo + "','" + clientId + "',getdate())";
                     break;
                 case ("school"):
-                    query = "insert into CodeMatcherOverrideInsur (frm,too,newtoo,ClientID,Added_Date,link) VALUES ('" + updateModel.From + "','" + updateModel.OldToo + "','" + updateModel.NewToo + "','" + clientId + "',getdate(),'"+updateModel.Link+"')";
+                    query = "insert into CodeMatcherOverrideInsur (frm,too,newtoo,ClientID,Added_Date) VALUES ('" + updateModel.From + "','" + updateModel.OldToo + "','" + updateModel.NewToo + "','" + clientId + "',getdate())";
                     break;
                 case ("insurance"):
-                    query = "insert into CodeMatcherOverrideSchool (frm,too,newtoo,ClientID,Added_Date,link) VALUES ('" + updateModel.From + "','" + updateModel.OldToo + "','" + updateModel.NewToo + "','" + clientId + "',getdate(),'" + updateModel.Link + "')";
+                    query = "insert into CodeMatcherOverrideSchool (frm,too,newtoo,ClientID,Added_Date) VALUES ('" + updateModel.From + "','" + updateModel.OldToo + "','" + updateModel.NewToo + "','" + clientId + "',getdate())";
                     break;
                 case ("state license"):
-                    query = "insert into CodeMatcherOverrideStatelic (frm,too,newtoo,ClientID,Added_Date,link) VALUES  ('" + updateModel.From + "','" + updateModel.OldToo + "','" + updateModel.NewToo + "','" + clientId + "',getdate(),'" + updateModel.Link + "')";
+                    query = "insert into CodeMatcherOverrideStatelic (frm,too,newtoo,ClientID,Added_Date) VALUES  ('" + updateModel.From + "','" + updateModel.OldToo + "','" + updateModel.NewToo + "','" + clientId + "',getdate())";
                     break;
             }
             return query;
