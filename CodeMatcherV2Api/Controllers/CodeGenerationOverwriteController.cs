@@ -53,11 +53,12 @@ namespace CodeMatcherV2Api.Controllers
             try
             {
               var result= await _codegenerationoverwrite.UpdateCGSourceDB(updateModels, getClientId());
+                _responseViewModel.Message = "Record updated in source database";
                 if (result)
                 {
-                    var saveHistory = _codegenerationoverwrite.UpdateCGDestinationDB(taskId, updateModels, getClientId());
+                    var saveHistory =await _codegenerationoverwrite.UpdateCGDestinationDB(taskId, updateModels, getClientId());
+                    _responseViewModel.Message = "Record updated into source and inserted into destination sucessfully";
                 }
-                _responseViewModel.Model = result;
                     return Ok(_responseViewModel);
             }
             catch (Exception ex)
