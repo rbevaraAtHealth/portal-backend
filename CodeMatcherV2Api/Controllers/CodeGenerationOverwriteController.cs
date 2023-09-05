@@ -29,8 +29,8 @@ namespace CodeMatcherV2Api.Controllers
                 if (taskId != null)
                 {
                     var data = await _codegenerationoverwrite.CodeGenerationOverwritegetAsync(taskId, GetUserInfo(), getClientId());
-                    if(data!= null && data.Tables.Count > 0)
-                       _responseViewModel.Model = data.Tables[0];
+                    if(data!= null && data.Count > 0)
+                       _responseViewModel.Model = data;
                     else 
                         _responseViewModel.ExceptionMessage = "No records Found";
                     return Ok(_responseViewModel);

@@ -14,6 +14,8 @@ using System;
 using CodeMatcherApiV2.Repositories;
 using Microsoft.Extensions.Logging;
 using System.Drawing;
+using CodeMatcher.Api.V2.ApiResponseModel;
+using Newtonsoft.Json;
 
 namespace CodeMatcherV2Api.BusinessLayer
 {
@@ -30,8 +32,9 @@ namespace CodeMatcherV2Api.BusinessLayer
             _configuration = configuration;
             _logger = logger;
         }
-        public async Task<DataSet> CodeGenerationOverwritegetAsync(string taskId, LoginModel userModel, string clientId)
+        public async Task<List<CgOverwriteModel>> CodeGenerationOverwritegetAsync(string taskId, LoginModel userModel, string clientId)
         {
+            List<CgOverwriteModel> cgOverwriteModels = new List<CgOverwriteModel>();
             try
             {
                 var request = await _context.CodeMappings.Include("Request").FirstOrDefaultAsync(x => x.Reference == taskId);
@@ -44,7 +47,12 @@ namespace CodeMatcherV2Api.BusinessLayer
                     if (query != string.Empty)
                     {
                         var data = GetDatafromSourceDB(clientId, query);
-                        return data;
+                        if (data != null && data.Tables.Count > 0)
+                        {
+                            string dataStr = JsonConvert.SerializeObject(data.Tables[0]);
+                            cgOverwriteModels = JsonConvert.DeserializeObject<List<CgOverwriteModel>>(dataStr);
+                        }
+                        return cgOverwriteModels;
                     }
                 }
             }
