@@ -44,7 +44,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                     var summary = await _context.CodeGenerationSummary.FirstOrDefaultAsync(x => x.TaskId == request.Reference);
                     // var segment = await _context.Lookups.FirstOrDefaultAsync(x => x.Id == request.Request.SegmentTypeId);
 
-                    string query = GetDBQueryforSegment(summary.Segment, summary.StartLink, summary.LatestLink);
+                    string query = GetDBQueryforSegment(request.Request.SegmentType.Name, summary.StartLink, summary.LatestLink);
                     if (query != string.Empty)
                     {
                         var data = GetDatafromSourceDB(clientId, query);
