@@ -29,10 +29,13 @@ namespace CodeMatcherV2Api.Controllers
                 if (taskId != null)
                 {
                     var data = await _codegenerationoverwrite.CodeGenerationOverwritegetAsync(taskId, GetUserInfo(), getClientId());
-                    _responseViewModel.Model = JsonConvert.SerializeObject(data);
+                    if(data!= null && data.Tables.Count > 0)
+                       _responseViewModel.Model = data.Tables[0];
+                    else 
+                        _responseViewModel.ExceptionMessage = "No records Found";
                     return Ok(_responseViewModel);
                 }
-                _responseViewModel.ExceptionMessage = "TaskId cann't be null";
+                _responseViewModel.ExceptionMessage = "Task Id cannot be null";
                 return BadRequest(_responseViewModel);
             }
             catch (Exception ex)
@@ -47,7 +50,7 @@ namespace CodeMatcherV2Api.Controllers
         {
             if (string.IsNullOrWhiteSpace(taskId) || updateModels == null)
             {
-                _responseViewModel.Message = "Fields cann't be null";
+                _responseViewModel.Message = "Fields cannot be null";
                 return BadRequest(_responseViewModel);
             }
             try
