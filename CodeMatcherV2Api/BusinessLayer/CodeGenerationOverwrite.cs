@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using System.Drawing;
 using CodeMatcher.Api.V2.ApiResponseModel;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace CodeMatcherV2Api.BusinessLayer
 {
@@ -49,8 +50,17 @@ namespace CodeMatcherV2Api.BusinessLayer
                         var data = GetDatafromSourceDB(clientId, query);
                         if (data != null && data.Tables.Count > 0)
                         {
-                            string dataStr = JsonConvert.SerializeObject(data.Tables[0]);
-                            cgOverwriteModels = JsonConvert.DeserializeObject<List<CgOverwriteModel>>(dataStr);
+                            //04ad8ea6-2806-4b80-bfba-ea7bf5522831
+                            var CgOverwriteModelData = data.Tables[0].AsEnumerable().Select(r => new CgOverwriteModel
+                            {
+                                frm = r.Field<string>("frm"),
+                                l_maps = r.Field<string>("l_maps"),
+                                too = r.Field<string>("too"),
+                                full_name = r.Field<string>("full_name"),
+                                Added_Date = r.Field<string>("Added_Date"),
+                                link = r.Field<string>("link")
+                            });
+                            cgOverwriteModels = CgOverwriteModelData.ToList();
                         }
                         return cgOverwriteModels;
                     }
