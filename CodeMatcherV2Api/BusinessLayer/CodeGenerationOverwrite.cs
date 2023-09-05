@@ -44,7 +44,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                     var summary = await _context.CodeGenerationSummary.FirstOrDefaultAsync(x => x.TaskId == request.Reference);
                     // var segment = await _context.Lookups.FirstOrDefaultAsync(x => x.Id == request.Request.SegmentTypeId);
 
-                    string query = GetDBQueryforSegment(request.Request.SegmentType.Name, summary.StartLink, summary.LatestLink);
+                    string query = GetDBQueryforSegment(summary.Segment, summary.StartLink, summary.LatestLink);
                     if (query != string.Empty)
                     {
                         var data = GetDatafromSourceDB(clientId, query);
@@ -86,9 +86,11 @@ namespace CodeMatcherV2Api.BusinessLayer
                     query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 Education School Code%' order by Added_Date desc";
                     break;
                 case ("insurance"):
+                case ("insur"):
                     query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 Malpractice Insurance Carrier Code%' order by Added_Date desc";
                     break;
                 case ("state license"):
+                case ("statelic"):
                     query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 Credential/License Institution Code%' order by Added_Date desc";
                     break;
             }
