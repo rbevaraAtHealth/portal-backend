@@ -30,24 +30,24 @@ namespace CodeMatcher.Api.V2.BusinessLayer
         }
         public async Task<List<SchedulerModel>> GetAllSchedulersAsync()
         {
-            var schedulerRecords = await _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").Where(x => x.RunType.Name.Equals("Scheduled")).ToListAsync();
+            var schedulerRecords = await _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").Where(x => x.RunType.Name.Equals("Scheduled")).OrderBy(x => x.CreatedBy).ToListAsync();
             List<SchedulerModel> schedulerModels = new List<SchedulerModel>();
 
             foreach (var item in schedulerRecords)
-            {              
-                    SchedulerModel schedulerModel = new SchedulerModel();
-                    schedulerModel.ClientId = item.ClientId;
-                    schedulerModel.Segment = item.SegmentType.Name;
-                    schedulerModel.Threshold = item.Threshold;
-                    schedulerModel.CronExpression = item.RunSchedule;
-                    schedulerModel.CodeMapping = item.CodeMappingType.Name;
-                    schedulerModels.Add(schedulerModel);
+            {
+                SchedulerModel schedulerModel = new SchedulerModel();
+                schedulerModel.ClientId = item.ClientId;
+                schedulerModel.Segment = item.SegmentType.Name;
+                schedulerModel.Threshold = item.Threshold;
+                schedulerModel.CronExpression = item.RunSchedule;
+                schedulerModel.CodeMapping = item.CodeMappingType.Name;
+                schedulerModels.Add(schedulerModel);
             }
             return schedulerModels;
         }
         public async Task<SchedulerModel> GetAllSchedulersByIdAsync(int schedulerId)
         {
-            var schedulerRecords = await _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").Where(x => x.RunType.Name.Equals("Scheduled")).Where(e=>e.Id == schedulerId).FirstOrDefaultAsync();
+            var schedulerRecords = await _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").Where(x => x.RunType.Name.Equals("Scheduled")).Where(e => e.Id == schedulerId).FirstOrDefaultAsync();
             SchedulerModel schedulerModel = new SchedulerModel();
             if (schedulerRecords != null)
             {

@@ -1,15 +1,12 @@
 ﻿using CodeMappingEfCore.DatabaseModels;
 using CodeMatcherV2Api.EntityFrameworkCore;
 using System.Linq;
-using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using CodeMatcher.Api.V2.BusinessLayer;
 using System.Threading.Tasks;
-using AutoMapper;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 using System;
-using CodeMatcher.Api.V2.Models;
 
 namespace CodeMatcherV2Api.Middlewares.SqlHelper
 {
@@ -35,12 +32,7 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             await context.CodeMappingResponses.AddAsync(responseDto);
             context.SaveChanges();
         }
-        
-        //public int GetLookupIdOnName(string type)
-        //{
-        //    var lookup = context.Lookups.FirstOrDefault(x => x.Name.ToLower() == type.ToLower());
-        //    return lookup.Id;
-        //}
+
         public string GetLookupName(int id)
         {
             var lookup = context.Lookups.FirstOrDefault(x => x.Id == id);
@@ -52,52 +44,10 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             await context.SaveChangesAsync();
             return (codeMapping.Id);
         }
-        public async Task<int> SaveCodeGenerationSummary(CodeGenerationSummaryDto cgSummary)
-        {
-            var cgdto = await context.CodeGenerationSummary.FirstOrDefaultAsync(x => x.TaskId == cgSummary.TaskId);
-            if (cgdto != null)
-            {
-                cgdto = cgSummary;
-                context.CodeGenerationSummary.Update(cgdto);
-                await context.SaveChangesAsync();
-                return cgdto.Id;
-            }
-            context.CodeGenerationSummary.Add(cgSummary);
-            await context.SaveChangesAsync();
-            return cgSummary.Id;
-        }
-        public async Task<int> SaveMonthlyEmbedSummary(MonthlyEmbeddingsSummaryDto monthlySummary)
-        {
-            var embeddto = await context.MonthlyEmbeddingsSummary.FirstOrDefaultAsync(x => x.TaskId == monthlySummary.TaskId);
-            if (embeddto != null)
-            {
-                embeddto = monthlySummary;
-                context.MonthlyEmbeddingsSummary.Update(embeddto);
-                await context.SaveChangesAsync();
-                return embeddto.Id;
-            }
-            context.MonthlyEmbeddingsSummary.Add(monthlySummary);
-            await context.SaveChangesAsync();
-            return monthlySummary.Id;
-        }
-        public async Task<int> SaveWeeklyEmbedSummary(WeeklyEmbeddingsSummaryDto weeklySummary)
-        {
-            var embeddto = await context.WeeklyEmbeddingsSummary.FirstOrDefaultAsync(x => x.TaskId == weeklySummary.TaskId);
-            if (embeddto != null)
-            {
-                embeddto = weeklySummary;
-                context.Update(embeddto);
-                await context.SaveChangesAsync();
-                return embeddto.Id;
-            }
-            context.WeeklyEmbeddingsSummary.Add(weeklySummary);
-            await context.SaveChangesAsync();
-            return weeklySummary.Id;
-        }
+
         public int GetRequestId(string taskId)
         {
             var codemap = context.CodeMappings.FirstOrDefault(x => x.Reference == taskId);
-            //return codemap.Id;
             return codemap.RequestId;
         }
         public int GetCodeMappingId(int requestId)
@@ -116,7 +66,6 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             codeMap.Status = StatusConst.Success;
             context.Entry(codeMap).State = EntityState.Modified;
             context.SaveChanges();
-
         }
         public async Task<List<LookupDto>> GetLookups(string key)
         {
@@ -125,7 +74,6 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             {
                 return cacheData;
             }
-            //var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
             var expirationTime = DateTimeOffset.Now.AddDays(7.0);
             var lookups = await context.Lookups.Include("LookupType").Where(x => x.LookupType.LookupTypeKey.ToLower() == key.ToLower()).AsNoTracking().ToListAsync();
 
@@ -149,12 +97,10 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
                 requestId.Status = updateStatus.Status;
                 requestId.Progress = updateStatus.Progress;
                 context.Update(requestId);
+                context.Entry(requestId).State = EntityState.Modified;
                 await context.SaveChangesAsync();
             }
-
-            //return requestId.Id;
             return requestId;
-
         }
 
         public async Task<int> UpdateCodeGenerationRequest(CodeMappingRequestDto cgReqModel, bool checkClientId)
@@ -168,10 +114,8 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
                 details = await context.CodeMappingRequests.FirstOrDefaultAsync(x => x.SegmentTypeId.Equals(cgReqModel.SegmentTypeId)
                                     && x.CodeMappingId.Equals(cgReqModel.CodeMappingId) && x.RunTypeId == cgReqModel.RunTypeId);
 
-            //var cgdto = await context.CodeGenerationSummary.FirstOrDefaultAsync(x => x.TaskId == cgSummary.TaskId);
             if (details != null)
             {
-                //details = cgReqModel;
                 details.RunSchedule = cgReqModel.RunSchedule;
                 details.Threshold = cgReqModel.Threshold;
                 details.LatestLink = cgReqModel.LatestLink;

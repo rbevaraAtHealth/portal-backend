@@ -14,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace CodeMatcherV2Api.BusinessLayer
@@ -32,19 +31,6 @@ namespace CodeMatcherV2Api.BusinessLayer
             _httpClientFactory = httpClientFactory1;
             _sqlHelper = sqlHelper;
         }
-        //public  async Task<List<CodeMappingModel>> GetCodeMappingsRecordsAsync()
-        //{
-        //    List<CodeMappingModel> codeMappingRecords = new List<CodeMappingModel>
-        //    {new CodeMappingModel{ TimeStamp = DateTime.Now ,Segment="Insurance",NumberOfRecord=100,NumberOfMatches=97,RunBy="John Smith",RunType="Scheduled",CodeMappingSummary =new CodeMappingSummary{TimeStamp=DateTime.Now,RecordParticulars=38983,Segment_type="State License",Threshhold="87",BaseRecords=2599,InputRecords=107,NoisyRecords=3,ProcessedRecords=104,CodeGeneratedRecords=99,CodeNotGeneratedRecords=5} },
-        //        new CodeMappingModel { TimeStamp = DateTime.Now, Segment = "Hospital", NumberOfRecord = 110, NumberOfMatches = 95, RunBy = "Joe Smith", RunType = "Triggered" ,CodeMappingSummary =new CodeMappingSummary{TimeStamp=DateTime.Now,RecordParticulars=38983,Segment_type="State License",Threshhold="87",BaseRecords=2599,InputRecords=107,NoisyRecords=3,ProcessedRecords=104,CodeGeneratedRecords=99,CodeNotGeneratedRecords=5}},
-        //        new CodeMappingModel { TimeStamp = DateTime.Now, Segment = "State License", NumberOfRecord = 110, NumberOfMatches = 97, RunBy = "John Smith", RunType = "Scheduled" , CodeMappingSummary = new CodeMappingSummary{ TimeStamp = DateTime.Now, RecordParticulars = 38983, Segment_type = "State License", Threshhold = "87", BaseRecords = 2599, InputRecords = 107, NoisyRecords = 3, ProcessedRecords = 104, CodeGeneratedRecords = 99, CodeNotGeneratedRecords = 5 }},
-        //        new CodeMappingModel { TimeStamp = DateTime.Now, Segment = "School", NumberOfRecord = 100, NumberOfMatches = 97, RunBy = "John Smith", RunType = "Scheduled" , CodeMappingSummary = new CodeMappingSummary{ TimeStamp = DateTime.Now, RecordParticulars = 38983, Segment_type = "State License", Threshhold = "87", BaseRecords = 2599, InputRecords = 107, NoisyRecords = 3, ProcessedRecords = 104, CodeGeneratedRecords = 99, CodeNotGeneratedRecords = 5 }},
-        //        new CodeMappingModel { TimeStamp = DateTime.Now, Segment = "Insurance", NumberOfRecord = 110, NumberOfMatches = 97, RunBy = "John Smith", RunType = "Scheduled" , CodeMappingSummary = new CodeMappingSummary{ TimeStamp = DateTime.Now, RecordParticulars = 38983, Segment_type = "State License", Threshhold = "87", BaseRecords = 2599, InputRecords = 107, NoisyRecords = 3, ProcessedRecords = 104, CodeGeneratedRecords = 99, CodeNotGeneratedRecords = 5 }}
-        //    };
-
-        //    return codeMappingRecords;
-        //}
-
         public async Task<GenericSummaryViewModel> GetMappings(string taskId)
         {
             var codemap = await _context.CodeMappings.FirstOrDefaultAsync(x => x.Reference == taskId.ToString());
@@ -80,7 +66,7 @@ namespace CodeMatcherV2Api.BusinessLayer
         }
         public async Task<List<GenericSummaryViewModel>> GetCodeGenerationMappingRecords(string clientId)
         {
-            var viewModels = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType")
+            var viewModels = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").OrderBy(cr => cr.CreatedBy)
                                     join cm in _context.CodeMappings on cr.Id equals cm.RequestId
                                     join cs in _context.CodeGenerationSummary on cr.Id equals cs.RequestId
                                     into csA
@@ -96,7 +82,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                                         CodeMappingType = cr.CodeMappingType.Name,
                                         Threshold = csB.Threshold,
                                         NoofMatches = csB.NoOfRecordsForWhichCodeGenerated,
-                                        NoOfRecords= csB.NoOfProcessedRecords,
+                                        NoOfRecords = csB.NoOfProcessedRecords,
                                         RunBy = cr.CreatedBy,
                                         Status = cm.Status,
                                         Summary = csB
@@ -106,7 +92,7 @@ namespace CodeMatcherV2Api.BusinessLayer
         }
         public async Task<List<GenericSummaryViewModel>> GetWeeklyEmbeddingMappingRecords(string clientId)
         {
-            var viewModels = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType")
+            var viewModels = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").OrderBy(cr => cr.CreatedBy)
                                     join cm in _context.CodeMappings on cr.Id equals cm.RequestId
                                     join cs in _context.WeeklyEmbeddingsSummary on cr.Id equals cs.RequestId
                                     into csA
@@ -132,7 +118,7 @@ namespace CodeMatcherV2Api.BusinessLayer
 
         public async Task<List<GenericSummaryViewModel>> GetMonthlyEmbeddingMappingRecords(string clientId)
         {
-            var viewModels = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType")
+            var viewModels = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").OrderBy(cr => cr.CreatedBy)
                                     join cm in _context.CodeMappings on cr.Id equals cm.RequestId
                                     join cs in _context.MonthlyEmbeddingsSummary on cr.Id equals cs.RequestId
                                     into csA
@@ -160,35 +146,95 @@ namespace CodeMatcherV2Api.BusinessLayer
 
         {
             var cgSummary = JsonConvert.DeserializeObject<CodeGenerationSummaryModel>(summary);
-            cgSummary.TaskId = taskId;
-            var cgSummaryDto = _mapper.Map<CodeGenerationSummaryDto>(cgSummary);
-            cgSummaryDto.RequestId = requestId;
-            cgSummaryDto.CreatedBy = loginModel.UserName;
-            int summaryid = await _sqlHelper.SaveCodeGenerationSummary(cgSummaryDto);
+            var cgDto = await _context.CodeGenerationSummary.FirstOrDefaultAsync(x => x.TaskId == taskId);
+            if (cgDto != null)
+            {
+                cgDto.Segment = cgSummary.Segment;
+                cgDto.Threshold = cgSummary.Threshold;
+                cgDto.NoOfBaseRecords = cgSummary.NoOfBaseRecords;
+                cgDto.NoOfInputRecords = cgSummary.NoOfInputRecords;
+                cgDto.NoOfProcessedRecords = cgSummary.NoOfProcessedRecords;
+                cgDto.NoOfRecordsForWhichCodeGenerated = cgSummary.NoOfRecordsForWhichCodeGenerated;
+                cgDto.NoOfRecordsForWhichCodeNotGenerated = cgSummary.NoOfRecordsForWhichCodeNotGenerated;
+                cgDto.StartLink = cgSummary.StartLink;
+                cgDto.LatestLink = cgSummary.LatestLink;
+                cgDto.ClientId = cgSummary.ClientId;
+                cgDto.NoOfNoiseRecords = cgSummary.NoOfNoiseRecords;
+                cgDto.ModifiedBy = loginModel.UserName;
+                cgDto.ModifiedTime = DateTime.Now;
+                _context.CodeGenerationSummary.Update(cgDto);
+                _context.Entry(cgDto).State = EntityState.Modified;
+            }
+            else
+            {
+                var cgnew = _mapper.Map<CodeGenerationSummaryDto>(cgSummary);
+                cgnew.TaskId = taskId;
+                cgnew.RequestId = requestId;
+                cgnew.CreatedBy = loginModel.UserName;
+                cgnew.CreatedTime = DateTime.Now;
+                _context.CodeGenerationSummary.Add(cgnew);
+            }
+            var id = await _context.SaveChangesAsync();
             _sqlHelper.UpdateCodeMappingStatus(taskId);
-            return summaryid;
+            return id;
         }
         public async Task<int> SaveMonthlyEmbedMappingsPythApi(string taskId, string summary, int requestId, LoginModel loginModel)
         {
             var cgSummary = JsonConvert.DeserializeObject<MonthlyEmbedSummaryModel>(summary);
-            cgSummary.TaskId = taskId;
-            var monthlySummaryDto = _mapper.Map<MonthlyEmbeddingsSummaryDto>(cgSummary);
-            monthlySummaryDto.RequestId = requestId;
-            monthlySummaryDto.CreatedBy = loginModel.UserName;
-            int summaryId = await _sqlHelper.SaveMonthlyEmbedSummary(monthlySummaryDto);
+            var embedDto = await _context.MonthlyEmbeddingsSummary.FirstOrDefaultAsync(x => x.TaskId == taskId);
+            if (embedDto != null)
+            {
+                embedDto.Segment = cgSummary.Segment;
+                embedDto.NoOfRecordsImportedFromDatabase = cgSummary.NoOfRecordsImportedFromDatabase;
+                embedDto.NoOfRecordsEmbeddingCreated = cgSummary.NoOfRecordsEmbeddingCreated;
+                embedDto.ModifiedBy = loginModel.UserName;
+                embedDto.ModifiedTime = DateTime.Now;
+                _context.MonthlyEmbeddingsSummary.Update(embedDto);
+                _context.Entry(embedDto).State = EntityState.Modified;
+            }
+            else
+            {
+                cgSummary.TaskId = taskId;
+                var monthlySummaryDto = _mapper.Map<MonthlyEmbeddingsSummaryDto>(cgSummary);
+                monthlySummaryDto.RequestId = requestId;
+                monthlySummaryDto.CreatedBy = loginModel.UserName;
+                monthlySummaryDto.CreatedTime = DateTime.Now;
+                _context.MonthlyEmbeddingsSummary.Add(monthlySummaryDto);
+            }
+            var id = await _context.SaveChangesAsync();
             _sqlHelper.UpdateCodeMappingStatus(taskId);
-            return summaryId;
+            return id;
         }
         public async Task<int> SaveWeeklyEmbedMappingsPythApi(string taskId, string summary, int requestId, LoginModel loginModel)
         {
             var cgSummary = JsonConvert.DeserializeObject<WeeklyEmbedSummaryModel>(summary);
-            cgSummary.TaskId = taskId;
-            var weeklySummaryDto = _mapper.Map<WeeklyEmbeddingsSummaryDto>(cgSummary);
-            weeklySummaryDto.RequestId = requestId;
-            weeklySummaryDto.CreatedBy = loginModel.UserName;
-            var summaryId = await _sqlHelper.SaveWeeklyEmbedSummary(weeklySummaryDto);
+            var embedDto = await _context.WeeklyEmbeddingsSummary.FirstOrDefaultAsync(x => x.TaskId == taskId);
+            if (embedDto != null)
+            {
+                embedDto.ModifiedBy = loginModel.UserName;
+                embedDto.ModifiedTime = DateTime.Now;
+                embedDto.Segment = cgSummary.Segment;
+                embedDto.NoOfBaseRecordsImportedFromDatabase = cgSummary.NoOfBaseRecordsImportedFromDatabase;
+                embedDto.NoOfRecordsEmbeddingsCreated = cgSummary.NoOfRecordsEmbeddingsCreated;
+                embedDto.NoOfBaseRecordsBeforeRun = cgSummary.NoOfBaseRecordsBeforeRun;
+                embedDto.NoOfRecordsAfterRun = cgSummary.NoOfRecordsAfterRun;
+                embedDto.StartLink = cgSummary.StartLink;
+                embedDto.LatestLink = cgSummary.LatestLink;
+                _context.WeeklyEmbeddingsSummary.Update(embedDto);
+                _context.Entry(embedDto).State = EntityState.Modified;
+            }
+            else
+            {
+                var summaryDto = _mapper.Map<WeeklyEmbeddingsSummaryDto>(cgSummary);
+                summaryDto.TaskId = taskId;
+                summaryDto.CreatedBy = loginModel.UserName;
+                summaryDto.CreatedTime = DateTime.Now;
+                summaryDto.RequestId = requestId;
+                _context.WeeklyEmbeddingsSummary.Add(summaryDto);
+            }
+            var id = await _context.SaveChangesAsync();
             _sqlHelper.UpdateCodeMappingStatus(taskId);
-            return summaryId;
+            return id;
         }
 
         public async Task<int> SaveSummary(string taskId, string summary, LoginModel loginModel)
@@ -214,7 +260,7 @@ namespace CodeMatcherV2Api.BusinessLayer
         }
         public async Task<List<CodeMappingReqResDataModel>> GetCodeMappingRequestResponse()
         {
-            var codeMappingdata = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType")
+            var codeMappingdata = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").OrderBy(cr => cr.CreatedBy)
                                          join cs in _context.CodeMappingResponses on cr.Id equals cs.RequestId into crM
                                          from cmR in crM.DefaultIfEmpty()
                                          join cm in _context.CodeMappings on cr.Id equals cm.RequestId
@@ -238,7 +284,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             data.Progress = codeMappingUpdate.Progress;
 
             var details = await _sqlHelper.UpdateTaskStatus(codeMappingUpdate.TaskId, data);
-  
+
             return details;
 
         }
