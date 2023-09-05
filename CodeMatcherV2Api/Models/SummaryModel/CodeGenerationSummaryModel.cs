@@ -1,11 +1,5 @@
-﻿using CodeMappingEfCore.DatabaseModels;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System;
-using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using System.Text.Json.Serialization;
 using Newtonsoft.Json;
-using AutoMapper.Execution;
 
 namespace CodeMatcher.Api.V2.Models.SummaryModel
 {
