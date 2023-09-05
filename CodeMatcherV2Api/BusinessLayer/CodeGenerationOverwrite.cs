@@ -57,7 +57,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                                 l_maps = r.Field<int>("l_maps"),
                                 too = r.Field<string>("too"),
                                 full_name = r.Field<string>("full_name"),
-                                Added_Date = r.Field<string>("Added_Date"),
+                                Added_Date = r.Field<DateTime?>("Added_Date"),
                                 link = r.Field<int>("link")
                             });
                             cgOverwriteModels = CgOverwriteModelData.ToList();
