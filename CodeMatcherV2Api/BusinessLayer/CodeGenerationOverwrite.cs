@@ -54,11 +54,11 @@ namespace CodeMatcherV2Api.BusinessLayer
                             var CgOverwriteModelData = data.Tables[0].AsEnumerable().Select(r => new CgOverwriteModel
                             {
                                 frm = r.Field<string>("frm"),
-                                l_maps = r.Field<string>("l_maps"),
+                                l_maps = r.Field<int>("l_maps"),
                                 too = r.Field<string>("too"),
                                 full_name = r.Field<string>("full_name"),
                                 Added_Date = r.Field<string>("Added_Date"),
-                                link = r.Field<string>("link")
+                                link = r.Field<int>("link")
                             });
                             cgOverwriteModels = CgOverwriteModelData.ToList();
                         }
