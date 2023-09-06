@@ -31,7 +31,7 @@ namespace CodeMatcherV2Api.Controllers
             _responseViewModel = new ResponseViewModel();
             _configuration = configuration;
         }
-
+        [NonAction]
         [HttpGet("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -47,6 +47,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(_responseViewModel);
             }
         }
+        [NonAction]
         [HttpGet("GetUserById/{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
@@ -62,7 +63,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(_responseViewModel);
             }
         }
-        //[NonAction]
+        [NonAction]
         [HttpPost("Encrypt")]
         public IActionResult GetEncryptConn([FromBody] string connStr)
         {
@@ -77,7 +78,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        // [NonAction]
+        [NonAction]
         [HttpPost("Decrypt")]
         public IActionResult GetDecryptConn([FromBody] string connStr)
         {
@@ -92,6 +93,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [NonAction]
         [HttpPost("CheckDBConnectivity")]
         public IActionResult CheckDBConnectivity([FromBody] List<string> connStrlist)
         {
@@ -125,7 +127,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(_responseViewModel);
             }
         }
-        //[NonAction]
+        [NonAction]
         [HttpPost("QueryDB")]
         public IActionResult QueryDB([FromBody] DBParams dBParams)
         {
@@ -165,6 +167,7 @@ namespace CodeMatcherV2Api.Controllers
 
             return Ok(_responseViewModel);
         }
+        [NonAction]
         [HttpPost("GetDBSchema")]
         public FileResult getDBSchema([FromBody] string connStr)
         {
