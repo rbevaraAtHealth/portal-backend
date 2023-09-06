@@ -30,7 +30,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer
         }
         public async Task<List<SchedulerModel>> GetAllSchedulersAsync()
         {
-            var schedulerRecords = await _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").Where(x => x.RunType.Name.Equals("Scheduled")).OrderBy(x => x.CreatedBy).ToListAsync();
+            var schedulerRecords = await _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").Where(x => x.RunType.Name.Equals("Scheduled")).OrderByDescending(x => x.CreatedTime).ToListAsync();
             List<SchedulerModel> schedulerModels = new List<SchedulerModel>();
 
             foreach (var item in schedulerRecords)
