@@ -19,7 +19,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -50,11 +49,10 @@ namespace CodeMatcherV2Api
                     .AllowAnyHeader());
             });
             services.AddDbContext<CodeMatcherDbContext>(options =>
-                                         options.UseSqlServer(Configuration.GetConnectionString("DBConnection"),sqlServerOptionsAction: sqlOptions =>
+                                         options.UseSqlServer(CommonHelper.Decrypt(Configuration.GetConnectionString("DBConnection")),sqlServerOptionsAction: sqlOptions =>
                                          {
                                              sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10),errorNumbersToAdd: null);
                                          }));
-                                         //options.UseSqlServer(CommonHelper.Decrypt(Configuration.GetConnectionString("DBConnection"))));
             services.AddControllers();
 
             services.AddAuthentication(opt =>
