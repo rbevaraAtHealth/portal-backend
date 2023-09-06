@@ -14,6 +14,9 @@ using System;
 using CodeMatcherApiV2.Repositories;
 using Microsoft.Extensions.Logging;
 using System.Drawing;
+using CodeMatcher.Api.V2.ApiResponseModel;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace CodeMatcherV2Api.BusinessLayer
 {
@@ -30,8 +33,9 @@ namespace CodeMatcherV2Api.BusinessLayer
             _configuration = configuration;
             _logger = logger;
         }
-        public async Task<DataSet> CodeGenerationOverwritegetAsync(string taskId, LoginModel userModel, string clientId)
+        public async Task<List<CgOverwriteModel>> CodeGenerationOverwritegetAsync(string taskId, LoginModel userModel, string clientId)
         {
+            List<CgOverwriteModel> cgOverwriteModels = new List<CgOverwriteModel>();
             try
             {
                 var request = await _context.CodeMappings.Include("Request").FirstOrDefaultAsync(x => x.Reference == taskId);
@@ -44,7 +48,21 @@ namespace CodeMatcherV2Api.BusinessLayer
                     if (query != string.Empty)
                     {
                         var data = GetDatafromSourceDB(clientId, query);
-                        return data;
+                        if (data != null && data.Tables.Count > 0)
+                        {
+                            //04ad8ea6-2806-4b80-bfba-ea7bf5522831
+                            var CgOverwriteModelData = data.Tables[0].AsEnumerable().Select(r => new CgOverwriteModel
+                            {
+                                frm = r.Field<string>("frm"),
+                                l_maps = r.Field<int>("l_maps"),
+                                too = r.Field<string>("too"),
+                                full_name = r.Field<string>("full_name"),
+                                Added_Date = r.Field<DateTime?>("Added_Date"),
+                                link = r.Field<int>("link")
+                            });
+                            cgOverwriteModels = CgOverwriteModelData.ToList();
+                        }
+                        return cgOverwriteModels;
                     }
                 }
             }
@@ -62,16 +80,18 @@ namespace CodeMatcherV2Api.BusinessLayer
             switch (segmentlower)
             {
                 case ("hospital"):
-                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where maps.link >= " + startLink + " and maps.link <= " + latestLink + " and maps.full_name like '%40 Affiliation Hospital Code%' order by Added_Date desc";
+                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 Affiliation Hospital Code%' order by Added_Date desc";
                     break;
                 case ("school"):
-                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where maps.link >= " + startLink + " and maps.link <= " + latestLink + " and maps.full_name like '%40 Education School Code%' order by Added_Date desc";
+                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 Education School Code%' order by Added_Date desc";
                     break;
                 case ("insurance"):
-                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where maps.link >= " + startLink + " and maps.link <= " + latestLink + " and maps.full_name like '%40 Malpractice Insurance Carrier Code%' order by Added_Date desc";
+                case ("insur"):
+                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 Malpractice Insurance Carrier Code%' order by Added_Date desc";
                     break;
                 case ("state license"):
-                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where maps.link >= " + startLink + " and maps.link <= " + latestLink + " and maps.full_name like '%40 Credential/License Institution Code%' order by Added_Date desc";
+                case ("statelic"):
+                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 Credential/License Institution Code%' order by Added_Date desc";
                     break;
             }
             return query;
