@@ -10,37 +10,8 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-# - task: Docker@2
-#   inputs:
-#     containerRegistry: 'codeconvacr01-1931'
-#     repository: 'app-function'
-#     command: 'buildAndPush'
-#     Dockerfile: 'Dockerfile-appfunction-scheduler'
-#     tags: '1'
 
-# - task: AzureFunctionApp@2
-#   inputs:
-#     connectedServiceNameARM: 'codeconv-rg01_serviceconnection'
-#     appType: 'functionAppLinux'
-#     appName: 'codeconv-func01'
-#     deployToSlotOrASE: true
-#     resourceGroupName: 'codeconv-rg01'
-#     slotName: 'production'
-#     package: '$(System.DefaultWorkingDirectory)/SchedulerProcessor/'
-#     runtimeStack: 'DOTNET|6.0'
-#     deploymentMethod: 'auto'
 
-# - task: AzureFunctionApp@2
-#   inputs:
-#     connectedServiceNameARM: 'VerityStream-1308-Verity Production(caa88d8e-50da-4a07-9132-54b28d3060c7)'
-#     appType: 'functionAppLinux'
-#     appName: 'codeconv-priv-func01'
-#     deployToSlotOrASE: true
-#     resourceGroupName: 'codeconv-rg01'
-#     slotName: 'production'
-#     package: '$(System.DefaultWorkingDirectory)/SchedulerProcessor/'
-#     runtimeStack: 'DOTNET|6.0'
-#     deploymentMethod: 'auto'
 
 - task: AzureFunctionApp@2
   inputs:
@@ -54,11 +25,3 @@ steps:
     runtimeStack: 'DOTNET|6.0'
     deploymentMethod: 'auto'
 
-# - task: AzureFunctionAppContainer@1
-#   inputs:
-#     azureSubscription: 'VerityStream-1308-Verity Production(caa88d8e-50da-4a07-9132-54b28d3060c7)'
-#     appName: 'codeconv-pub-func03'
-#     deployToSlotOrASE: true
-#     resourceGroupName: 'codeconv-rg01'
-#     slotName: 'production'
-#     imageName: 'app-function:1'
