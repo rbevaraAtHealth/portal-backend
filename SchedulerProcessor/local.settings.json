@@ -7,7 +7,7 @@
     "EveryMin": "*/1 * * * *"
   },
   "DotNetApi": {
-    //"ApiUrl": "https://codeconv-app01.codeconv-ase01.p.azurewebsites.net/"
-    "ApiUrl": "https://ccapi.credentialstream.cloud/api/"
+    "ApiUrl": "https://codeconv-priv-app01.codeconv-priv-ase01.appserviceenvironment.net/api/"
+    //"ApiUrl": "https://ccapi.credentialstream.cloud/api/"
   }
 }
