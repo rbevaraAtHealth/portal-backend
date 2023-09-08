@@ -14,7 +14,6 @@ namespace CodeMatcherApiV2.Common
     {
         public EncDecModel DecryptString(string cipherText)
         {
-            //string keyString = "E546C8DF278CD5931069B522E695D4F2";
             string keyString = EncryptionDecryption.Key;
 
             EncDecModel deRes = new EncDecModel();
