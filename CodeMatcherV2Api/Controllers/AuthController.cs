@@ -103,8 +103,8 @@ namespace CodeMatcherV2Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet, Route("EncryptiionDecryption")]
-        public async Task<IActionResult> EncryptDecrypt()
+        [HttpGet, Route("AuthGetKey")]
+        public async Task<IActionResult> AuthGetKey()
         {
             string key = EncryptionDecryption.Key;
             return Ok(key);
