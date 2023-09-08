@@ -1,7 +1,4 @@
-using CodeMatcher.Api.V2.ApiResponseModel;
-using CodeMatcher.Api.V2.Models;
-using CodeMatcherV2Api.ApiResponseModel;
-using CodeMatcherV2Api.Models;
+using SchedulerProcessor.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
