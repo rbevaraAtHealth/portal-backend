@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using AutoMapper;
@@ -20,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -77,17 +79,17 @@ namespace CodeMatcherV2Api
             IMapper mapper = MapperConfig.RegisterMaps().CreateMapper();
             services.AddSingleton(mapper);
             services.AddControllers();
-            services.AddTransient<IUser, User>();
-            services.AddTransient<ITrigger, Trigger>();
+            services.AddScoped<IUser, User>();
+            services.AddScoped<ITrigger, Trigger>();
            // services.AddTransient<ISchedule, Schedule>();
-            services.AddTransient<ILookUp, LookUp>();
-            services.AddTransient<ICsvUpload, CsvUpload>();
-            services.AddTransient<ICodeMapping, CodeMapping>();
-            services.AddTransient<ILookupTypes, LookupTypes>();
-            services.AddTransient<IScheduler, Scheduler>();
-            services.AddTransient<ICodeGenerationOverwrite, CodeGenerationOverwrite>();
-            services.AddTransient<SqlHelper>();
-            services.AddTransient<ICacheService, CacheService>();
+            services.AddScoped<ILookUp, LookUp>();
+            services.AddScoped<ICsvUpload, CsvUpload>();
+            services.AddScoped<ICodeMapping, CodeMapping>();
+            services.AddScoped<ILookupTypes, LookupTypes>();
+            services.AddScoped<IScheduler, Scheduler>();
+            services.AddScoped<ICodeGenerationOverwrite, CodeGenerationOverwrite>();
+            services.AddScoped<SqlHelper>();
+            services.AddScoped<ICacheService, CacheService>();
 
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -101,8 +103,13 @@ namespace CodeMatcherV2Api
             services.AddHttpClient("CodeMatcher", c => { c.BaseAddress = new Uri(Configuration["PythonApi:BaseUrl"]);
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
-                
-            
+
+            services.AddHttpClient("BackendApi", c => {
+                c.BaseAddress = new Uri(Configuration["BackendApi:BaseUrl"]);
+                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
+
+
             services
                 .AddSwaggerGen(c =>
                 {
@@ -156,6 +163,11 @@ namespace CodeMatcherV2Api
             try
             {
                 dataContext.Database.Migrate();
+                var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+                var schedulerObj = scope.ServiceProvider.GetService<IScheduler>();
+                var httpClientObj = scope.ServiceProvider.GetService<IHttpClientFactory>();
+                TimerJob t = new(schedulerObj, httpClientObj);
+                t.InvokeTimerJob(Convert.ToDouble(Configuration["TimerJob:Frequency"]));
             }
             catch(Exception)
             {
