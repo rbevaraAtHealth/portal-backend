@@ -27,6 +27,7 @@ namespace CodeMatcherApiV2.Repositories
         public async Task<Tuple<bool, LoginModel>> ProcessLogin(LoginModel model, string headerValue)
         {
             bool success = false;
+            model.ClientId = headerValue;
             using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(headerValue).GetSection("source").Value)))
             {
                 try

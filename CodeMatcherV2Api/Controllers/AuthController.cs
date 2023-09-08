@@ -82,7 +82,7 @@ namespace CodeMatcherV2Api.Controllers
                         signingCredentials: signinCredentials);
 
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                    _responseViewModel.Model = new { Token = tokenString, user.Role, EncClientID = CommonHelper.Encrypt(authLoginModel.ClientId) };
+                    _responseViewModel.Model = new { Token = tokenString, user.Role, EncClientID = CommonHelper.Encrypt(user.ClientId) };
                     return Ok(_responseViewModel);
                 }
                 else
