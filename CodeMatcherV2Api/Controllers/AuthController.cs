@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using CodeMatcher.Api.V2.ApiResponseModel;
 using CodeMatcher.Api.V2.BusinessLayer;
+using CodeMatcherApiV2.Common;
+using CodeMatcher.Api.V2.Middlewares.CommonHelper;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -32,7 +34,7 @@ namespace CodeMatcherV2Api.Controllers
         }
         [AllowAnonymous]
         [HttpPost, Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel user)
+        public async Task<IActionResult> Login([FromBody] AuthLoginModel authLoginModel)
         {
             try
             {
@@ -42,6 +44,11 @@ namespace CodeMatcherV2Api.Controllers
 
                 //Logic for process the user info against the client specific db//
                 //isValid = await ProcessLogin(user);
+                LoginModel user = new LoginModel
+                {
+                    UserName = authLoginModel.UserName,
+                    Password = authLoginModel.Password
+                };
                 var result = await ProcessLogin(user);
                 isValid = result.Item1;
                 user = result.Item2;
@@ -75,8 +82,7 @@ namespace CodeMatcherV2Api.Controllers
                         signingCredentials: signinCredentials);
 
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                    _responseViewModel.Message = user.Role;
-                    _responseViewModel.Model = new { Token = tokenString };
+                    _responseViewModel.Model = new { Token = tokenString, user.Role, EncClientID = CommonHelper.Encrypt(authLoginModel.ClientId) };
                     return Ok(_responseViewModel);
                 }
                 else
