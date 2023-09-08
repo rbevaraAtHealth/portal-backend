@@ -28,4 +28,8 @@
         public const string Admin = "admin";
         public const string User = "internal user";
     }
+    public static class EncryptionDecryption
+    {
+        public const string Key = "E546C8DF278CD5931069B522E695D4F2";
+    }
 }

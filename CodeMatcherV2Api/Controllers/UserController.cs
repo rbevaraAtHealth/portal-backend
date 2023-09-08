@@ -63,7 +63,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(_responseViewModel);
             }
         }
-        [NonAction]
+        //[NonAction]
         [HttpPost("Encrypt")]
         public IActionResult GetEncryptConn([FromBody] string connStr)
         {
@@ -78,7 +78,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [NonAction]
+        //[NonAction]
         [HttpPost("Decrypt")]
         public IActionResult GetDecryptConn([FromBody] string connStr)
         {

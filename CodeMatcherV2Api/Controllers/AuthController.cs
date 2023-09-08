@@ -102,5 +102,13 @@ namespace CodeMatcherV2Api.Controllers
             return await _authRepository.ProcessLogin(model, headerValue);
         }
 
+        [AllowAnonymous]
+        [HttpGet, Route("EncryptiionDecryption")]
+        public async Task<IActionResult> EncryptDecrypt()
+        {
+            string key = EncryptionDecryption.Key;
+            return Ok(key);
+        }
+
     }
 }
