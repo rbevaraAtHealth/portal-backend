@@ -11,7 +11,12 @@ pool:
 
 steps:
 
-
+- task: Docker@2
+  inputs:
+    containerRegistry: 'codeconvacr01-1931'
+    repository: 'app-function'
+    command: 'buildAndPush'
+    Dockerfile: 'Dockerfile-appfunction-scheduler'
 
 - task: AzureFunctionApp@2
   inputs:
