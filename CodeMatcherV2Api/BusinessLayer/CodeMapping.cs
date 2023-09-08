@@ -66,7 +66,7 @@ namespace CodeMatcherV2Api.BusinessLayer
         }
         public async Task<List<GenericSummaryViewModel>> GetCodeGenerationMappingRecords(string clientId)
         {
-            var viewModels = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").OrderBy(cr => cr.CreatedBy)
+            var viewModels = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").OrderByDescending(cr=>cr.CreatedTime)
                                     join cm in _context.CodeMappings on cr.Id equals cm.RequestId
                                     join cs in _context.CodeGenerationSummary on cr.Id equals cs.RequestId
                                     into csA
@@ -92,7 +92,7 @@ namespace CodeMatcherV2Api.BusinessLayer
         }
         public async Task<List<GenericSummaryViewModel>> GetWeeklyEmbeddingMappingRecords(string clientId)
         {
-            var viewModels = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").OrderBy(cr => cr.CreatedBy)
+            var viewModels = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").OrderByDescending(cr => cr.CreatedTime)
                                     join cm in _context.CodeMappings on cr.Id equals cm.RequestId
                                     join cs in _context.WeeklyEmbeddingsSummary on cr.Id equals cs.RequestId
                                     into csA
@@ -118,7 +118,7 @@ namespace CodeMatcherV2Api.BusinessLayer
 
         public async Task<List<GenericSummaryViewModel>> GetMonthlyEmbeddingMappingRecords(string clientId)
         {
-            var viewModels = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").OrderBy(cr => cr.CreatedBy)
+            var viewModels = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").OrderByDescending(cr=>cr.CreatedTime)
                                     join cm in _context.CodeMappings on cr.Id equals cm.RequestId
                                     join cs in _context.MonthlyEmbeddingsSummary on cr.Id equals cs.RequestId
                                     into csA
@@ -260,7 +260,7 @@ namespace CodeMatcherV2Api.BusinessLayer
         }
         public async Task<List<CodeMappingReqResDataModel>> GetCodeMappingRequestResponse()
         {
-            var codeMappingdata = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").OrderBy(cr => cr.CreatedBy)
+            var codeMappingdata = await (from cr in _context.CodeMappingRequests.Include("RunType").Include("SegmentType").Include("CodeMappingType").OrderByDescending(cr => cr.CreatedTime)
                                          join cs in _context.CodeMappingResponses on cr.Id equals cs.RequestId into crM
                                          from cmR in crM.DefaultIfEmpty()
                                          join cm in _context.CodeMappings on cr.Id equals cm.RequestId
