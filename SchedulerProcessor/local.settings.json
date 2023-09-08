@@ -1,7 +1,7 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=codeconvstr01;AccountKey=sEqn4qpTlDtnXTK6uOdtBTKhOD1k1b+1QiBxbeHh7maa2kX0AbudNseW6F8OAb0Xbby2EDEhRuXv+AStZzocAA==;EndpointSuffix=core.windows.net",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "EveryTwoMin": "*/2 * * * *",
     "EveryMin": "*/1 * * * *"

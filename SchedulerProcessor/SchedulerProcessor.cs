@@ -31,7 +31,7 @@ namespace SchedulerProcessor
             _httpClient = httpClientFactory.CreateClient("AzureFunction");
             _responseViewModel = new ResponseViewModel();
         }
-        [FunctionName("Processor")]
+        [FunctionName("SchedulerProcessor")]
         public async Task SchedulerTimeRun([TimerTrigger("*/1 * * * *")] TimerInfo myTimer, ILogger log)
         {
             var curExecutionDate = DateTime.Now;
