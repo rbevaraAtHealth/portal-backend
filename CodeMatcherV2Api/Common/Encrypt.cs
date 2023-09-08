@@ -1,4 +1,5 @@
-﻿using CodeMatcherApiV2.Common;
+﻿using CodeMatcher.Api.V2.BusinessLayer;
+using CodeMatcherApiV2.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +14,7 @@ namespace CodeMatcherApiV2.Common
     {
         public EncDecModel EncryptString(string text)
         {
-            string keyString = "E546C8DF278CD5931069B522E695D4F2";
+            string keyString = EncryptionDecryption.Key;
 
             EncDecModel enRes = new EncDecModel();
             var key = Encoding.UTF8.GetBytes(keyString);
