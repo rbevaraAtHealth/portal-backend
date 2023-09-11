@@ -7,6 +7,8 @@ using CodeMatcherV2Api.Models;
 using System.Globalization;
 using System;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using CodeMatcher.Api.V2.Models;
+using CodeMatcher.EntityFrameworkCore.DatabaseModels;
 
 namespace CodeMatcherV2Api
 {
@@ -29,6 +31,7 @@ namespace CodeMatcherV2Api
                 .ForMember(x => x.Date, y => y.MapFrom(z => DateTime.ParseExact(z.Date, "dd/MM/yyyy hh:mm:ss", CultureInfo.CurrentCulture)))
                  .ReverseMap();
                 config.CreateMap<CodeMappingRequestDto, CgTriggeredRunReqModel>().ReverseMap();
+                config.CreateMap<LogTableModel, LogTableDto>().ReverseMap();
             });
             return mapperConfig;
         }

@@ -7,6 +7,7 @@ using CodeMatcher.Api.V2.BusinessLayer;
 using System.Threading.Tasks;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 using System;
+using CodeMatcher.EntityFrameworkCore.DatabaseModels;
 
 namespace CodeMatcherV2Api.Middlewares.SqlHelper
 {
@@ -134,6 +135,14 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
                 await context.SaveChangesAsync();
                 return cgReqModel.Id;
             }
+        }
+
+        public async Task<int> SaveLogRequest(LogTableDto log)
+        {
+            context.LogTable.Add(log);
+            context.Entry(log).State = EntityState.Added;
+            await context.SaveChangesAsync();
+            return (1);
         }
     }
 }

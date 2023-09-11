@@ -1,4 +1,5 @@
 ﻿using CodeMappingEfCore.DatabaseModels;
+using CodeMatcher.EntityFrameworkCore.DatabaseModels;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -16,10 +17,10 @@ namespace CodeMatcherV2Api.EntityFrameworkCore
             modelBuilder.Entity<LookupDto>().HasOne(s => s.LookupType)
                 .WithMany().OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<CodeMappingRequestDto>().HasOne(s=>s.RunType)
+            modelBuilder.Entity<CodeMappingRequestDto>().HasOne(s => s.RunType)
                 .WithMany().OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<CodeMappingRequestDto>().HasOne(s=>s.SegmentType)
+            modelBuilder.Entity<CodeMappingRequestDto>().HasOne(s => s.SegmentType)
                 .WithMany().OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<CodeMappingRequestDto>().HasOne(s => s.CodeMappingType)
@@ -46,5 +47,6 @@ namespace CodeMatcherV2Api.EntityFrameworkCore
         public DbSet<CodeGenerationOverwriteDto> CodeGenerationOverwrites { get; set; } = null!;
         public DbSet<CodeGenerationOverwriteHistoryDto> CodeGenerationOverwriteHistory { get; set; } = null!;
         public DbSet<UserDto> UserDetail { get; set; } = null!;
+        public DbSet<LogTableDto> LogTable { get; set; } = null!;
     }
 }

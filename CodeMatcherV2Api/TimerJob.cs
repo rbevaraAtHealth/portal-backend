@@ -1,7 +1,11 @@
 ﻿using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 using CodeMatcher.Api.V2.Common;
+using CodeMatcher.EntityFrameworkCore.DatabaseModels;
 using CodeMatcherApiV2.Repositories;
+using CodeMatcherV2Api.BusinessLayer;
+using CodeMatcherV2Api.BusinessLayer.Interfaces;
+using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Models;
 using Microsoft.Extensions.Logging;
 using NCrontab;
@@ -20,9 +24,15 @@ namespace CodeMatcher.Api.V2
         private readonly IScheduler _scheduler;
         private double _interval;
         private readonly HttpClient _httpClient;
-        public TimerJob(IScheduler scheduler, IHttpClientFactory httpClientFactory) { 
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ITrigger _trigger;
+        private readonly ILogTable _log;
+        public TimerJob(IScheduler scheduler, IHttpClientFactory httpClientFactory, ITrigger trigger, ILogTable logTable) { 
             _scheduler = scheduler;
             _httpClient = httpClientFactory.CreateClient("BackendApi");
+            _httpClientFactory = httpClientFactory;
+            _trigger = trigger;
+            _log = logTable;
         }
 
         public void InvokeTimerJob(double interval)
@@ -36,15 +46,16 @@ namespace CodeMatcher.Api.V2
         {
             var schedulerList = await _scheduler.GetAllSchedulersAsync();
             var curExecutionDate = DateTime.Now.RoundDownToMinutes();
-            Console.WriteLine($"Current Job Run Time: {curExecutionDate}");
+            await AddLog($"Current Job Run Time: {curExecutionDate}");
             var nextRunSchedule = curExecutionDate.AddMilliseconds(_interval);
-            Console.WriteLine($"Next Job Run Time: {nextRunSchedule}");
+            await AddLog($"Next Job Run Time: {nextRunSchedule}");
+            var user = new LoginModel { UserName = "Scheduler Admin" };
             foreach (var details in schedulerList)
             {
                 var schedule = CrontabSchedule.TryParse(details.CronExpression).GetNextOccurrence(curExecutionDate);
                 if (schedule >= curExecutionDate && schedule <= nextRunSchedule)
                 {
-                    Console.WriteLine($"Call Job API of CLientId: {details.ClientId}");
+                    await AddLog($"Call Job API of CLientId: {details.ClientId}");
                     if (details.CronExpression != null)
                     {
                         _httpClient.DefaultRequestHeaders.Add("ClientID", details.ClientId);
@@ -53,57 +64,59 @@ namespace CodeMatcher.Api.V2
                             CgTriggerRunModel models = new CgTriggerRunModel();
                             models.Segment = details.Segment;
                             models.Threshold = details.Threshold;
-                            var requestContent = JsonConvert.SerializeObject(models);
-                            var content = new StringContent(requestContent, System.Text.Encoding.UTF8, "application/json");
-
-                            var cgTriggeredUrl = _httpClient.BaseAddress + "TriggeredRun/CodeGenerationTriggerRun";
-                            var cgTriggeredResponse = await _httpClient.PostAsync(cgTriggeredUrl, content);
-                            if (!cgTriggeredResponse.IsSuccessStatusCode)
+                            string url = "code-generation/triggered-run";
+                            var requestModel = await _trigger.CgApiRequestGet(models, user, details.ClientId);
+                            var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
+                            var savedData = await _trigger.CgAPiResponseSave(apiResponse, requestModel.Item2, user);
+                            if (!apiResponse.IsSuccessStatusCode)
                             {
-                                Console.WriteLine($"Unable to schedule triggeredrun for clientId - {details}");
+                                await AddLog($"Unable to schedule triggeredrun for clientId - {details}");
                             }
                         }
                         else if (details.CodeMapping.ToLower() == "weekly embedding")
                         {
                             WeeklyEmbedTriggeredRunModel models = new WeeklyEmbedTriggeredRunModel();
                             models.Segment = details.Segment;
-                            var requestContent = JsonConvert.SerializeObject(models);
-                            var content = new StringContent(requestContent, System.Text.Encoding.UTF8, "application/json");
-
-                            var cgTriggeredUrl = _httpClient.BaseAddress + "TriggeredRun/WeeklyEmbeddingTriggerRun";
-                            var cgTriggeredResponse = await _httpClient.PostAsync(cgTriggeredUrl, content);
-                            if (!cgTriggeredResponse.IsSuccessStatusCode)
+                            string url = "weekly-embeddings/triggered-run";
+                            var requestModel = await _trigger.WeeklyEmbedApiRequestGet(models, user, details.ClientId);
+                            var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
+                            var SavedData = await _trigger.WeeklyEmbedApiResponseSave(apiResponse, requestModel.Item2, user);
+                            if (!apiResponse.IsSuccessStatusCode)
                             {
-                                Console.WriteLine($"Unable to schedule weekly embedding for clientId - {details}");
+                                await AddLog($"Unable to schedule weekly embedding for clientId - {details}");
                             }
                         }
                         else if (details.CodeMapping.ToLower() == "monthly embedding")
                         {
                             MonthlyEmbedTriggeredRunModel models = new MonthlyEmbedTriggeredRunModel();
                             models.Segment = details.Segment;
-                            var requestContent = JsonConvert.SerializeObject(models);
-                            var content = new StringContent(requestContent, System.Text.Encoding.UTF8, "application/json");
-
-                            var cgTriggeredUrl = _httpClient.BaseAddress + "TriggeredRun/MonthlyEmbeddingTriggerRun";
-                            var cgTriggeredResponse = await _httpClient.PostAsync(cgTriggeredUrl, content);
-                            if (!cgTriggeredResponse.IsSuccessStatusCode)
+                            string url = "monthly-embeddings/triggered-run";
+                            var requestModel = await _trigger.MonthlyEmbedApiRequestGet(models, user, details.ClientId);
+                            var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
+                            var SavedData = await _trigger.MonthlyEmbedApiResponseSave(apiResponse, requestModel.Item2, user);
+                            if (!apiResponse.IsSuccessStatusCode)
                             {
-                                Console.WriteLine($"Unable to schedule monthly embedding for clientId - {details}");
+                                await AddLog($"Unable to schedule monthly embedding for clientId - {details}");
                             }
                         }
                         else
                         {
-                            Console.WriteLine($"Cannot process with empty cronexpression {details}");
+                            await AddLog($"Cannot process with empty cronexpression {details}");
                         }
                     }
                 }
                 else
                 {
-                    Console.WriteLine($"Next schedule for clientId - {details.ClientId} is at - {schedule}");
+                    await AddLog($"Next schedule for clientId - {details.ClientId} is at - {schedule}");
                 }
             }
-            Console.WriteLine("Job triggred every second");
+            await AddLog("Job triggred every minute");
             //Do the stuff you want to be done every hour;
+        }
+        private async Task AddLog(string message)
+        {
+            //await _log.SaveLog(new LogTableDto { LogName = "TimerJob", LogDescription = message, CreatedBy = "Scheduler Admin", CreatedTime = DateTime.Now });
+            Console.WriteLine(message);
         }
     }
 }

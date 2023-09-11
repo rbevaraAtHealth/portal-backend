@@ -51,10 +51,15 @@ namespace CodeMatcherV2Api
                     .AllowAnyHeader());
             });
             services.AddDbContext<CodeMatcherDbContext>(options =>
-                                         options.UseSqlServer(CommonHelper.Decrypt(Configuration.GetConnectionString("DBConnection")),sqlServerOptionsAction: sqlOptions =>
+                                         options.UseSqlServer(CommonHelper.Decrypt(Configuration.GetConnectionString("DBConnection")), sqlServerOptionsAction: sqlOptions =>
                                          {
-                                             sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10),errorNumbersToAdd: null);
+                                             sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10), errorNumbersToAdd: null);
                                          }));
+            //services.AddDbContext<CodeMatcherDbContext>(options =>
+            //                             options.UseSqlServer(Configuration.GetConnectionString("DBConnection"), sqlServerOptionsAction: sqlOptions =>
+            //                             {
+            //                                 sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10), errorNumbersToAdd: null);
+            //                             }));
             services.AddControllers();
 
             services.AddAuthentication(opt =>
@@ -93,6 +98,7 @@ namespace CodeMatcherV2Api
 
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<ILogTable, LogTable>();
 
             //services.AddHttpClient();
             //services.AddHttpClient("CodeMatcher", c =>
@@ -166,7 +172,9 @@ namespace CodeMatcherV2Api
                 var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
                 var schedulerObj = scope.ServiceProvider.GetService<IScheduler>();
                 var httpClientObj = scope.ServiceProvider.GetService<IHttpClientFactory>();
-                TimerJob t = new(schedulerObj, httpClientObj);
+                var triggerObj = scope.ServiceProvider.GetService<ITrigger>();
+                var logObj = scope.ServiceProvider.GetService<ILogTable>();
+                TimerJob t = new(schedulerObj, httpClientObj, triggerObj, logObj);
                 t.InvokeTimerJob(Convert.ToDouble(Configuration["TimerJob:Frequency"]));
                 dataContext.Database.Migrate();
             }
