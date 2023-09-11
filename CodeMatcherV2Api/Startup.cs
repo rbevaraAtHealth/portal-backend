@@ -162,12 +162,13 @@ namespace CodeMatcherV2Api
             app.UseSwagger();
             try
             {
-                dataContext.Database.Migrate();
+
                 var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
                 var schedulerObj = scope.ServiceProvider.GetService<IScheduler>();
                 var httpClientObj = scope.ServiceProvider.GetService<IHttpClientFactory>();
                 TimerJob t = new(schedulerObj, httpClientObj);
                 t.InvokeTimerJob(Convert.ToDouble(Configuration["TimerJob:Frequency"]));
+                dataContext.Database.Migrate();
             }
             catch(Exception)
             {
