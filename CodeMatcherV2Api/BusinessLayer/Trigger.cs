@@ -44,16 +44,8 @@ namespace CodeMatcherV2Api.BusinessLayer
             codeMappingRequestDto.CodeMappingId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.CodeMapping, CodeMappingTypeConst.CodeGeneration)).Id;
             codeMappingRequestDto.Threshold = trigger.Threshold.ToString();
             codeMappingRequestDto.LatestLink = "1";
-            if (user.UserName != null)
-            {
-                codeMappingRequestDto.ClientId = clientId;
-                codeMappingRequestDto.CreatedBy = user.UserName;
-            }
-            else
-            {
-                codeMappingRequestDto.ClientId = "No Client";
-                codeMappingRequestDto.CreatedBy = "Scheduler Admin";
-            }
+            codeMappingRequestDto.CreatedBy = user.UserName != null ? user.UserName : "Scheduler Admin";
+            codeMappingRequestDto.ClientId = !string.IsNullOrEmpty(clientId)? clientId: "No Client";
             int reuestId = await _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             var requestModel = _mapper.Map<CgTriggeredRunReqModel>(codeMappingRequestDto);
             requestModel.ConnectionString = _configuration.GetSection(codeMappingRequestDto.ClientId).GetSection("source").Value;
@@ -94,16 +86,8 @@ namespace CodeMatcherV2Api.BusinessLayer
             codeMappingRequestDto.RunTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.RunType, RequestTypeConst.Triggered)).Id;
             codeMappingRequestDto.SegmentTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.Segment, trigger.Segment)).Id;
             codeMappingRequestDto.CodeMappingId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.CodeMapping, CodeMappingTypeConst.MonthlyEmbeddings)).Id; codeMappingRequestDto.CreatedBy = user.UserName;
-            if (user.UserName != null)
-            {
-                codeMappingRequestDto.ClientId = clientId;
-                codeMappingRequestDto.CreatedBy = user.UserName;
-            }
-            else
-            {
-                codeMappingRequestDto.ClientId = "No Client";
-                codeMappingRequestDto.CreatedBy = "Scheduler Admin";
-            }
+            codeMappingRequestDto.CreatedBy = user.UserName != null ? user.UserName : "Scheduler Admin";
+            codeMappingRequestDto.ClientId = !string.IsNullOrEmpty(clientId) ? clientId : "No Client";
             int requestId = await _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             MonthlyEmbedTriggeredRunReqModel requestModel = new MonthlyEmbedTriggeredRunReqModel();
             requestModel.Segment = SegmentDictionary.GetSegmentValueByKey(trigger.Segment);
@@ -116,16 +100,8 @@ namespace CodeMatcherV2Api.BusinessLayer
             codeMappingRequestDto.SegmentTypeId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.Segment, trigger.Segment)).Id;
             codeMappingRequestDto.CodeMappingId = (await _sqlHelper.GetLookupbyName(LookupTypeConst.CodeMapping, CodeMappingTypeConst.WeeklyEmbeddings)).Id;
             codeMappingRequestDto.CreatedBy = user.UserName;
-            if (user.UserName != null)
-            {
-                codeMappingRequestDto.ClientId = clientId;
-                codeMappingRequestDto.CreatedBy = user.UserName;
-            }
-            else
-            {
-                codeMappingRequestDto.ClientId = "No Client";
-                codeMappingRequestDto.CreatedBy = "Scheduler Admin";
-            }
+            codeMappingRequestDto.CreatedBy = user.UserName != null ? user.UserName : "Scheduler Admin";
+            codeMappingRequestDto.ClientId = !string.IsNullOrEmpty(clientId) ? clientId : "No Client";
             int requestId = await _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             WeeklyEmbedTriggeredRunReqModel requestModel = new WeeklyEmbedTriggeredRunReqModel();
             requestModel.Segment = SegmentDictionary.GetSegmentValueByKey(trigger.Segment);

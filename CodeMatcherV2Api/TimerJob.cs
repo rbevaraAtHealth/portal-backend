@@ -1,5 +1,6 @@
 ﻿using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
+using CodeMatcher.Api.V2.Common;
 using CodeMatcherApiV2.Repositories;
 using CodeMatcherV2Api.Models;
 using Microsoft.Extensions.Logging;
@@ -34,8 +35,10 @@ namespace CodeMatcher.Api.V2
         private async void OnTimedEvent(object source, ElapsedEventArgs e)
         {
             var schedulerList = await _scheduler.GetAllSchedulersAsync();
-            var curExecutionDate = DateTime.Now;
-            var nextRunSchedule = DateTime.Now.AddMilliseconds(_interval);
+            var curExecutionDate = DateTime.Now.RoundDownToMinutes();
+            Console.WriteLine($"Current Job Run Time: {curExecutionDate}");
+            var nextRunSchedule = curExecutionDate.AddMilliseconds(_interval);
+            Console.WriteLine($"Next Job Run Time: {nextRunSchedule}");
             foreach (var details in schedulerList)
             {
                 var schedule = CrontabSchedule.TryParse(details.CronExpression).GetNextOccurrence(curExecutionDate);
