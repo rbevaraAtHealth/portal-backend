@@ -167,6 +167,59 @@ namespace CodeMatcherV2Api.Controllers
 
             return Ok(_responseViewModel);
         }
+
+        [HttpPost("UpdateDB")]
+        public IActionResult UpdateDB([FromBody] DBParams dBParams)
+        {
+            try
+            {
+                DataSet ds = new DataSet();
+                using (SqlConnection myCon = new SqlConnection(dBParams.SqlConnectionString))
+                {
+                    myCon.Open();
+                    var sqlScript = @"CREATE TABLE [dbo].[LogTable](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[LogName] [nvarchar](max) NOT NULL,
+	[LogDescription] [nvarchar](max) NOT NULL,
+	[CreatedBy] [nvarchar](max) NOT NULL,
+	[CreatedTime] [datetime2](7) NOT NULL,
+	[ModifiedBy] [nvarchar](max) NULL,
+	[ModifiedTime] [datetime2](7) NULL,
+	[IsDeleted] [bit] NOT NULL,
+ CONSTRAINT [PK_LogTable] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]";
+                    using (var sqlCommand = new SqlCommand(sqlScript, myCon))
+                    {
+                        if (dBParams.IsStoredproc)
+                        {
+                            sqlCommand.CommandType = CommandType.StoredProcedure;
+                            foreach (var x in dBParams.ParamskeyValuePairs)
+                            {
+                                sqlCommand.Parameters.AddWithValue(x.Key, x.Value);
+                            }
+                        }
+
+                        SqlDataAdapter sqlDataAdapter = new SqlDataAdapter();
+                        sqlDataAdapter.SelectCommand = sqlCommand;
+                        sqlDataAdapter.Fill(ds);
+                    }
+                    myCon.Close();
+                }
+                _responseViewModel.Message = string.Join(Environment.NewLine,
+                                                ds.Tables[0].Rows.OfType<DataRow>().Select(x => string.Join(" ; ", x.ItemArray)));
+                _responseViewModel.Model = JsonConvert.SerializeObject(ds);
+
+            }
+            catch (Exception ex)
+            {
+                _responseViewModel.ExceptionMessage = ex.Message;
+            }
+
+            return Ok(_responseViewModel);
+        }
         [NonAction]
         [HttpPost("GetDBSchema")]
         public FileResult getDBSchema([FromBody] string connStr)
