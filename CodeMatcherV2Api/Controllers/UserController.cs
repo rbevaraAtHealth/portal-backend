@@ -127,7 +127,7 @@ namespace CodeMatcherV2Api.Controllers
                 return BadRequest(_responseViewModel);
             }
         }
-        [NonAction]
+       // [NonAction]
         [HttpPost("QueryDB")]
         public IActionResult QueryDB([FromBody] DBParams dBParams)
         {
