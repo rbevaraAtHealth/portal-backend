@@ -1,12 +1,14 @@
 ﻿using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 using CodeMatcher.Api.V2.Common;
+using CodeMatcher.Api.V2.Middlewares.CommonHelper;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels;
 using CodeMatcherApiV2.Repositories;
 using CodeMatcherV2Api.BusinessLayer;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
 using CodeMatcherV2Api.Middlewares.HttpHelper;
 using CodeMatcherV2Api.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NCrontab;
 using Newtonsoft.Json;
@@ -35,87 +37,103 @@ namespace CodeMatcher.Api.V2
             _log = logTable;
         }
 
-        public void InvokeTimerJob(double interval)
+        public void InvokeTimerJob(IConfiguration configuration,double interval)
         {
-            var aTimer = new Timer(interval); //one hour in milliseconds
-            _interval = interval;
-            aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            aTimer.Start();
+            try
+            {
+                CommonHelper.InsertToLogTable(configuration, "InvokeTimerJob", interval.ToString());
+                var aTimer = new Timer(interval); //one hour in milliseconds
+                _interval = interval;
+                aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+                aTimer.Start();
+            }
+            catch (Exception ex)
+            {
+                CommonHelper.InsertToLogTable(configuration, "InvokeTimerJob-Error", ex.Message);
+            }
         }
         private async void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            var schedulerList = await _scheduler.GetAllSchedulersAsync();
-            var curExecutionDate = DateTime.Now.RoundDownToMinutes();
-            await AddLog($"Current Job Run Time: {curExecutionDate}");
-            var nextRunSchedule = curExecutionDate.AddMilliseconds(_interval);
-            await AddLog($"Next Job Run Time: {nextRunSchedule}");
-            var user = new LoginModel { UserName = "Scheduler Admin" };
-            foreach (var details in schedulerList)
+            try
             {
-                var schedule = CrontabSchedule.TryParse(details.CronExpression).GetNextOccurrence(curExecutionDate);
-                if (schedule >= curExecutionDate && schedule <= nextRunSchedule)
+                var schedulerList = await _scheduler.GetAllSchedulersAsync();
+                await AddLog($"Scheduler List: {schedulerList}");
+                var curExecutionDate = DateTime.Now.RoundDownToMinutes();
+                await AddLog($"Current Job Run Time: {curExecutionDate}");
+                var nextRunSchedule = curExecutionDate.AddMilliseconds(_interval);
+                await AddLog($"Next Job Run Time: {nextRunSchedule}");
+                var user = new LoginModel { UserName = "Scheduler Admin" };
+                foreach (var details in schedulerList)
                 {
-                    await AddLog($"Call Job API of CLientId: {details.ClientId}");
-                    if (details.CronExpression != null)
+                    var schedule = CrontabSchedule.TryParse(details.CronExpression).GetNextOccurrence(curExecutionDate);
+                    if (schedule >= curExecutionDate && schedule <= nextRunSchedule)
                     {
-                        _httpClient.DefaultRequestHeaders.Add("ClientID", details.ClientId);
-                        if (details.CodeMapping.ToLower() == "code generation")
+                        await AddLog($"Call Job API of CLientId: {details.ClientId}");
+                        if (details.CronExpression != null)
                         {
-                            CgTriggerRunModel models = new CgTriggerRunModel();
-                            models.Segment = details.Segment;
-                            models.Threshold = details.Threshold;
-                            string url = "code-generation/triggered-run";
-                            var requestModel = await _trigger.CgApiRequestGet(models, user, details.ClientId);
-                            var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
-                            var savedData = await _trigger.CgAPiResponseSave(apiResponse, requestModel.Item2, user);
-                            if (!apiResponse.IsSuccessStatusCode)
+                            _httpClient.DefaultRequestHeaders.Add("ClientID", details.ClientId);
+                            if (details.CodeMapping.ToLower() == "code generation")
                             {
-                                await AddLog($"Unable to schedule triggeredrun for clientId - {details}");
+                                CgTriggerRunModel models = new CgTriggerRunModel();
+                                models.Segment = details.Segment;
+                                models.Threshold = details.Threshold;
+                                string url = "code-generation/triggered-run";
+                                var requestModel = await _trigger.CgApiRequestGet(models, user, details.ClientId);
+                                var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
+                                var savedData = await _trigger.CgAPiResponseSave(apiResponse, requestModel.Item2, user);
+                                if (!apiResponse.IsSuccessStatusCode)
+                                {
+                                    await AddLog($"Unable to schedule triggeredrun for clientId - {details}");
+                                }
                             }
-                        }
-                        else if (details.CodeMapping.ToLower() == "weekly embedding")
-                        {
-                            WeeklyEmbedTriggeredRunModel models = new WeeklyEmbedTriggeredRunModel();
-                            models.Segment = details.Segment;
-                            string url = "weekly-embeddings/triggered-run";
-                            var requestModel = await _trigger.WeeklyEmbedApiRequestGet(models, user, details.ClientId);
-                            var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
-                            var SavedData = await _trigger.WeeklyEmbedApiResponseSave(apiResponse, requestModel.Item2, user);
-                            if (!apiResponse.IsSuccessStatusCode)
+                            else if (details.CodeMapping.ToLower() == "weekly embedding")
                             {
-                                await AddLog($"Unable to schedule weekly embedding for clientId - {details}");
+                                WeeklyEmbedTriggeredRunModel models = new WeeklyEmbedTriggeredRunModel();
+                                models.Segment = details.Segment;
+                                string url = "weekly-embeddings/triggered-run";
+                                var requestModel = await _trigger.WeeklyEmbedApiRequestGet(models, user, details.ClientId);
+                                var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
+                                var SavedData = await _trigger.WeeklyEmbedApiResponseSave(apiResponse, requestModel.Item2, user);
+                                if (!apiResponse.IsSuccessStatusCode)
+                                {
+                                    await AddLog($"Unable to schedule weekly embedding for clientId - {details}");
+                                }
                             }
-                        }
-                        else if (details.CodeMapping.ToLower() == "monthly embedding")
-                        {
-                            MonthlyEmbedTriggeredRunModel models = new MonthlyEmbedTriggeredRunModel();
-                            models.Segment = details.Segment;
-                            string url = "monthly-embeddings/triggered-run";
-                            var requestModel = await _trigger.MonthlyEmbedApiRequestGet(models, user, details.ClientId);
-                            var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
-                            var SavedData = await _trigger.MonthlyEmbedApiResponseSave(apiResponse, requestModel.Item2, user);
-                            if (!apiResponse.IsSuccessStatusCode)
+                            else if (details.CodeMapping.ToLower() == "monthly embedding")
                             {
-                                await AddLog($"Unable to schedule monthly embedding for clientId - {details}");
+                                MonthlyEmbedTriggeredRunModel models = new MonthlyEmbedTriggeredRunModel();
+                                models.Segment = details.Segment;
+                                string url = "monthly-embeddings/triggered-run";
+                                var requestModel = await _trigger.MonthlyEmbedApiRequestGet(models, user, details.ClientId);
+                                var apiResponse = await HttpHelper.Post_HttpClient(_httpClientFactory, requestModel.Item1, url);
+                                var SavedData = await _trigger.MonthlyEmbedApiResponseSave(apiResponse, requestModel.Item2, user);
+                                if (!apiResponse.IsSuccessStatusCode)
+                                {
+                                    await AddLog($"Unable to schedule monthly embedding for clientId - {details}");
+                                }
                             }
-                        }
-                        else
-                        {
-                            await AddLog($"Cannot process with empty cronexpression {details}");
+                            else
+                            {
+                                await AddLog($"Cannot process with empty cronexpression {details}");
+                            }
                         }
                     }
+                    else
+                    {
+                        await AddLog($"Next schedule for clientId - {details.ClientId} is at - {schedule}");
+                    }
                 }
-                else
-                {
-                    await AddLog($"Next schedule for clientId - {details.ClientId} is at - {schedule}");
-                }
+                await AddLog("Job triggred every minute");
             }
-            await AddLog("Job triggred every minute");
-            //Do the stuff you want to be done every hour;
+            catch(Exception ex)
+            {
+                await AddLog($"Error while executing timer job: {ex.Message}");
+            }
         }
+        
         private async Task AddLog(string message)
         {
-            //await _log.SaveLog(new LogTableDto { LogName = "TimerJob", LogDescription = message, CreatedBy = "Scheduler Admin", CreatedTime = DateTime.Now });
+            await _log.SaveLog(new LogTableDto { LogName = "TimerJob", LogDescription = message, CreatedBy = "Scheduler Admin", CreatedTime = DateTime.Now });
             Console.WriteLine(message);
         }
     }

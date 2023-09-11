@@ -175,17 +175,14 @@ namespace CodeMatcherV2Api
                 var httpClientObj = scope.ServiceProvider.GetService<IHttpClientFactory>();
                 var triggerObj = scope.ServiceProvider.GetService<ITrigger>();
                 var logObj = scope.ServiceProvider.GetService<ILogTable>();
+                CommonHelper.InsertToLogTable(Configuration, "App_StartUp", "Starting scheduler timer job");
                 TimerJob t = new(schedulerObj, httpClientObj, triggerObj, logObj);
-                t.InvokeTimerJob(Convert.ToDouble(Configuration["TimerJob:Frequency"]));
+                t.InvokeTimerJob(Configuration, Convert.ToDouble(Configuration["TimerJob:Frequency"]));
                 dataContext.Database.Migrate();
             }
             catch(Exception ex)
             {
-                LogTableModel log = new LogTableModel {
-                    LogName = "App_StartUp",
-                    LogDescription = ex.Message
-                };
-                CommonHelper.InsertToLogTable(Configuration, log);
+                CommonHelper.InsertToLogTable(Configuration, "App_StartUp", ex.Message);
             }
             app.UseSwaggerUI(c =>
             {

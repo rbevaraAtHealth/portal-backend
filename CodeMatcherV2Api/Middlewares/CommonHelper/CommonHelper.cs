@@ -26,10 +26,10 @@ namespace CodeMatcher.Api.V2.Middlewares.CommonHelper
             return _res.outPut;
         }
 
-        public static void InsertToLogTable(IConfiguration configuration, LogTableModel logTableModel)
+        public static void InsertToLogTable(IConfiguration configuration, string logName, string logDesc)
         {
-            var query = $"INSERT INTO [dbo].[LogTable] ([LogName],[LogDescription] ,[CreatedBy],[CreatedTime])" +
-                $"VALUES('{logTableModel.LogName}','{logTableModel.LogDescription}' ,'App Startup','{DateTime.Now}');";
+            var query = $"INSERT INTO [dbo].[LogTable] ([LogName],[LogDescription] ,[CreatedBy],[CreatedTime],[IsDeleted])" +
+                $"VALUES('{logName}','{logDesc}' ,'App Startup','{DateTime.Now}', 0);";
             using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(configuration.GetConnectionString("DBConnection"))))
             {
                 try
