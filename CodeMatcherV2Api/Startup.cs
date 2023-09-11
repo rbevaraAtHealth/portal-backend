@@ -7,6 +7,7 @@ using CodeMatcher.Api.V2;
 using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 using CodeMatcher.Api.V2.Middlewares.CommonHelper;
+using CodeMatcher.Api.V2.Models;
 using CodeMatcherApiV2.BusinessLayer.Interfaces;
 using CodeMatcherApiV2.Repositories;
 using CodeMatcherV2Api.BusinessLayer;
@@ -166,9 +167,9 @@ namespace CodeMatcherV2Api
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwagger();
+           
             try
             {
-
                 var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
                 var schedulerObj = scope.ServiceProvider.GetService<IScheduler>();
                 var httpClientObj = scope.ServiceProvider.GetService<IHttpClientFactory>();
@@ -178,9 +179,13 @@ namespace CodeMatcherV2Api
                 t.InvokeTimerJob(Convert.ToDouble(Configuration["TimerJob:Frequency"]));
                 dataContext.Database.Migrate();
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                
+                LogTableModel log = new LogTableModel {
+                    LogName = "App_StartUp",
+                    LogDescription = ex.Message
+                };
+                CommonHelper.InsertToLogTable(Configuration, log);
             }
             app.UseSwaggerUI(c =>
             {
