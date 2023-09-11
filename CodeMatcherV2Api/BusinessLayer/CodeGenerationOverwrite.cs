@@ -176,8 +176,8 @@ namespace CodeMatcherV2Api.BusinessLayer
                 }
                 catch
                 {
-                    return isSaved ;
-                   
+                    return isSaved;
+
                 }
             }
         }
@@ -194,9 +194,11 @@ namespace CodeMatcherV2Api.BusinessLayer
                     query = "insert into CodeMatcherOverrideSchool (frm,too,newtoo,ClientID,Added_Date) VALUES ('" + updateModel.From + "','" + updateModel.OldToo + "','" + updateModel.NewToo + "','" + clientId + "',getdate())";
                     break;
                 case ("insurance"):
+                case ("insur"):
                     query = "insert into CodeMatcherOverrideInsur (frm,too,newtoo,ClientID,Added_Date) VALUES ('" + updateModel.From + "','" + updateModel.OldToo + "','" + updateModel.NewToo + "','" + clientId + "',getdate())";
                     break;
                 case ("state license"):
+                case ("statelic"):
                     query = "insert into CodeMatcherOverrideStatelic (frm,too,newtoo,ClientID,Added_Date) VALUES  ('" + updateModel.From + "','" + updateModel.OldToo + "','" + updateModel.NewToo + "','" + clientId + "',getdate())";
                     break;
             }
