@@ -65,7 +65,7 @@ namespace CodeMatcher.Api.V2
                 var user = new LoginModel { UserName = "Scheduler Admin" };
                 foreach (var details in schedulerList)
                 {
-                    await AddLog($"Call Job API of CLientId: {details.ClientId}, segment {details.Segment}, expression {details.CronExpression}");
+                    await AddLog($"Before parser details CLientId: {details.ClientId}, segment {details.Segment}, expression {details.CronExpression}");
                     var schedule = CrontabSchedule.TryParse(details.CronExpression).GetNextOccurrence(curExecutionDate);
                     if (schedule >= curExecutionDate && schedule <= nextRunSchedule)
                     {
