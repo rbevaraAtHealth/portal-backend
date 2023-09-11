@@ -57,18 +57,19 @@ namespace CodeMatcher.Api.V2
             try
             {
                 var schedulerList = await _scheduler.GetAllSchedulersAsync();
-                await AddLog($"Scheduler List: {schedulerList}");
-                var curExecutionDate = DateTime.Now.RoundDownToMinutes();
+                await AddLog($"Scheduler List: {schedulerList.Count}");
+                var curExecutionDate = DateTime.UtcNow.RoundDownToMinutes();
                 await AddLog($"Current Job Run Time: {curExecutionDate}");
                 var nextRunSchedule = curExecutionDate.AddMilliseconds(_interval);
                 await AddLog($"Next Job Run Time: {nextRunSchedule}");
                 var user = new LoginModel { UserName = "Scheduler Admin" };
                 foreach (var details in schedulerList)
                 {
+                    await AddLog($"Call Job API of CLientId: {details.ClientId}, segment {details.Segment}, expression {details.CronExpression}");
                     var schedule = CrontabSchedule.TryParse(details.CronExpression).GetNextOccurrence(curExecutionDate);
                     if (schedule >= curExecutionDate && schedule <= nextRunSchedule)
                     {
-                        await AddLog($"Call Job API of CLientId: {details.ClientId}");
+                        await AddLog($"Call Job API of CLientId: {details.ClientId} and segment {details.Segment}");
                         if (details.CronExpression != null)
                         {
                             _httpClient.DefaultRequestHeaders.Add("ClientID", details.ClientId);
@@ -120,10 +121,9 @@ namespace CodeMatcher.Api.V2
                     }
                     else
                     {
-                        await AddLog($"Next schedule for clientId - {details.ClientId} is at - {schedule}");
+                        await AddLog($"Next schedule for clientId - {details.ClientId} and segment {details.Segment} is at - {schedule}");
                     }
                 }
-                await AddLog("Job triggred every minute");
             }
             catch(Exception ex)
             {
