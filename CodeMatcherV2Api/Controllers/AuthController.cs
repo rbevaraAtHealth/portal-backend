@@ -16,6 +16,11 @@ using CodeMatcher.Api.V2.ApiResponseModel;
 using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcherApiV2.Common;
 using CodeMatcher.Api.V2.Middlewares.CommonHelper;
+using System.Net.Http;
+using CodeMatcherV2Api.Middlewares.HttpHelper;
+using CodeMatcher.Api.V2.Models;
+using CodeMatcherV2Api.ApiResponseModel;
+using Newtonsoft.Json;
 
 namespace CodeMatcherV2Api.Controllers
 {
@@ -26,11 +31,13 @@ namespace CodeMatcherV2Api.Controllers
         private readonly IConfiguration _configuration;
         private readonly IAuthRepository _authRepository;
         private readonly ResponseViewModel _responseViewModel;
-        public AuthController(IConfiguration configuration, IAuthRepository authRepository)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public AuthController(IConfiguration configuration, IAuthRepository authRepository, IHttpClientFactory httpClientFactory)
         {
             _configuration = configuration;
             _authRepository = authRepository;
             _responseViewModel = new ResponseViewModel();
+            _httpClientFactory = httpClientFactory;
         }
         [AllowAnonymous]
         [HttpPost, Route("login")]
@@ -115,6 +122,22 @@ namespace CodeMatcherV2Api.Controllers
             string key = EncryptionDecryption.Key;
             return Ok(key);
         }
-
+        [AllowAnonymous]
+        [HttpPost, Route("ApiKeyInput")]
+        public async Task<IActionResult> ApiKeyInput(KeyModel key)
+        {
+            try
+            {
+                var response = await HttpHelper.Post_HttpClient(_httpClientFactory, key, "APIKey_Input");
+                var httpResult = response.Content.ReadAsStringAsync().Result;
+                _responseViewModel.Model = JsonConvert.DeserializeObject<ResponseViewModel>(httpResult);
+                return Ok(_responseViewModel);
+            }
+            catch (Exception ex)
+            {
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
+            }
+        }
     }
 }
