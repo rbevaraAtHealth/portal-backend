@@ -122,7 +122,6 @@ namespace CodeMatcherV2Api.Controllers
             string key = EncryptionDecryption.Key;
             return Ok(key);
         }
-        [AllowAnonymous]
         [HttpPost, Route("ApiKeyInput")]
         public async Task<IActionResult> ApiKeyInput(KeyModel key)
         {
