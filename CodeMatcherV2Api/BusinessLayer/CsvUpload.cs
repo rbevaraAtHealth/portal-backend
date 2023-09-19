@@ -39,7 +39,7 @@ namespace CodeMatcherV2Api.BusinessLayer
         private readonly CodeMatcherDbContext _context;
         private readonly SqlHelper _sqlHelper;
         private List<ShareFileDownloadInfo> _fileDetails = new List<ShareFileDownloadInfo>();
-        private List<string> _fileNames= new List<string>();
+        private List<string> _fileNames = new List<string>();
         public CsvUpload(IMapper mapper, IConfiguration configuration, CodeMatcherDbContext context, SqlHelper sqlHelper)
         {
             _mapper = mapper;
@@ -133,11 +133,11 @@ namespace CodeMatcherV2Api.BusinessLayer
             return $"{outputDirName}{inputdirName}/{fileName}";
         }
 
-        public async Task<(List<ShareFileDownloadInfo> shareFiles,List<string> fileNames)> DownloadFile(string dirName)
+        public async Task<(List<ShareFileDownloadInfo> shareFiles, List<string> fileNames)> DownloadFile(string dirName, string segmentName)
         {
             try
             {
-                (List<ShareFileDownloadInfo> shareFiles, List<string> fileNames) result= (new List<ShareFileDownloadInfo>(),new List<string>());
+                (List<ShareFileDownloadInfo> shareFiles, List<string> fileNames) result = (new List<ShareFileDownloadInfo>(), new List<string>());
                 string connectionString = _configuration["AzureFileStorage:ConnectionString"];
                 string shareName = _configuration["AzureFileStorage:ShareName"];
                 ShareClient share = new(connectionString, shareName);
@@ -152,35 +152,22 @@ namespace CodeMatcherV2Api.BusinessLayer
                     return result;
                 }
 
-                //// Check path and remove if added already and added newly
-                //var filesPath = Directory.CreateDirectory("C:\\CSV_Output") + @$"\{dirName}";
-                //if (System.IO.Directory.Exists(filesPath))
-                //{
-                //    Directory.Delete(filesPath, true);
-                //}
-                //if (!System.IO.Directory.Exists(filesPath))
-                //{
-                //    Directory.CreateDirectory(filesPath);
-                //}
-
-                //Loop over the overall files and directories
-                
-                
-                        foreach (var file in files)
-                        {
-                            if (!file.IsDirectory)
-                            {
-                                var fileName = file.Name;
-                                //var filePath = Path.Combine(filesPath, fileName);
-                                ShareFileClient fileclient = directory.GetFileClient(fileName);
-                                _fileDetails.Add(fileclient.Download().Value);
-                                _fileNames.Add(fileName);
-                            }
-                            if (file.IsDirectory)
-                            {
-                                await DownloadFile(Path.Combine(dirName, file.Name));
-                            }
-                        }
+                foreach (var file in files)
+                {
+                    if (!file.IsDirectory)
+                    {
+                        var fileName = file.Name;
+                        //var filePath = Path.Combine(filesPath, fileName);
+                        ShareFileClient fileclient = directory.GetFileClient(fileName);
+                        _fileDetails.Add(fileclient.Download().Value);
+                        _fileNames.Add(fileName);
+                    }
+                    if (file.IsDirectory && file.Name == segmentName)
+                    {
+                        //await DownloadFile(Path.Combine(dirName, file.Name));
+                        await DownloadFile(Path.Combine(dirName, file.Name), segmentName);
+                    }
+                }
                 result.shareFiles = _fileDetails;
                 result.fileNames = _fileNames;
                 return result;
@@ -190,7 +177,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                 throw;
             }
         }
-        public async Task<byte[]> FilesToZip(List<ShareFileDownloadInfo> files,List<string> fileNames)
+        public async Task<byte[]> FilesToZip(List<ShareFileDownloadInfo> files, List<string> fileNames)
         {
             if (files != null && files.Count > 0)
             {
@@ -213,7 +200,7 @@ namespace CodeMatcherV2Api.BusinessLayer
                     return archiveFile;
                 }
             }
-            else 
+            else
             {
                 return null;
             }
@@ -223,13 +210,13 @@ namespace CodeMatcherV2Api.BusinessLayer
             byte[] bytes;
             using (var reader = new StreamReader(stream))
             {
-                bytes =  System.Text.Encoding.UTF8.GetBytes(await reader.ReadToEndAsync());
+                bytes = System.Text.Encoding.UTF8.GetBytes(await reader.ReadToEndAsync());
             }
             return bytes;
         }
         public async Task<CodeGenerationSummaryDto> GetCsvOutputPath(string taskId)
         {
-            var path =await _context.CodeGenerationSummary.FirstOrDefaultAsync(_context => _context.TaskId == taskId);
+            var path = await _context.CodeGenerationSummary.FirstOrDefaultAsync(_context => _context.TaskId == taskId);
             return path;
         }
     }

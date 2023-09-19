@@ -78,7 +78,7 @@ namespace CodeMatcherV2Api.Controllers
                 _responseViewModel.ExceptionMessage = "Task id is not found";
                 return BadRequest(_responseViewModel);
             }
-            else if (data!=null && string.IsNullOrEmpty(data.UploadCsvOutputDirPath))
+            else if (data != null && string.IsNullOrEmpty(data.UploadCsvOutputDirPath))
             {
                 _responseViewModel.ExceptionMessage = @$"Output path is not found for taskId - {taskId}";
                 return BadRequest(_responseViewModel);
@@ -90,7 +90,7 @@ namespace CodeMatcherV2Api.Controllers
                 zipFileName = dirName.Split('/').Last();
                 rootDirectory = dirName.Split('/').First();
             }
-            var filesInfo = await _Upload.DownloadFile(rootDirectory);
+            var filesInfo = await _Upload.DownloadFile(rootDirectory,zipFileName);
             byte[] zipBytesArr= await _Upload.FilesToZip(filesInfo.shareFiles,filesInfo.fileNames);
             if (zipBytesArr!=null)
             {
