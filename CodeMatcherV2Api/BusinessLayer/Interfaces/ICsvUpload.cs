@@ -16,7 +16,7 @@ namespace CodeMatcherV2Api.BusinessLayer.Interfaces
         public Task<string> WriteFile(IFormFile file);
         public Task<Tuple<CgUploadCsvReqModel, int>> CgUploadCsvRequestGet(CgCsvUploadModel csvUpload, LoginModel user,string clientId);
         public Task<CgUploadCsvResModel> CgUploadSaveResponse(HttpResponseMessage httpResponse, int requestId, LoginModel user);
-        Task<(List<ShareFileDownloadInfo> shareFiles, List<string> fileNames)> DownloadFile(string dirName);
+        Task<(List<ShareFileDownloadInfo> shareFiles, List<string> fileNames)> DownloadFile(string dirName, string segmentName);
         Task<byte[]> FilesToZip(List<ShareFileDownloadInfo> files, List<string> fileNames);
         Task<CodeGenerationSummaryDto> GetCsvOutputPath(string taskId);
     }
