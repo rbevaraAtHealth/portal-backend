@@ -10,11 +10,9 @@ using CodeMatcherV2Api.Controllers;
 using CodeMatcherV2Api.Middlewares.SqlHelper;
 using CodeMatcherV2Api.Models;
 using CodeMatcherV2Api.RepoModelAdapter;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -24,15 +22,13 @@ namespace CodeMatcherV2Api.BusinessLayer
     {
         private readonly SqlHelper _sqlHelper;
         private readonly IMapper _mapper;
-        private readonly ILookUp _lookUp;
         private readonly IConfiguration _configuration;
-        public Trigger(IMapper mapper, SqlHelper sqlHelper, ILookUp lookUp, IConfiguration configuration)
+        public Trigger(IMapper mapper, SqlHelper sqlHelper, IConfiguration configuration)
         {
             BaseController baseController = new BaseController();
             _mapper = mapper;
             var user = baseController.GetUserInfo();
             _sqlHelper = sqlHelper;
-            _lookUp = lookUp;
             _configuration = configuration;
         }
 
@@ -91,6 +87,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             int requestId = await _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             MonthlyEmbedTriggeredRunReqModel requestModel = new MonthlyEmbedTriggeredRunReqModel();
             requestModel.Segment = SegmentDictionary.GetSegmentValueByKey(trigger.Segment);
+            requestModel.ConnectionString= _configuration.GetSection(codeMappingRequestDto.ClientId).GetSection("destination").Value;
             return new Tuple<MonthlyEmbedTriggeredRunReqModel, int>(requestModel, requestId);
         }
         public async Task<Tuple<WeeklyEmbedTriggeredRunReqModel, int>> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user, string clientId)
@@ -105,7 +102,8 @@ namespace CodeMatcherV2Api.BusinessLayer
             int requestId = await _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             WeeklyEmbedTriggeredRunReqModel requestModel = new WeeklyEmbedTriggeredRunReqModel();
             requestModel.Segment = SegmentDictionary.GetSegmentValueByKey(trigger.Segment);
-            requestModel.LatestLink = "6";
+            requestModel.LatestLink = "1";
+            requestModel.ConnectionString = _configuration.GetSection(codeMappingRequestDto.ClientId).GetSection("destination").Value ;
 
             return new Tuple<WeeklyEmbedTriggeredRunReqModel, int>(requestModel, requestId);
         }
