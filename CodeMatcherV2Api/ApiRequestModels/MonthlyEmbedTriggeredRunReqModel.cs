@@ -9,5 +9,7 @@ namespace CodeMatcherV2Api.ApiRequestModels
         public string Segment { get; set; }
         [JsonProperty(PropertyName = "threshold")]
         public string Threshold { get; set; }
+
+        public string ConnectionString { get; set; }
     }
 }
