@@ -80,18 +80,18 @@ namespace CodeMatcherV2Api.BusinessLayer
             switch (segmentlower)
             {
                 case ("hospital"):
-                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 Affiliation Hospital Code%' order by Added_Date desc";
+                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 GPT Affiliation Hospital Code%' order by Added_Date desc";
                     break;
                 case ("school"):
-                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 Education School Code%' order by Added_Date desc";
+                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 GPT Education School Code%' order by Added_Date desc";
                     break;
                 case ("insurance"):
                 case ("insur"):
-                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 Malpractice Insurance Carrier Code%' order by Added_Date desc";
+                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 GPT Malpractice Insurance Carrier Code%' order by Added_Date desc";
                     break;
                 case ("state license"):
                 case ("statelic"):
-                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 Credential/License Institution Code%' order by Added_Date desc";
+                    query = "select top 5000 map_fiel.frm, map_fiel.l_maps, map_fiel.too, maps.full_name, map_fiel.Added_Date, map_fiel.link from map_fiel inner join maps on map_fiel.l_maps=maps.link  where map_fiel.link >= " + startLink + " and map_fiel.link <= " + latestLink + " and maps.full_name like '%40 GPT Credential/License Institution Code%' order by Added_Date desc";
                     break;
             }
             return query;
