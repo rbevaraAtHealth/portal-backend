@@ -36,7 +36,7 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
 
         public string GetLookupName(int id)
         {
-            var lookup = context.Lookups.FirstOrDefault(x => x.Id == id);
+            var lookup = context.Lookups.AsNoTracking().FirstOrDefault(x => x.Id == id);
             return lookup.Name;
         }
         public async Task<int> SaveCodeMappingData(CodeMappingDto codeMapping)
@@ -48,17 +48,17 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
 
         public int GetRequestId(string taskId)
         {
-            var codemap = context.CodeMappings.FirstOrDefault(x => x.Reference == taskId);
+            var codemap = context.CodeMappings.AsNoTracking().FirstOrDefault(x => x.Reference == taskId);
             return codemap.RequestId;
         }
         public int GetCodeMappingId(int requestId)
         {
-            var codeMapping = context.CodeMappingRequests.FirstOrDefault(x => x.Id == requestId);
+            var codeMapping = context.CodeMappingRequests.AsNoTracking().FirstOrDefault(x => x.Id == requestId);
             return codeMapping.CodeMappingId;
         }
         public List<CodeMappingDto> GetCodeMappings()
         {
-            var codeMappingList = context.CodeMappings.Where(x => x.Status.ToLower() == StatusConst.InProgress.ToLower()).ToList();
+            var codeMappingList = context.CodeMappings.AsNoTracking().Where(x => x.Status.ToLower() == StatusConst.InProgress.ToLower()).ToList();
             return codeMappingList;
         }
         public void UpdateCodeMappingStatus(string taskId)
