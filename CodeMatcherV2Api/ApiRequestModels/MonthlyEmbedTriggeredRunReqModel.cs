@@ -11,5 +11,6 @@ namespace CodeMatcherV2Api.ApiRequestModels
         public string Threshold { get; set; }
 
         public string ConnectionString { get; set; }
+        public string ApiKey { get; set; }
     }
 }

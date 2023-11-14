@@ -48,5 +48,6 @@ namespace CodeMatcherV2Api.EntityFrameworkCore
         public DbSet<CodeGenerationOverwriteHistoryDto> CodeGenerationOverwriteHistory { get; set; } = null!;
         public DbSet<UserDto> UserDetail { get; set; } = null!;
         public DbSet<LogTableDto> LogTable { get; set; } = null!;
+        public DbSet<APIKeyDto> ApiKeys { get; set; } = null!;
     }
 }

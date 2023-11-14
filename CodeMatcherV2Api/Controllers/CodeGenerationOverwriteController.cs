@@ -76,5 +76,21 @@ namespace CodeMatcherV2Api.Controllers
             }
         }
 
+        [HttpGet, Route("GetCodeGenerationOverwriteBaseData")]
+        public async Task<IActionResult> GetCodeGenerationOverwriteBaseData( string taskId)
+        {
+            try
+            {
+                var baseData = await _codegenerationoverwrite.GetCGOverwriteBaseDataModel(GetUserInfo(), getClientId(), taskId);
+                _responseViewModel.Model = baseData;
+                return Ok(_responseViewModel);
+            }
+            catch (Exception ex)
+            {
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
+            }
+        }
+
     }
 }

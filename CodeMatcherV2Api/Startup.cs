@@ -96,6 +96,7 @@ namespace CodeMatcherV2Api
             services.AddScoped<ICodeGenerationOverwrite, CodeGenerationOverwrite>();
             services.AddScoped<SqlHelper>();
             services.AddScoped<ICacheService, CacheService>();
+            services.AddScoped<IApiKey, ApiKey>();
 
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

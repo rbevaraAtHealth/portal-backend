@@ -14,6 +14,7 @@ namespace CodeMatcherV2Api.ApiRequestModels
         [JsonProperty(PropertyName = "client_Id")]
         public string ClientId { get; set; }
         public string ConnectionString { get; set; }
+        public string ApiKey { get; set; }
 
     }
 }

@@ -9,5 +9,6 @@ namespace CodeMatcherV2Api.ApiRequestModels
         [JsonProperty(PropertyName = "latest_link")]
         public string LatestLink { get; set; }
         public string ConnectionString { get; set; }
+        public string ApiKey { get; set; }
     }
 }
