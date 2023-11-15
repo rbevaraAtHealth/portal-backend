@@ -32,6 +32,7 @@ namespace CodeMatcherV2Api
                  .ReverseMap();
                 config.CreateMap<CodeMappingRequestDto, CgTriggeredRunReqModel>().ReverseMap();
                 config.CreateMap<LogTableModel, LogTableDto>().ReverseMap();
+                config.CreateMap<APIKeyModel, APIKeyDto>().ReverseMap();
             });
             return mapperConfig;
         }

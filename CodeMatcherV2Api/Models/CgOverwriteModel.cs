@@ -10,5 +10,6 @@ namespace CodeMatcher.Api.V2.Models
         public string full_name { get; set; }
         public DateTime? Added_Date { get; set; }
         public int link { get; set; }
+        public string institution { get; set; }
     }
 }

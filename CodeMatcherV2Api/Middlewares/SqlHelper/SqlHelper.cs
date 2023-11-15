@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 using System;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels;
+using CodeMatcher.Api.V2.Models;
 
 namespace CodeMatcherV2Api.Middlewares.SqlHelper
 {
@@ -143,6 +144,32 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
             context.Entry(log).State = EntityState.Added;
             await context.SaveChangesAsync();
             return (1);
+        }
+
+        public async Task<string> GetApiKey()
+        {
+            var apiKey = context.ApiKeys.FirstOrDefault();
+            if (apiKey != null)
+            {
+                return apiKey.Api_Key;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<APIKeyDto> SaveApiKeyRequest(APIKeyDto apiKeyModel)
+        {
+            var apiKey = await context.ApiKeys.FirstOrDefaultAsync(x => x.Api_Key == apiKeyModel.Api_Key);
+            if (apiKey == null)
+            {
+                context.ApiKeys.Add(apiKeyModel);
+                await context.SaveChangesAsync();
+                return apiKeyModel;
+            }
+           // return "Api Key Already Exists";
+            return null;
         }
     }
 }

@@ -58,7 +58,8 @@ namespace CodeMatcherV2Api.BusinessLayer
                                 too = r.Field<string>("too"),
                                 full_name = r.Field<string>("full_name"),
                                 Added_Date = r.Field<DateTime?>("Added_Date"),
-                                link = r.Field<int>("link")
+                                link = r.Field<int>("link"),
+                                institution = r.Field<string>("frm")
                             });
                             cgOverwriteModels = CgOverwriteModelData.ToList();
                         }
@@ -203,6 +204,96 @@ namespace CodeMatcherV2Api.BusinessLayer
                     break;
             }
             return query;
+        }
+
+        private DataSet GetDatafromDestinationDB(string headerValue, string query)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(headerValue).GetSection("destination").Value)))
+                {
+                    myCon.Open();
+                    SqlCommand sqlCommand = new SqlCommand(query, myCon);
+                    sqlCommand.CommandType = CommandType.Text;
+
+                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter();
+                    sqlDataAdapter.SelectCommand = sqlCommand;
+                    sqlDataAdapter.Fill(ds);
+                    myCon.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in GetDatafromSourceDB Method: {ex.Message}", ex);
+                throw;
+            }
+            return ds;
+        }
+
+        private string GetDBQueryforToo(string segment)
+        {
+            var segmentlower = segment.ToLower();
+            string query = string.Empty;
+            switch (segmentlower)
+            {
+                case ("hospital"):
+                    query = "select cd,txt,(subname+':'+addr+':'+addr2+':'+city+':'+state+':'+zip+':'+nation) as Address from hospital";
+                    break;
+                case ("school"):
+                    query = "select cd,txt,(subname+':'+addr+':'+addr2+':'+city+':'+state+':'+zip+':'+nation) as Address from school";
+                    break;
+                case ("insurance"):
+                case ("insur"):
+                    query = "select cd,txt,(addr+':'+addr2+':'+city+':'+state+':'+zip) as Address from insur";
+                    break;
+                case ("state license"):
+                case ("statelic"):
+                    query = "select cd,txt,(addr+':'+addr2+':'+city+':'+state+':'+zip) as Address from statelic";
+                    break;
+            }
+            return query;
+        }
+
+
+
+        public async Task<List<CGOverwriteBaseDataModel>> GetCGOverwriteBaseDataModel(LoginModel loginModel, string clientId, string taskId)
+        {
+            List<CGOverwriteBaseDataModel> cgOverwriteModels = new List<CGOverwriteBaseDataModel>();
+            try
+            {
+                var request = await _context.CodeMappings.Include("Request").FirstOrDefaultAsync(x => x.Reference == taskId);
+                if (request != null)
+                {
+                    var summary = await _context.CodeGenerationSummary.FirstOrDefaultAsync(x => x.TaskId == request.Reference);
+                    // var segment = await _context.Lookups.FirstOrDefaultAsync(x => x.Id == request.Request.SegmentTypeId);
+
+                    string query = GetDBQueryforToo(summary.Segment);
+                    if (query != string.Empty)
+                    {
+                        var data = GetDatafromDestinationDB(clientId, query);
+                        if (data != null && data.Tables.Count > 0)
+                        {
+                            //04ad8ea6-2806-4b80-bfba-ea7bf5522831
+                            var CgOverwriteModelData = data.Tables[0].AsEnumerable().Select(r => new CGOverwriteBaseDataModel
+                            {
+                                Code = r.Field<string>("cd"),
+                                Name = r.Field<string>("txt"),
+                                Address = r.Field<string>("Address"),
+                            });
+                            cgOverwriteModels = CgOverwriteModelData.ToList();
+                        }
+                        return cgOverwriteModels;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CodeGenerationOverwritegetAsync Method: {ex.Message}", ex);
+                throw;
+            }
+            return null;
         }
     }
 }
