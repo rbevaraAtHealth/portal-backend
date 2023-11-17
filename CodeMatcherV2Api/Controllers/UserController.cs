@@ -177,16 +177,16 @@ namespace CodeMatcherV2Api.Controllers
                 using (SqlConnection myCon = new SqlConnection(dBParams.SqlConnectionString))
                 {
                     myCon.Open();
-                    var sqlScript = @"CREATE TABLE [dbo].[LogTable](
+                    var sqlScript =
+                    @"CREATE TABLE [dbo].[ApiKeys](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[LogName] [nvarchar](max) NOT NULL,
-	[LogDescription] [nvarchar](max) NOT NULL,
+	[Api_Key] [nvarchar](max) NOT NULL,
 	[CreatedBy] [nvarchar](max) NOT NULL,
 	[CreatedTime] [datetime2](7) NOT NULL,
 	[ModifiedBy] [nvarchar](max) NULL,
 	[ModifiedTime] [datetime2](7) NULL,
 	[IsDeleted] [bit] NOT NULL,
- CONSTRAINT [PK_LogTable] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ApiKeys] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
