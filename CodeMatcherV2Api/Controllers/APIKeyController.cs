@@ -1,5 +1,7 @@
-﻿using CodeMatcher.Api.V2.ApiResponseModel;
+﻿using ADODB;
+using CodeMatcher.Api.V2.ApiResponseModel;
 using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
+using CodeMatcher.Api.V2.Middlewares.CommonHelper;
 using CodeMatcher.Api.V2.Models;
 using CodeMatcherV2Api.BusinessLayer;
 using CodeMatcherV2Api.BusinessLayer.Interfaces;
@@ -20,10 +22,12 @@ namespace CodeMatcher.Api.V2.Controllers
     {
         private readonly IApiKey _apiKey;
         private readonly ResponseViewModel _responseViewModel;
+        private readonly ApiKeyHelper _apiKeyHelper;
         public APIKeyController(IApiKey apiKey)
         {
             _apiKey = apiKey;
             _responseViewModel = new ResponseViewModel();
+            _apiKeyHelper = new ApiKeyHelper();
         }
 
         [AllowAnonymous]
@@ -51,10 +55,19 @@ namespace CodeMatcher.Api.V2.Controllers
         {
             try
             {
-                var user = GetUserInfo();
-                var requestModel = await _apiKey.CreateNewApiKey(apiKey, user, getClientId());
-                _responseViewModel.Model = requestModel;
-                return Ok(_responseViewModel);
+                bool validateApiKey = await _apiKeyHelper.ValidateApiKey(apiKey.Api_Key);
+                if (validateApiKey)
+                {
+                    var user = GetUserInfo();
+                    var requestModel = await _apiKey.CreateNewApiKey(apiKey, user, getClientId());
+                    _responseViewModel.Model = requestModel;
+                    return Ok(_responseViewModel);
+                }
+                else
+                {
+                    _responseViewModel.Message = "Invalid API key.";
+                    return Ok(_responseViewModel);
+                }
             }
             catch(Exception ex)
             {
