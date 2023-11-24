@@ -2,6 +2,7 @@
 using CodeMappingEfCore.DatabaseModels;
 using CodeMatcher.Api.V2.BusinessLayer;
 using CodeMatcher.Api.V2.BusinessLayer.Dictionary;
+using CodeMatcher.Api.V2.Middlewares.CommonHelper;
 using CodeMatcher.Api.V2.RepoModelAdapter;
 using CodeMatcherV2Api.ApiRequestModels;
 using CodeMatcherV2Api.ApiResponseModel;
@@ -46,7 +47,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             string apiKey = await _sqlHelper.GetApiKey();
             var requestModel = _mapper.Map<CgTriggeredRunReqModel>(codeMappingRequestDto);
             requestModel.ConnectionString = _configuration.GetSection(codeMappingRequestDto.ClientId).GetSection("source").Value;
-            requestModel.ApiKey = apiKey;
+            requestModel.ApiKey = CommonHelper.Encrypt(apiKey);
             //requestModel.Segment = trigger.Segment;
             requestModel.Segment = SegmentDictionary.GetSegmentValueByKey(trigger.Segment);
             return new Tuple<CgTriggeredRunReqModel, int>(requestModel, reuestId);
@@ -91,7 +92,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             MonthlyEmbedTriggeredRunReqModel requestModel = new MonthlyEmbedTriggeredRunReqModel();
             requestModel.Segment = SegmentDictionary.GetSegmentValueByKey(trigger.Segment);
             requestModel.ConnectionString= _configuration.GetSection(codeMappingRequestDto.ClientId).GetSection("destination").Value;
-            requestModel.ApiKey = apiKey;
+            requestModel.ApiKey = CommonHelper.Encrypt(apiKey);
             return new Tuple<MonthlyEmbedTriggeredRunReqModel, int>(requestModel, requestId);
         }
         public async Task<Tuple<WeeklyEmbedTriggeredRunReqModel, int>> WeeklyEmbedApiRequestGet(WeeklyEmbedTriggeredRunModel trigger, LoginModel user, string clientId)
@@ -109,7 +110,7 @@ namespace CodeMatcherV2Api.BusinessLayer
             requestModel.Segment = SegmentDictionary.GetSegmentValueByKey(trigger.Segment);
             requestModel.LatestLink = "1";
             requestModel.ConnectionString = _configuration.GetSection(codeMappingRequestDto.ClientId).GetSection("destination").Value ;
-            requestModel.ApiKey = apiKey;
+            requestModel.ApiKey = CommonHelper.Encrypt(apiKey);
 
             return new Tuple<WeeklyEmbedTriggeredRunReqModel, int>(requestModel, requestId);
         }
