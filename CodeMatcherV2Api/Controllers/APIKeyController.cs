@@ -77,7 +77,7 @@ namespace CodeMatcher.Api.V2.Controllers
         }
 
         [AllowAnonymous]
-        [HttpDelete, Route("CreateApiKey")]
+        [HttpDelete, Route("DeleteApiKey")]
         public async Task<IActionResult> DeleteApiKey(string apiKey)
         {
             try
