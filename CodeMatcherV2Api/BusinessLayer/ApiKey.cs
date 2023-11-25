@@ -66,5 +66,22 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             return new APIKeyModel(){ Api_Key="Key already exist"};
         }
 
+        //Delete ApiKey
+        public async Task<string> DeleteApiKey(string apiKey)
+        {
+
+            var keyId = await _context.ApiKeys.FirstOrDefaultAsync(x => x.Api_Key == apiKey);
+            if (keyId != null)
+            {
+                _context.ApiKeys.Remove(keyId);
+                _context.SaveChanges();
+                return "ApiKey is deleted";
+            }
+            else
+            {
+                return "ApiKey is not deleted";
+            }
+
+        }
     }
 }

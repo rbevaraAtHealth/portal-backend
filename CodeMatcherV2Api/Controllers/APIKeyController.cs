@@ -75,5 +75,23 @@ namespace CodeMatcher.Api.V2.Controllers
                 return BadRequest(_responseViewModel);
             }
         }
+
+        [AllowAnonymous]
+        [HttpDelete, Route("CreateApiKey")]
+        public async Task<IActionResult> DeleteApiKey(string apiKey)
+        {
+            try
+            {
+                // var user = GetUserInfo();
+                var requestModel = await _apiKey.DeleteApiKey(apiKey);
+                _responseViewModel.Model = requestModel;
+                return Ok(_responseViewModel);
+            }
+            catch (Exception ex)
+            {
+                _responseViewModel.ExceptionMessage = ex.Message;
+                return BadRequest(_responseViewModel);
+            }
+        }
     }
 }
