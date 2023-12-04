@@ -122,7 +122,14 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
                 details.Threshold = cgReqModel.Threshold;
                 details.LatestLink = cgReqModel.LatestLink;
                 details.CreatedBy = cgReqModel.CreatedBy;
-                details.CreatedTime = cgReqModel.CreatedTime;
+                // converting time zone
+
+                //details.CreatedTime = cgReqModel.CreatedTime;
+                DateTime createdTimePST = cgReqModel.CreatedTime;
+                TimeZoneInfo tzInfoPST = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+                DateTime createdTimeUTC = TimeZoneInfo.ConvertTimeToUtc(createdTimePST, tzInfoPST);
+                details.CreatedTime = createdTimeUTC;
+
                 details.ClientId = cgReqModel.ClientId;
                 context.CodeMappingRequests.Update(details);
                 context.Entry(details).State = EntityState.Modified;
