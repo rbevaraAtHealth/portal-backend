@@ -95,7 +95,6 @@ namespace CodeMatcherV2Api
             services.AddScoped<IScheduler, Scheduler>();
             services.AddScoped<ICodeGenerationOverwrite, CodeGenerationOverwrite>();
             services.AddScoped<SqlHelper>();
-            services.AddScoped<ConvertTimeZoneHelper>();
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<IApiKey, ApiKey>();
 

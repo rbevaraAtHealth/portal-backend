@@ -17,13 +17,11 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
     {
         private readonly CodeMatcherDbContext context;
         private readonly ICacheService _cacheService;
-        private readonly ConvertTimeZoneHelper timeZoneHelper;
 
-        public SqlHelper(CodeMatcherDbContext _context, ICacheService cacheService, ConvertTimeZoneHelper _timeZoneHelper)
+        public SqlHelper(CodeMatcherDbContext _context, ICacheService cacheService)
         {
             context = _context;
             _cacheService = cacheService;
-            timeZoneHelper = _timeZoneHelper;
         }
         public async Task<int> SaveCodeMappingRequest(CodeMappingRequestDto cgReqModel)
         {
@@ -121,8 +119,7 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
 
             if (details != null)
             {
-                //details.RunSchedule = cgReqModel.RunSchedule;
-                details.RunSchedule = await timeZoneHelper.ConverTimeZone(cgReqModel.RunSchedule);
+                details.RunSchedule = ConvertTimeZoneHelper.ConvertTimeZone(cgReqModel.RunSchedule);
                 details.Threshold = cgReqModel.Threshold;
                 details.LatestLink = cgReqModel.LatestLink;
                 details.CreatedBy = cgReqModel.CreatedBy;
