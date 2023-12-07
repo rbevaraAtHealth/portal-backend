@@ -9,11 +9,6 @@ namespace CodeMatcher.Api.V2.Middlewares.CommonHelper
 {
     public class ConvertTimeZoneHelper
     {
-        private readonly CodeMatcherDbContext context;
-        public ConvertTimeZoneHelper(CodeMatcherDbContext _context)
-        {
-            context = _context;
-        }
         public async Task<string> ConverTimeZone(string cronExpression)
         {
             string operatingSystem = RuntimeInformation.OSDescription;
