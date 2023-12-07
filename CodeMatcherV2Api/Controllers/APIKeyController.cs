@@ -31,17 +31,17 @@ namespace CodeMatcher.Api.V2.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet,Route("GetAllApiKeys")]
+        [HttpGet, Route("GetAllApiKeys")]
         public async Task<IActionResult> GetAllApiKeys()
         {
             try
             {
                 var result = await _apiKey.GetAllApiKeysRecords();
-                _responseViewModel.Model= result;
+                _responseViewModel.Model = result;
                 return Ok(_responseViewModel);
 
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _responseViewModel.ExceptionMessage = ex.Message;
                 return BadRequest(_responseViewModel);
@@ -50,7 +50,7 @@ namespace CodeMatcher.Api.V2.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost,Route("CreateApiKey")]
+        [HttpPost, Route("CreateApiKey")]
         public async Task<IActionResult> CreateApiKey(APIKeyModel apiKey)
         {
             try
@@ -69,7 +69,7 @@ namespace CodeMatcher.Api.V2.Controllers
                     return Ok(_responseViewModel);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _responseViewModel.ExceptionMessage = ex.Message;
                 return BadRequest(_responseViewModel);
@@ -91,6 +91,29 @@ namespace CodeMatcher.Api.V2.Controllers
             {
                 _responseViewModel.ExceptionMessage = ex.Message;
                 return BadRequest(_responseViewModel);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost, Route("ValidateApiKey")]
+        public async Task<bool> ValidateApiKey(APIKeyModel apiKey)
+        {
+            try
+            {
+                bool validateApiKey = await _apiKeyHelper.ValidateApiKey(apiKey.Api_Key);
+                if (validateApiKey)
+                {
+                   _responseViewModel.Message = "Valid Api Key";
+                    return true;
+                }
+                else
+                {
+                   return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
     }
