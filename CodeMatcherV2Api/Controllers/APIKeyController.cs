@@ -103,17 +103,12 @@ namespace CodeMatcher.Api.V2.Controllers
                 bool validateApiKey = await _apiKeyHelper.ValidateApiKey(apiKey.Api_Key);
                 if (validateApiKey)
                 {
-                    //var user = GetUserInfo();
-                    //var requestModel = await _apiKey.CreateNewApiKey(apiKey, user, getClientId());
-                    _responseViewModel.Message = "Valid Api Key";
-                    //return Ok(_responseViewModel);
+                   _responseViewModel.Message = "Valid Api Key";
                     return true;
                 }
                 else
                 {
-                    //_responseViewModel.Message = "Invalid API key.";
-                    //return Ok(_responseViewModel);
-                    return false;
+                   return false;
                 }
             }
             catch (Exception ex)

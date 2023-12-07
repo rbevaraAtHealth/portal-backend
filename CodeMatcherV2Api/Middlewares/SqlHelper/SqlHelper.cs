@@ -9,6 +9,7 @@ using CodeMatcher.Api.V2.BusinessLayer.Interfaces;
 using System;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels;
 using CodeMatcher.Api.V2.Models;
+using CodeMatcher.Api.V2.Middlewares.CommonHelper;
 
 namespace CodeMatcherV2Api.Middlewares.SqlHelper
 {
@@ -16,11 +17,13 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
     {
         private readonly CodeMatcherDbContext context;
         private readonly ICacheService _cacheService;
+        private readonly ConvertTimeZoneHelper timeZoneHelper;
 
-        public SqlHelper(CodeMatcherDbContext _context, ICacheService cacheService)
+        public SqlHelper(CodeMatcherDbContext _context, ICacheService cacheService, ConvertTimeZoneHelper _timeZoneHelper)
         {
             context = _context;
             _cacheService = cacheService;
+            timeZoneHelper = _timeZoneHelper;
         }
         public async Task<int> SaveCodeMappingRequest(CodeMappingRequestDto cgReqModel)
         {
@@ -118,17 +121,12 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
 
             if (details != null)
             {
-                details.RunSchedule = cgReqModel.RunSchedule;
+                //details.RunSchedule = cgReqModel.RunSchedule;
+                details.RunSchedule = await timeZoneHelper.ConverTimeZone(cgReqModel.RunSchedule);
                 details.Threshold = cgReqModel.Threshold;
                 details.LatestLink = cgReqModel.LatestLink;
                 details.CreatedBy = cgReqModel.CreatedBy;
-                // converting time zone
-
-                //details.CreatedTime = cgReqModel.CreatedTime;
-                DateTime createdTimePST = cgReqModel.CreatedTime;
-                TimeZoneInfo tzInfoPST = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-                DateTime createdTimeUTC = TimeZoneInfo.ConvertTimeToUtc(createdTimePST, tzInfoPST);
-                details.CreatedTime = createdTimeUTC;
+                details.CreatedTime = cgReqModel.CreatedTime;
 
                 details.ClientId = cgReqModel.ClientId;
                 context.CodeMappingRequests.Update(details);
