@@ -8,5 +8,6 @@ namespace CodeMatcher.EntityFrameworkCore.DatabaseModels
         [Key]
         public int Id { get; set; }
         public string Api_Key { get; set; }
+        public DateTime LastAccessedOn { get; set; }
     }
 }
