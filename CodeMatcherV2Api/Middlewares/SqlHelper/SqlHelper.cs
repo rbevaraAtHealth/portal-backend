@@ -150,9 +150,13 @@ namespace CodeMatcherV2Api.Middlewares.SqlHelper
 
         public async Task<string> GetApiKey()
         {
-            var apiKey = context.ApiKeys.FirstOrDefault();
+            var apiKey = context.ApiKeys.Where(k => k.LastAccessedOn == context.ApiKeys.Min(minKey => minKey.LastAccessedOn)).FirstOrDefault();
+
             if (apiKey != null)
             {
+                apiKey.LastAccessedOn = DateTime.Now;
+                context.ApiKeys.Update(apiKey);
+                await context.SaveChangesAsync();
                 return apiKey.Api_Key;
             }
             else
