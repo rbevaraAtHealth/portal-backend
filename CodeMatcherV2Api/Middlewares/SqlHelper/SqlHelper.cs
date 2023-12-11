@@ -10,8 +10,6 @@ using System;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels;
 using CodeMatcher.Api.V2.Models;
 using CodeMatcher.Api.V2.Middlewares.CommonHelper;
-using CodeMatcher.Api.V2.ApiResponseModel;
-using CodeMatcher.EntityFrameworkCore.Migrations;
 
 namespace CodeMatcherV2Api.Middlewares.SqlHelper
 {
