@@ -6,5 +6,6 @@
         public string From { get; set; }
         public string OldToo { get; set; }
         public string NewToo { get; set; }
+        public string Address { get; set; }
     }
 }
