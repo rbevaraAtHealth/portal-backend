@@ -11,7 +11,7 @@ namespace CodeMatcher.Api.V2.BusinessLayer.Interfaces
 {
     public interface IApiKey
     {
-        Task<List<APIKeyModel>> GetAllApiKeysRecords();
+        Task<List<APIKeyResponseModel>> GetAllApiKeysRecords();
         Task<APIKeyModel> CreateNewApiKey(APIKeyModel apiKey, LoginModel user, string clientId);
         Task<string> DeleteApiKey(string apiKey);
     }
