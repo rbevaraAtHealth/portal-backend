@@ -35,14 +35,16 @@ namespace CodeMatcher.Api.V2.BusinessLayer
             _sqlHelper = sqlHelper;
         }
 
-        public async Task<List<APIKeyModel>> GetAllApiKeysRecords()
+        public async Task<List<APIKeyResponseModel>> GetAllApiKeysRecords()
         {
             var apiKeyRecords = await _context.ApiKeys.AsNoTracking().OrderByDescending(x => x.CreatedTime).ToListAsync();
-            List<APIKeyModel> result = new List<APIKeyModel>();
+            List<APIKeyResponseModel> result = new List<APIKeyResponseModel>();
             foreach (var item in apiKeyRecords)
             {
-                APIKeyModel apiKeyModel = new APIKeyModel();
+                APIKeyResponseModel apiKeyModel = new APIKeyResponseModel();
                 apiKeyModel.Api_Key = item.Api_Key;
+                apiKeyModel.CreatedBy = item.CreatedBy;
+                apiKeyModel.CreatedTime = item.CreatedTime;
                 result.Add(apiKeyModel);
             }
             return result;
