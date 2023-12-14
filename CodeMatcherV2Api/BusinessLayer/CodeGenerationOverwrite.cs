@@ -130,7 +130,9 @@ namespace CodeMatcherV2Api.BusinessLayer
             string query = "";
             foreach (var item in updateModels)
             {
-                query = query + "update map_fiel set too = '" + item.NewToo + "' where link = '" + item.Link + "';";
+                //query = query + "update map_fiel set too = '" + item.NewToo + "' where link = '" + item.Link + "';";
+                query = query + "UPDATE map_fiel SET too = '" + item.NewToo + "', too_descr = '" + item.Address + "' WHERE link = '" + item.Link + "';";
+
             }
             using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(clientId).GetSection("source").Value)))
             {
