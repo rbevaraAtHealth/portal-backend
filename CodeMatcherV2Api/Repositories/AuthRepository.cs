@@ -13,7 +13,6 @@ using System.Data;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Web.Helpers;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CodeMatcherApiV2.Repositories
 {
@@ -28,7 +27,6 @@ namespace CodeMatcherApiV2.Repositories
         }
         public async Task<Tuple<bool, LoginModel>> ProcessLogin(LoginModel model, string headerValue)
         {
-            bool isApiKey = false;
             bool success = false;
             model.ClientId = headerValue;
             using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(headerValue).GetSection("source").Value)))
@@ -59,8 +57,7 @@ namespace CodeMatcherApiV2.Repositories
                 }
             }
             model = getUserRole(model, headerValue);
-            isApiKey = getApiKey();
-            model.IsApiKeyExist = isApiKey;
+            model.IsApiKeyExist = getApiKey();
             return new Tuple<bool, LoginModel>(success, model);
         }
         private LoginModel getUserRole(LoginModel userModel, string headerValue)
