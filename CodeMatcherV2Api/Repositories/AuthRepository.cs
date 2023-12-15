@@ -8,10 +8,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using QeDataNet.UserRights;
 using System;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Web.Helpers;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CodeMatcherApiV2.Repositories
 {
@@ -26,6 +28,7 @@ namespace CodeMatcherApiV2.Repositories
         }
         public async Task<Tuple<bool, LoginModel>> ProcessLogin(LoginModel model, string headerValue)
         {
+            bool isApiKey = false;
             bool success = false;
             model.ClientId = headerValue;
             using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetSection(headerValue).GetSection("source").Value)))
@@ -44,7 +47,7 @@ namespace CodeMatcherApiV2.Repositories
                     {
                         success = VerifyPassword(password, reader["password"].ToString().Trim());
                     }
-                   
+
                     myCon.Close();
                 }
                 catch (Exception ex)
@@ -56,6 +59,8 @@ namespace CodeMatcherApiV2.Repositories
                 }
             }
             model = getUserRole(model, headerValue);
+            isApiKey = getApiKey();
+            model.IsApiKeyExist = isApiKey;
             return new Tuple<bool, LoginModel>(success, model);
         }
         private LoginModel getUserRole(LoginModel userModel, string headerValue)
@@ -98,6 +103,30 @@ namespace CodeMatcherApiV2.Repositories
                 myCon.Close();
             }
             return userModel;
+        }
+        private bool getApiKey()
+        {
+            string query = "SELECT COUNT(*) FROM [dbo].[ApiKeys]";
+            bool isCount = false;
+            using (SqlConnection myCon = new SqlConnection(CommonHelper.Decrypt(_configuration.GetConnectionString("DBConnection"))))
+            {
+                try
+                {
+                    myCon.Open();
+                    using (SqlCommand sqlCommand = new SqlCommand(query, myCon))
+                    {
+                        sqlCommand.CommandType = CommandType.Text;
+                        int count = Convert.ToInt32(sqlCommand.ExecuteScalar());
+                        isCount = count > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    return false;
+                }
+            }
+            return isCount;
         }
         private bool VerifyPassword(string password, string passwordSan)
         {
