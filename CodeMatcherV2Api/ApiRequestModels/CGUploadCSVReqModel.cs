@@ -13,5 +13,6 @@ namespace CodeMatcherV2Api.ApiRequestModels
         public string Segment { get; set; }
         [JsonProperty(PropertyName = "threshold")]
         public List<string> Threshold { get; set; }
+        public string ApiKey { get; set; }
     }
 }

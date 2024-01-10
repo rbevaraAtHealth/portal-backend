@@ -29,6 +29,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CodeMatcher.EntityFrameworkCore.DatabaseModels.SummaryTables;
+using CodeMatcher.Api.V2.Middlewares.CommonHelper;
 
 namespace CodeMatcherV2Api.BusinessLayer
 {
@@ -66,9 +67,11 @@ namespace CodeMatcherV2Api.BusinessLayer
             codeMappingRequestDto.ClientId = clientId;
             int reuestId = await _sqlHelper.SaveCodeMappingRequest(codeMappingRequestDto);
             CgUploadCsvReqModel requestModel = new CgUploadCsvReqModel();
+            string apiKey = await _sqlHelper.GetApiKey();
             requestModel.CsvInput = csvUpload.CsvFilePath;
             requestModel.Threshold = csvUpload.Threshold;
             requestModel.Segment = SegmentDictionary.GetSegmentValueByKey(csvUpload.Segment);
+            requestModel.ApiKey = CommonHelper.Encrypt(apiKey);
             return new Tuple<CgUploadCsvReqModel, int>(requestModel, reuestId);
         }
 
